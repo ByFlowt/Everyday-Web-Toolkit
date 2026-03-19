@@ -22,12 +22,15 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Inject password
-              env:
-                USERS: ${{ secrets.USERS }}
               run: |
-                echo "Before: $(grep USERS_PLACEHOLDER index.html)"
-                sed -i "s|USERS_PLACEHOLDER|${USERS}|g" index.html
-                echo "After: $(grep USERS_PLACEHOLDER index.html || echo 'Placeholder replaced')"
+                echo "Before injection Check:"
+                grep USERS_PLACEHOLDER index.html || echo "Placeholder missing!"
+                
+                # Use a different delimiter in sed and wrap the secret in single quotes to handle JSON safely
+                sed -i "s#USERS_PLACEHOLDER#${{ secrets.USERS }}#g" index.html
+                
+                echo "After injection Check:"
+                grep USERS_PLACEHOLDER index.html && echo "Failed to replace!" || echo "Successfully replaced."
 
             - name: Setup Pages
               uses: actions/configure-pages@v5
