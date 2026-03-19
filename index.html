@@ -309,12 +309,14 @@
         let USERS_LIST = {};
         let SYSTEM_ERROR = "";
         try {
-            // Wrapped in single quotes so the injected JSON (which uses double quotes) creates a valid JS string
+            // Replaced securely via Node.js in the GitHub Action using backticks.
             const rawUsers = 'USERS_PLACEHOLDER';
-            if (rawUsers !== 'USERS_PLACEHOLDER' && rawUsers !== '') {
+            
+            // Checking if the placeholder is still there or empty
+            if (rawUsers !== 'USERS_PLACEHOLDER' && rawUsers !== '' && rawUsers !== '{}') {
                 USERS_LIST = JSON.parse(rawUsers);
-            } else if (rawUsers === '') {
-                SYSTEM_ERROR = "GitHub Secret ist leer.";
+            } else {
+                SYSTEM_ERROR = "GitHub Secret ist leer oder wurde nicht injiziert.";
             }
         } catch (e) {
             console.warn("User list invalid JSON format:", e);
