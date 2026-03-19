@@ -23,9 +23,11 @@ jobs:
 
             - name: Inject password
               env:
-                  PASSWORD: ${{ secrets.PASSWORD }}
+                PASSWORD: ${{ secrets.PASSWORD }}
               run: |
-                  sed -i "s|PASSWORD_PLACEHOLDER|${PASSWORD}|g" index.html
+                echo "Before: $(grep CORRECT_PASSWORD index.html)"
+                sed -i "s|PASSWORD_PLACEHOLDER|${PASSWORD}|g" index.html
+                echo "After: $(grep CORRECT_PASSWORD index.html)"
 
             - name: Setup Pages
               uses: actions/configure-pages@v5
