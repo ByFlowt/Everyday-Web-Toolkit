@@ -8,15 +8,16 @@ on:
 jobs:
     deploy:
         runs-on: ubuntu-latest
+        environment: Site-Passwords # 👈 add this
         steps:
             - name: Checkout
               uses: actions/checkout@v4
 
             - name: Inject password
               env:
-                PASSWORD: ${{ secrets.PASSWORD }}
+                  PASSWORD: ${{ secrets.PASSWORD }}
               run: |
-                sed -i "s|\${{ secrets.PASSWORD }}|${PASSWORD}|g" index.html
+                  sed -i "s|PASSWORD_PLACEHOLDER|${PASSWORD}|g" index.html
 
             - name: Deploy to GitHub Pages
               uses: peaceiris/actions-gh-pages@v4
