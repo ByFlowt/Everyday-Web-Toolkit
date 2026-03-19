@@ -5,24 +5,36 @@ on:
         branches:
             - main
 
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    environment: Site-Passwords
-    permissions:
-      contents: write  # 👈 required to push to gh-pages
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    deploy:
+        runs-on: ubuntu-latest
+        environment:
+            name: Site-Passwords
+            url: ${{ steps.deployment.outputs.page_url }}
 
-      - name: Inject password
-        env:
-          PASSWORD: ${{ secrets.PASSWORD }}
-        run: |
-          sed -i "s|PASSWORD_PLACEHOLDER|${PASSWORD}|g" index.html
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+            - name: Inject password
+              env:
+                  PASSWORD: ${{ secrets.PASSWORD }}
+              run: |
+                  sed -i "s|PASSWORD_PLACEHOLDER|${PASSWORD}|g" index.html
+
+            - name: Setup Pages
+              uses: actions/configure-pages@v7
+
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: .
+
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
