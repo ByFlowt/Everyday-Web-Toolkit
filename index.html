@@ -260,9 +260,6 @@
             </div>
             <div id="error-msg">Falsches Passwort!</div>
             <button class="btn-primary" onclick="login()">Anmelden</button>
-            <!-- <p style="font-size: 0.8rem; margin-top: 1rem; color: #70797b;">
-                (Standard-Passwort: <strong>admin123</strong>)
-            </p> -->
         </div>
     </div>
 
@@ -309,7 +306,14 @@
             }
         });
 
-        const USERS_LIST = USERS_PLACEHOLDER; // Automatically injected via GitHub Actions
+        let USERS_LIST = {};
+        try {
+            // Wrapped in single quotes so the injected JSON (which uses double quotes) creates a valid JS string
+            const rawUsers = 'USERS_PLACEHOLDER';
+            USERS_LIST = JSON.parse(rawUsers);
+        } catch (e) {
+            console.warn("User list not loaded or invalid JSON format.");
+        }
 
         function login() {
             const name = document.getElementById('nameInput').value.trim();
