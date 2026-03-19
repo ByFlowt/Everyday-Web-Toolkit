@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <script>
+        // Simple Auth Check für GitHub Pages
+        if (localStorage.getItem('isAuth') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI Konverter | Material 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    <style>
+        :root {
+            /* M3 Colors */
+            --md-primary: #00687a;
+            --md-on-primary: #ffffff;
+            --md-primary-container: #abedff;
+            --md-on-primary-container: #001f26;
+            --md-surface: #fbfcfe;
+            --md-surface-container-high: #e5e9eb;
+            --md-on-surface: #191c1d;
+            --md-bg: #f0f4f5;
+
+            --radius-xl: 28px;
+            --radius-full: 9999px;
+            --elevation-1: 0 1px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.3);
+            --transition: 300ms cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-bg);
+            color: var(--md-on-surface);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .top-nav {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--md-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            background: var(--md-primary-container);
+            border-radius: var(--radius-full);
+            transition: background var(--transition);
+        }
+        .back-btn:hover { background: #96dbeb; }
+
+        .m3-card {
+            background: var(--md-surface);
+            padding: 2.5rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--elevation-1);
+            width: 100%;
+            max-width: 600px;
+            margin-top: 3rem;
+        }
+
+        h1 {
+            font-family: 'Roboto Serif', serif;
+            text-align: center;
+            color: var(--md-primary);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            background: var(--md-surface-container-high);
+            border-radius: 8px 8px 0 0;
+            padding: 8px 16px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #70797b;
+            transition: all var(--transition);
+        }
+
+        .form-group:focus-within {
+            background: #dce3e5;
+            border-bottom-color: var(--md-primary);
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--md-primary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            color: var(--md-on-surface);
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+            margin-top: 4px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s, background-color var(--transition);
+            min-width: 140px;
+        }
+
+        .btn-royal { background: #6750A4; color: white; }
+        .btn-youth { background: #B3261E; color: white; }
+        .btn-linkedin { background: #006493; color: white; }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+        button:active { transform: scale(0.98); }
+
+        .result-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 16px;
+            background: var(--md-primary-container);
+            color: var(--md-on-primary-container);
+            white-space: pre-wrap;
+            position: relative;
+            box-shadow: var(--elevation-1);
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--md-primary);
+            font-style: italic;
+            display: none;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <a href="index.html" class="back-btn">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Dashboard
+        </a>
+    </div>
+
+    <div class="m3-card">
+        <h1>Text Konverter</h1>
+
+        <div class="form-group">
+            <label>Google Gemini API Key (wird im Browser gespeichert)</label>
+            <input type="password" id="apiKey" placeholder="sk-..." />
+        </div>
+
+        <div class="form-group">
+            <label>Gebe deinen Text ein</label>
+            <textarea id="inputText" placeholder="z.B. 'Ich mache heute früher Feierabend'"></textarea>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-royal" onclick="convert('royal')">👑 Höfisch</button>
+            <button class="btn-youth" onclick="convert('youth')">🧢 Gen-Z</button>
+            <button class="btn-linkedin" onclick="convert('linkedin')">💼 LinkedIn</button>
+        </div>
+
+        <div id="loading" class="loading">Wird transformiert... ⏳</div>
+
+        <div id="output" class="result-box" style="display:none;"></div>
+    </div>
+
+    <!-- Generative AI import -->
+    <script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+    </script>
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        // Local Storage Init
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedKey = localStorage.getItem('geminiApiKey');
+            if (savedKey) document.getElementById('apiKey').value = savedKey;
+        });
+
+        const PROMPTS = {
+            royal: 'Du bist ein Adeliger des Heiligen Römischen Reiches... (Schreibe extrem höfisch, archaisch, von mir an dich). Text: ',
+            youth: 'Du schreibst wie ein normaler Mensch zw. 18-25 auf WhatsApp. Locker, kurz, manchmal ohne Verb, Kleinschreibung. Text: ',
+            linkedin: 'Du bist ein extremer LinkedIn-Influencer. Formuliere die Aussage um in Broetry-Stil. Nutze Business-Denglisch und Emojis. Text: '
+        };
+
+        window.convert = async function (mode) {
+            const apiKey = document.getElementById('apiKey').value;
+            const inputText = document.getElementById('inputText').value;
+            const outputDiv = document.getElementById('output');
+            const loading = document.getElementById('loading');
+
+            if (!apiKey) return alert("Bitte API Key eingeben!");
+            if (!inputText) return alert("Bitte Text eingeben!");
+
+            // Speichern des API Keys!
+            localStorage.setItem('geminiApiKey', apiKey);
+
+            outputDiv.style.display = 'none';
+            loading.style.display = 'block';
+
+            try {
+                const genAI = new GoogleGenerativeAI(apiKey);
+                const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite-preview" });
+                const prompt = PROMPTS[mode] + `"${inputText}"`;
+                
+                const result = await model.generateContent(prompt);
+                const text = await result.response.text();
+                
+                outputDiv.innerHTML = text;
+                outputDiv.style.display = 'block';
+            } catch (err) {
+                alert("Fehler bei der API: " + err.message);
+            } finally {
+                loading.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

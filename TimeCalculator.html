@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <script>
+        // Simple Auth Check für GitHub Pages
+        if (localStorage.getItem('isAuth') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitszeit-Rechner | Material 3</title>
+    
+    <!-- Google Fonts: Roboto & Roboto Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+
+    <style>
+        /* Material 3 Expressive Color Tokens & Variables */
+        :root {
+            --md-primary: #00687a;
+            --md-on-primary: #ffffff;
+            --md-primary-container: #abedff;
+            --md-on-primary-container: #001f26;
+            
+            --md-secondary: #4a6268;
+            --md-on-secondary: #ffffff;
+            --md-secondary-container: #cde7ed;
+            --md-on-secondary-container: #051f24;
+
+            --md-surface: #fbfcfe;
+            --md-surface-container: #f0f4f5;
+            --md-surface-container-high: #e5e9eb;
+            --md-on-surface: #191c1d;
+            --md-on-surface-variant: #3f484a;
+            
+            --md-error: #ba1a1a;
+            --md-outline: #70797b;
+
+            /* Radii */
+            --radius-extra-large: 28px;
+            --radius-large: 16px;
+            --radius-full: 9999px;
+
+            /* Elevation/Shadows */
+            --elevation-1: 0px 1px 3px 1px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.3);
+            --elevation-3: 0px 4px 8px 3px rgba(0,0,0,0.15), 0px 1px 3px 0px rgba(0,0,0,0.3);
+            
+            /* Transitions */
+            --transition-standard: 300ms cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-surface-container);
+            color: var(--md-on-surface);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Roboto Serif', serif;
+            color: var(--md-on-surface);
+        }
+
+        /* --- Hero Section / Start Page --- */
+        #start-page {
+            position: fixed;
+            inset: 0;
+            background-color: var(--md-surface);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            z-index: 100;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        #start-page.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .hero-shape {
+            width: 200px;
+            height: 200px;
+            background: var(--md-primary-container);
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: morphFloat 8s ease-in-out infinite;
+        }
+
+        .hero-shape .material-symbols-outlined {
+            font-size: 5rem;
+            color: var(--md-primary);
+        }
+
+        @keyframes morphFloat {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translateY(0); }
+            50% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: translateY(-15px); }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translateY(0); }
+        }
+
+        #start-page h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--md-primary);
+        }
+
+        #start-page p {
+            font-size: 1.2rem;
+            max-width: 500px;
+            color: var(--md-on-surface-variant);
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+            border: none;
+            padding: 1rem 2rem;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            box-shadow: var(--elevation-1);
+            transition: background-color var(--transition-standard), box-shadow var(--transition-standard), transform var(--transition-standard);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-primary:hover {
+            background-color: #00768a;
+            box-shadow: var(--elevation-3);
+            transform: translateY(-2px);
+        }
+
+        /* --- Main App Container --- */
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.2, 0, 0, 1) 0.2s;
+        }
+
+        #start-page.hidden ~ .app-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Tabs --- */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            background: var(--md-surface-container-high);
+            padding: 8px;
+            border-radius: var(--radius-full);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: var(--md-on-surface-variant);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: background-color var(--transition-standard), color var(--transition-standard);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background-color: var(--md-secondary-container);
+            color: var(--md-on-secondary-container);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Material 3 Cards --- */
+        .m3-card {
+            background-color: var(--md-surface);
+            border-radius: var(--radius-extra-large);
+            padding: 2rem;
+            box-shadow: var(--elevation-1);
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Form Elements --- */
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+            background: var(--md-surface-container-high);
+            border-radius: 4px 4px 0 0;
+            padding: 8px 16px;
+            border-bottom: 2px solid var(--md-on-surface-variant);
+            transition: background-color var(--transition-standard);
+        }
+
+        .form-group:focus-within {
+            background: #dce3e5;
+            border-bottom-color: var(--md-primary);
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--md-primary);
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            color: var(--md-on-surface);
+            outline: none;
+            padding: 4px 0;
+        }
+
+        .row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .row .form-group {
+            flex: 1;
+        }
+
+        /* --- Toggles & Switches --- */
+        .switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-top: 1px solid var(--md-outline);
+            margin-top: 1rem;
+        }
+
+        .switch-label {
+            font-weight: 500;
+            color: var(--md-on-surface);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 32px;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--md-surface-container-high);
+            border: 2px solid var(--md-outline);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 6px;
+            bottom: 6px;
+            background-color: var(--md-outline);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--md-primary);
+            border-color: var(--md-primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+            background-color: var(--md-on-primary);
+            height: 24px;
+            width: 24px;
+            left: 2px;
+            bottom: 2px;
+        }
+
+        /* --- Result Highlight Card --- */
+        .result-card {
+            background: var(--md-primary-container);
+            color: var(--md-on-primary-container);
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: var(--radius-extra-large);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--elevation-3);
+        }
+        
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .result-time {
+            font-size: 4rem;
+            font-weight: 700;
+            font-family: 'Roboto Serif', serif;
+            margin: 0.5rem 0;
+            letter-spacing: -1px;
+        }
+
+        .result-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .overtime-badge {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--md-surface);
+            color: var(--md-on-surface);
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: var(--elevation-1);
+        }
+        
+        .overtime-input-section {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height var(--transition-standard), margin var(--transition-standard);
+        }
+        
+        .overtime-input-section.expanded {
+            max-height: 200px;
+            margin-top: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Start Page / Hero -->
+    <div id="start-page">
+        <div class="hero-shape">
+            <span class="material-symbols-outlined">schedule</span>
+        </div>
+        <h1>Work-Life Balance</h1>
+        <p>Berechne deinen Feierabend und verwalte dein Überstundenkonto effizient – mit modernem Design & intelligenter Logik.</p>
+        <button class="btn-primary" onclick="startApp()">
+            <span class="material-symbols-outlined">calculate</span>
+            Zum Rechner
+        </button>
+    </div>
+
+        <div class="top-nav" style="position: absolute; top: 1rem; left: 1rem; z-index: 1000;">
+        <a href="index.html" style="display: flex; align-items: center; gap: 8px; color: var(--md-primary); text-decoration: none; font-weight: 500; padding: 8px 16px; background: var(--md-primary-container); border-radius: 9999px;">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Dashboard
+        </a>
+    </div>
+
+    <!-- Main Application -->
+    <main class="app-container">
+        
+        <!-- Tab Navigation -->
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="switchTab('calculator', this)">
+                <span class="material-symbols-outlined">timer</span>
+                Rechner
+            </button>
+            <button class="tab-btn" onclick="switchTab('info', this)">
+                <span class="material-symbols-outlined">info</span>
+                Info
+            </button>
+        </nav>
+
+        <!-- Tab 1: Calculator -->
+        <div id="calculator-tab" class="tab-content active">
+            
+            <div class="m3-card">
+                <div class="row">
+                    <div class="form-group">
+                        <label>Anfangszeit</label>
+                        <input type="time" id="startTime" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Reguläre Arbeitszeit (h)</label>
+                        <input type="number" id="workHours" step="0.5" placeholder="7.5" min="1" max="12">
+                    </div>
+                    <div class="form-group">
+                        <label>Pausenzeit (Minuten)</label>
+                        <input type="number" id="breakMinutes" placeholder="45" min="0" max="120">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Bisherige Überstunden (h)</label>
+                    <input type="number" id="currentOvertime" step="0.25" placeholder="0">
+                </div>
+
+                <div class="switch-container">
+                    <div class="switch-label">
+                        <span class="material-symbols-outlined" style="color: var(--md-primary);">more_time</span>
+                        Überstunden verwalten (Auf-/Abbau heute)
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleOvertime">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="overtime-input-section" id="overtimeSection">
+                    <div class="form-group">
+                        <label>Geplante Überstunden heute (+/- Minuten)</label>
+                        <input type="number" id="dailyOvertimeCalc" placeholder="0">
+                        <small style="color: var(--md-on-surface-variant); font-size: 0.8rem; display: block; margin-top: 5px;">
+                            Z.B. -30 für 30 Minuten früher gehen, +60 für 1 Stunde länger
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Card -->
+            <div class="result-card">
+                <div class="result-label">Dein Feierabend ist um</div>
+                <div class="result-time" id="endTime">16:45</div>
+                <div class="overtime-badge" id="overtimeBadge">
+                    Neues Konto: 12.5 h
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Tab 2: Info -->
+        <div id="info-tab" class="tab-content">
+            <div class="m3-card">
+                <h2>Über diesen Rechner</h2>
+                <p style="margin-top: 1rem; color: var(--md-on-surface-variant);">
+                    Dieser Arbeitszeit-Rechner basiert auf der <strong>Google Material 3 Expressive</strong> Design Language.
+                </p>
+                <p style="margin-top: 1rem; color: var(--md-on-surface-variant);">
+                    Er kalkuliert deine Feierabendzeit dynamisch auf Basis von regulärer Arbeitszeit, Beginn und Pausen. Das integrierte Überstundensystem erlaubt es dir, Abbaustunden einzutragen, was automatisch den Feierabend vorzieht und dein fiktives Überstundenkonto am Folgetag aktualisiert.
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- Navigation ---
+        function startApp() {
+            document.getElementById('start-page').classList.add('hidden');
+        }
+
+        function switchTab(tabId, btnElement) {
+            // Reset active states
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Set new active states
+            btnElement.classList.add('active');
+            document.getElementById(tabId + '-tab').classList.add('active');
+        }
+
+        // --- Calculation Logic & Local Storage ---
+        const inputs = [
+            'startTime', 'workHours', 'breakMinutes', 
+            'currentOvertime', 'dailyOvertimeCalc', 'toggleOvertime'
+        ];
+
+        function loadFromStorage() {
+            const data = JSON.parse(localStorage.getItem('timeCalcState') || '{}');
+            if(data.startTime) document.getElementById('startTime').value = data.startTime;
+            if(data.workHours) document.getElementById('workHours').value = data.workHours;
+            if(data.breakMinutes) document.getElementById('breakMinutes').value = data.breakMinutes;
+            if(data.currentOvertime) document.getElementById('currentOvertime').value = data.currentOvertime;
+            if(data.dailyOvertimeCalc) document.getElementById('dailyOvertimeCalc').value = data.dailyOvertimeCalc;
+            
+            if(data.toggleOvertime) {
+                document.getElementById('toggleOvertime').checked = true;
+                document.getElementById('overtimeSection').classList.add('expanded');
+            }
+        }
+
+        function saveToStorage() {
+            const data = {
+                startTime: document.getElementById('startTime').value,
+                workHours: document.getElementById('workHours').value,
+                breakMinutes: document.getElementById('breakMinutes').value,
+                currentOvertime: document.getElementById('currentOvertime').value,
+                dailyOvertimeCalc: document.getElementById('dailyOvertimeCalc').value,
+                toggleOvertime: document.getElementById('toggleOvertime').checked
+            };
+            localStorage.setItem('timeCalcState', JSON.stringify(data));
+        }
+
+        // Attach event listeners for real-time calculation & saving
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                saveToStorage();
+                calculateTime();
+            });
+            document.getElementById(id).addEventListener('change', () => {
+                saveToStorage();
+                calculateTime();
+            });
+        });
+
+        // Toggle overtime section sliding
+        document.getElementById('toggleOvertime').addEventListener('change', (e) => {
+            const section = document.getElementById('overtimeSection');
+            if(e.target.checked) {
+                section.classList.add('expanded');
+            } else {
+                section.classList.remove('expanded');
+                document.getElementById('dailyOvertimeCalc').value = '';
+            }
+            saveToStorage();
+            calculateTime();
+        });
+
+        function calculateTime() {
+            const startTimeStr = document.getElementById('startTime').value;
+            
+            // Standard values if input is empty
+            const workHoursInput = document.getElementById('workHours').value;
+            const breakMinutesInput = document.getElementById('breakMinutes').value;
+            const currentOvertimeInput = document.getElementById('currentOvertime').value;
+            
+            const workHours = workHoursInput !== '' ? parseFloat(workHoursInput) : 7.5;
+            const breakMinutes = breakMinutesInput !== '' ? parseInt(breakMinutesInput) : 45;
+            const currentOvertime = currentOvertimeInput !== '' ? parseFloat(currentOvertimeInput) : 0;
+            
+            const isOvertimeActive = document.getElementById('toggleOvertime').checked;
+            // Now expecting dailyOvertimeCalc in Minutes!
+            const dailyOvertimeMinutes = isOvertimeActive ? (parseInt(document.getElementById('dailyOvertimeCalc').value) || 0) : 0;
+
+            if (!startTimeStr) {
+                document.getElementById('endTime').innerText = '--:--';
+                document.getElementById('overtimeBadge').innerText = 'Bitte Anfangszeit eingeben';
+                document.getElementById('overtimeBadge').style.backgroundColor = 'var(--md-surface)';
+                document.getElementById('overtimeBadge').style.color = 'var(--md-on-surface)';
+                return;
+            }
+
+            const [startHour, startMinute] = startTimeStr.split(':').map(Number);
+            let timeDate = new Date();
+            timeDate.setHours(startHour, startMinute, 0, 0);
+
+            const workMillis = workHours * 3600000;
+            const breakMillis = breakMinutes * 60000;
+            
+            // Adjust end time by adding overtime in minutes
+            const adjustmentMillis = dailyOvertimeMinutes * 60000;
+
+            timeDate = new Date(timeDate.getTime() + workMillis + breakMillis + adjustmentMillis);
+
+            const endHourStr = timeDate.getHours().toString().padStart(2, '0');
+            const endMinuteStr = timeDate.getMinutes().toString().padStart(2, '0');
+            document.getElementById('endTime').innerText = `${endHourStr}:${endMinuteStr} Uhr`;
+
+            // Calculate New Overtime Balance in Hours
+            const newOvertimeBalance = currentOvertime + (dailyOvertimeMinutes / 60);
+            
+            const badge = document.getElementById('overtimeBadge');
+            
+            // Format to hh:mm for display
+            const isNegative = newOvertimeBalance < 0;
+            const absHours = Math.abs(newOvertimeBalance);
+            const h = Math.floor(absHours);
+            const m = Math.round((absHours - h) * 60);
+            const sign = isNegative ? '-' : '';
+            badge.innerText = `Neues Konto: ${sign}${h}h ${m}m`;
+
+            if (dailyOvertimeMinutes > 0) {
+                badge.style.color = '#00687a';
+                badge.style.backgroundColor = '#abedff';
+                badge.innerText += ' (Aufgebaut 🚀)';
+            } else if (dailyOvertimeMinutes < 0) {
+                badge.style.color = '#ba1a1a';
+                badge.style.backgroundColor = '#ffdad6'; 
+                badge.innerText += ' (Abgebaut 📉)';
+            } else {
+                badge.style.color = 'var(--md-on-surface)';
+                badge.style.backgroundColor = 'var(--md-surface)';
+            }
+        }
+
+        // Run initial calculation and load storage
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromStorage();
+            calculateTime();
+        });
+
+    </script>
+</body>
+</html>
