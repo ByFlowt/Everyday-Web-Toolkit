@@ -14,7 +14,7 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         environment:
-            name: Site-Passwords
+            name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
 
         steps:
@@ -23,28 +23,28 @@ jobs:
 
             - name: Check and Inject Secret
               env:
-                USERS_JSON: ${{ secrets.USERS }}
+                  USERS_JSON: ${{ secrets.USERS }}
               run: |
-                echo "Checking if secret exists..."
-                if [ -z "$USERS_JSON" ]; then
-                  echo "ERROR: The USERS secret is completely empty or not accessible by this job!"
-                else
-                  echo "SUCCESS: The USERS secret was found (length: ${#USERS_JSON} characters)."
-                fi
-                
-                node -e "
-                  const fs = require('fs');
-                  let html = fs.readFileSync('index.html', 'utf8');
-                  const jsonString = process.env.USERS_JSON || '{}';
-                  
-                  if (html.includes('\'USERS_PLACEHOLDER\'')) {
-                     console.log('Placeholder found in HTML, replacing...');
-                     html = html.replace('\'USERS_PLACEHOLDER\'', '\`' + jsonString + '\`');
-                     fs.writeFileSync('index.html', html);
-                  } else {
-                     console.log('ERROR: Placeholder NOT found in HTML!');
-                  }
-                "
+                  echo "Checking if secret exists..."
+                  if [ -z "$USERS_JSON" ]; then
+                    echo "ERROR: The USERS secret is completely empty or not accessible by this job!"
+                  else
+                    echo "SUCCESS: The USERS secret was found (length: ${#USERS_JSON} characters)."
+                  fi
+
+                  node -e "
+                    const fs = require('fs');
+                    let html = fs.readFileSync('index.html', 'utf8');
+                    const jsonString = process.env.USERS_JSON || '{}';
+                    
+                    if (html.includes('\'USERS_PLACEHOLDER\'')) {
+                       console.log('Placeholder found in HTML, replacing...');
+                       html = html.replace('\'USERS_PLACEHOLDER\'', '\`' + jsonString + '\`');
+                       fs.writeFileSync('index.html', html);
+                    } else {
+                       console.log('ERROR: Placeholder NOT found in HTML!');
+                    }
+                  "
 
             - name: Setup Pages
               uses: actions/configure-pages@v5
