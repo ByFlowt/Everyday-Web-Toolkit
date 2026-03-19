@@ -13,8 +13,10 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Inject password
+              env:
+                PASSWORD: ${{ secrets.PASSWORD }}
               run: |
-                  sed -i 's|\${{ secrets.PASSWORD }}|'"${{ secrets.PASSWORD }}"'|g' index.html
+                sed -i "s|\${{ secrets.PASSWORD }}|${PASSWORD}|g" index.html
 
             - name: Deploy to GitHub Pages
               uses: peaceiris/actions-gh-pages@v4
