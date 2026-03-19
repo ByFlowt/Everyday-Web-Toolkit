@@ -307,17 +307,35 @@
         });
 
         let USERS_LIST = {};
+        let SYSTEM_ERROR = "";
         try {
             // Wrapped in single quotes so the injected JSON (which uses double quotes) creates a valid JS string
             const rawUsers = 'USERS_PLACEHOLDER';
-            USERS_LIST = JSON.parse(rawUsers);
+            if (rawUsers !== 'USERS_PLACEHOLDER' && rawUsers !== '') {
+                USERS_LIST = JSON.parse(rawUsers);
+            } else if (rawUsers === '') {
+                SYSTEM_ERROR = "GitHub Secret ist leer.";
+            }
         } catch (e) {
-            console.warn("User list not loaded or invalid JSON format.");
+            console.warn("User list invalid JSON format:", e);
+            SYSTEM_ERROR = "JSON-Format Fehler: Bitte prüfe die Formatierung des Secrets! (" + e.message + ")";
         }
 
         function login() {
             const name = document.getElementById('nameInput').value.trim();
-            const pw = document.getElementById('passwordInput').value;
+            const pw = document.getElementById('passwordInput').value.trim();
+
+            if (SYSTEM_ERROR) {
+                document.getElementById('error-msg').textContent = 'Systemfehler: ' + SYSTEM_ERROR;
+                document.getElementById('error-msg').style.display = 'block';
+                return;
+            }
+
+            if (Object.keys(USERS_LIST).length === 0) {
+                document.getElementById('error-msg').textContent = 'Systemfehler: Keine Benutzer geladen.';
+                document.getElementById('error-msg').style.display = 'block';
+                return;
+            }
 
             if (!name) {
                 document.getElementById('error-msg').textContent = 'Bitte einen Namen eingeben!';
@@ -325,15 +343,19 @@
                 return;
             }
 
-            if (USERS_LIST[name] && USERS_LIST[name] === pw) {
+            // Case-insensitive name search
+            const foundUserKey = Object.keys(USERS_LIST).find(k => k.toLowerCase() === name.toLowerCase());
+
+            if (foundUserKey && USERS_LIST[foundUserKey] === pw) {
                 localStorage.setItem('isAuth', 'true');
-                localStorage.setItem('userName', name);
+                localStorage.setItem('userName', foundUserKey);
                 document.getElementById('passwordInput').value = '';
                 document.getElementById('error-msg').style.display = 'none';
                 showDashboard();
             } else {
-                document.getElementById('error-msg').textContent = 'Name oder Passwort falsch!';
+                document.getElementById('error-msg').textContent = 'Name oder Passwort falsch! (Tipp: Achte auf Groß-/Kleinschreibung beim Passwort)';
                 document.getElementById('error-msg').style.display = 'block';
+                console.log("Gefundene Benutzernamen im System: ", Object.keys(USERS_LIST));
             }
         }
 
