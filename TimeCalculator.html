@@ -42,16 +42,16 @@
             --md-outline: #70797b;
 
             /* Radii */
-            --radius-extra-large: 28px;
-            --radius-large: 16px;
+            --radius-extra-large: 32px;
+            --radius-large: 20px;
             --radius-full: 9999px;
 
             /* Elevation/Shadows */
-            --elevation-1: 0px 1px 3px 1px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.3);
-            --elevation-3: 0px 4px 8px 3px rgba(0,0,0,0.15), 0px 1px 3px 0px rgba(0,0,0,0.3);
+            --elevation-1: 0px 4px 12px rgba(0,0,0,0.08), 0px 1px 3px rgba(0,0,0,0.1);
+            --elevation-3: 0px 8px 24px rgba(0,0,0,0.12), 0px 2px 6px rgba(0,0,0,0.1);
             
             /* Transitions */
-            --transition-standard: 300ms cubic-bezier(0.2, 0, 0, 1);
+            --transition-standard: 400ms cubic-bezier(0.2, 0, 0, 1);
         }
 
         * {
@@ -224,9 +224,14 @@
         .m3-card {
             background-color: var(--md-surface);
             border-radius: var(--radius-extra-large);
-            padding: 2rem;
+            padding: 2.5rem;
             box-shadow: var(--elevation-1);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            transition: transform var(--transition-standard);
+        }
+        
+        .m3-card:hover {
+            transform: translateY(-4px);
         }
 
         /* --- Form Elements --- */
@@ -234,10 +239,10 @@
             position: relative;
             margin-bottom: 1.5rem;
             background: var(--md-surface-container-high);
-            border-radius: 4px 4px 0 0;
-            padding: 8px 16px;
-            border-bottom: 2px solid var(--md-on-surface-variant);
-            transition: background-color var(--transition-standard);
+            border-radius: 12px 12px 0 0;
+            padding: 12px 16px;
+            border-bottom: 3px solid #70797b;
+            transition: all var(--transition-standard);
         }
 
         .form-group:focus-within {
@@ -247,10 +252,10 @@
 
         .form-group label {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--md-primary);
-            margin-bottom: 2px;
-            font-weight: 500;
+            margin-bottom: 4px;
+            font-weight: 600;
         }
 
         .form-group input {
@@ -258,7 +263,7 @@
             border: none;
             background: transparent;
             font-family: 'Roboto', sans-serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--md-on-surface);
             outline: none;
             padding: 4px 0;
@@ -497,6 +502,24 @@
                 </div>
             </div>
             
+            <div id="saveToast" style="
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100px);
+                background: var(--md-on-surface);
+                color: var(--md-surface);
+                padding: 12px 24px;
+                border-radius: var(--radius-full);
+                font-family: 'Roboto', sans-serif;
+                font-size: 0.9rem;
+                box-shadow: var(--elevation-3);
+                transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+                opacity: 0;
+                pointer-events: none;
+                z-index: 1000;
+            ">Deine Eingaben wurden gespeichert!</div>
+            
         </div>
 
         <!-- Tab 2: Info -->
@@ -560,6 +583,20 @@
                 toggleOvertime: document.getElementById('toggleOvertime').checked
             };
             localStorage.setItem('timeCalcState', JSON.stringify(data));
+            showSaveToast();
+        }
+        
+        let saveToastTimeout;
+        function showSaveToast() {
+            const toast = document.getElementById('saveToast');
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            toast.style.opacity = '1';
+            
+            clearTimeout(saveToastTimeout);
+            saveToastTimeout = setTimeout(() => {
+                toast.style.transform = 'translateX(-50%) translateY(100px)';
+                toast.style.opacity = '0';
+            }, 2000);
         }
 
         // Attach event listeners for real-time calculation & saving

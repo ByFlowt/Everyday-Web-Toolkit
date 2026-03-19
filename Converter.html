@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
     <style>
         :root {
-            /* M3 Colors */
+            /* M3 Expressive Colors & Radii */
             --md-primary: #00687a;
             --md-on-primary: #ffffff;
             --md-primary-container: #abedff;
@@ -24,10 +24,10 @@
             --md-on-surface: #191c1d;
             --md-bg: #f0f4f5;
 
-            --radius-xl: 28px;
+            --radius-xl: 32px;
             --radius-full: 9999px;
-            --elevation-1: 0 1px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.3);
-            --transition: 300ms cubic-bezier(0.2, 0, 0, 1);
+            --elevation-1: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.1);
+            --transition: 400ms cubic-bezier(0.2, 0, 0, 1);
         }
 
         body {
@@ -50,42 +50,53 @@
         }
 
         .back-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            color: var(--md-primary);
+            gap: 12px;
+            color: var(--md-on-primary-container);
             text-decoration: none;
             font-weight: 500;
-            padding: 8px 16px;
+            padding: 12px 24px;
             background: var(--md-primary-container);
             border-radius: var(--radius-full);
-            transition: background var(--transition);
+            transition: all var(--transition);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
-        .back-btn:hover { background: #96dbeb; }
+        .back-btn:hover { 
+            background: #96dbeb; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
 
         .m3-card {
             background: var(--md-surface);
-            padding: 2.5rem;
+            padding: 3rem;
             border-radius: var(--radius-xl);
             box-shadow: var(--elevation-1);
             width: 100%;
             max-width: 600px;
             margin-top: 3rem;
+            transition: transform var(--transition);
+        }
+        
+        .m3-card:hover {
+            transform: translateY(-4px);
         }
 
         h1 {
             font-family: 'Roboto Serif', serif;
             text-align: center;
             color: var(--md-primary);
-            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
         }
 
         .form-group {
             background: var(--md-surface-container-high);
-            border-radius: 8px 8px 0 0;
-            padding: 8px 16px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #70797b;
+            border-radius: 12px 12px 0 0;
+            padding: 12px 20px;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #70797b;
             transition: all var(--transition);
         }
 
@@ -96,10 +107,10 @@
 
         .form-group label {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--md-primary);
-            font-weight: 500;
-            margin-bottom: 4px;
+            font-weight: 600;
+            margin-bottom: 6px;
         }
 
         .form-group input, .form-group textarea {
@@ -107,15 +118,22 @@
             border: none;
             background: transparent;
             font-family: 'Roboto', sans-serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--md-on-surface);
             outline: none;
         }
 
         .form-group textarea {
             resize: vertical;
-            height: 100px;
-            margin-top: 4px;
+            height: 120px;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        /* Override autofill styling */
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 1000px var(--md-surface-container-high) inset !important;
+            -webkit-text-fill-color: var(--md-on-surface) !important;
         }
 
         .button-group {

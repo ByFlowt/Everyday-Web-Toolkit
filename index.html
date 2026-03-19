@@ -179,6 +179,13 @@
             outline: none;
         }
 
+        /* Prevent auto-fill background from overriding transparency */
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 1000px var(--md-surface-container-high) inset !important;
+            -webkit-text-fill-color: var(--md-on-surface) !important;
+            border-radius: 4px;
+        }
+
         .btn-primary {
             background-color: var(--md-primary);
             color: var(--md-on-primary);
@@ -235,6 +242,29 @@
             margin-bottom: 1rem;
             display: none;
         }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .nav-card {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .login-card {
+                box-sizing: border-box;
+                padding: 1.5rem;
+            }
+            .logout-btn {
+                position: static;
+                align-self: flex-end;
+                margin-bottom: 1.5rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 
@@ -248,19 +278,18 @@
         <h1>Login</h1>
         <p class="subtitle">Bitte melde dich an, um das Dashboard zu nutzen.</p>
 
-        <div class="login-card">
+        <form class="login-card" onsubmit="event.preventDefault(); login();">
             <div class="form-group">
-                <label>Name</label>
-                <input type="text" id="nameInput" placeholder="Dein Name" onkeypress="checkEnter(event)">
+                <label for="nameInput">Name</label>
+                <input type="text" id="nameInput" name="username" autocomplete="username" placeholder="Dein Name" required>
             </div>
             <div class="form-group">
-                <label>Passwort</label>
-                <input type="password" id="passwordInput" placeholder="Passwort eingeben"
-                    onkeypress="checkEnter(event)">
+                <label for="passwordInput">Passwort</label>
+                <input type="password" id="passwordInput" name="password" autocomplete="current-password" placeholder="Passwort eingeben" required>
             </div>
             <div id="error-msg">Falsches Passwort!</div>
-            <button class="btn-primary" onclick="login()">Anmelden</button>
-        </div>
+            <button type="submit" class="btn-primary">Anmelden</button>
+        </form>
     </div>
 
     <!-- DASHBOARD VIEW -->
@@ -296,8 +325,35 @@
     </div>
 
     <script>
+        // Inactivity timeout (1 hour in milliseconds)
+        const INACTIVITY_LIMIT = 60 * 60 * 1000;
+
+        function resetActivityTimer() {
+            if (localStorage.getItem('isAuth') === 'true') {
+                localStorage.setItem('lastActivity', Date.now());
+            }
+        }
+
+        function checkInactivity() {
+            if (localStorage.getItem('isAuth') === 'true') {
+                const lastActivity = localStorage.getItem('lastActivity');
+                if (lastActivity && (Date.now() - parseInt(lastActivity)) > INACTIVITY_LIMIT) {
+                    alert('Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.');
+                    logout();
+                }
+            }
+        }
+
         // Check Auth Status on Load
         document.addEventListener('DOMContentLoaded', () => {
+            checkInactivity(); // Check immediately on load
+            setInterval(checkInactivity, 60000); // Check every minute
+
+            // Attach listeners to reset timer on user interaction
+            ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {
+                window.addEventListener(event, resetActivityTimer);
+            });
+
             const isAuth = localStorage.getItem('isAuth') === 'true';
             if (isAuth) {
                 showDashboard();
@@ -351,6 +407,7 @@
             if (foundUserKey && USERS_LIST[foundUserKey] === pw) {
                 localStorage.setItem('isAuth', 'true');
                 localStorage.setItem('userName', foundUserKey);
+                localStorage.setItem('lastActivity', Date.now()); // Set initial activity time
                 document.getElementById('passwordInput').value = '';
                 document.getElementById('error-msg').style.display = 'none';
                 showDashboard();
@@ -361,15 +418,10 @@
             }
         }
 
-        function checkEnter(e) {
-            if (e.key === 'Enter') {
-                login();
-            }
-        }
-
         function logout() {
             localStorage.removeItem('isAuth');
             localStorage.removeItem('userName');
+            localStorage.removeItem('lastActivity');
             showLogin();
         }
 
