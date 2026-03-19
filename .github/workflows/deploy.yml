@@ -21,21 +21,30 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Inject password
+            - name: Check and Inject Secret
               env:
                 USERS_JSON: ${{ secrets.USERS }}
               run: |
-                # Create a temporary script to do the replacement safely instead of relying on basic sed
-                # This treats the secret as pure text and doesn't care about quotes/brackets
+                echo "Checking if secret exists..."
+                if [ -z "$USERS_JSON" ]; then
+                  echo "ERROR: The USERS secret is completely empty or not accessible by this job!"
+                else
+                  echo "SUCCESS: The USERS secret was found (length: ${#USERS_JSON} characters)."
+                fi
+                
                 node -e "
                   const fs = require('fs');
                   let html = fs.readFileSync('index.html', 'utf8');
-                  // We expect the environment variable USERS_JSON to hold the exact string
                   const jsonString = process.env.USERS_JSON || '{}';
-                  html = html.replace('\'USERS_PLACEHOLDER\'', '\`' + jsonString + '\`');
-                  fs.writeFileSync('index.html', html);
+                  
+                  if (html.includes('\'USERS_PLACEHOLDER\'')) {
+                     console.log('Placeholder found in HTML, replacing...');
+                     html = html.replace('\'USERS_PLACEHOLDER\'', '\`' + jsonString + '\`');
+                     fs.writeFileSync('index.html', html);
+                  } else {
+                     console.log('ERROR: Placeholder NOT found in HTML!');
+                  }
                 "
-                echo "Injection complete."
 
             - name: Setup Pages
               uses: actions/configure-pages@v5
