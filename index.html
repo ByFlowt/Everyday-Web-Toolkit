@@ -309,7 +309,7 @@
             }
         });
 
-        const CORRECT_PASSWORD = "PASSWORD_PLACEHOLDER"; // Automatically injected via GitHub Actions
+        const USERS_LIST = USERS_PLACEHOLDER; // Automatically injected via GitHub Actions
 
         function login() {
             const name = document.getElementById('nameInput').value.trim();
@@ -321,14 +321,14 @@
                 return;
             }
 
-            if (pw === CORRECT_PASSWORD) {
+            if (USERS_LIST[name] && USERS_LIST[name] === pw) {
                 localStorage.setItem('isAuth', 'true');
                 localStorage.setItem('userName', name);
                 document.getElementById('passwordInput').value = '';
                 document.getElementById('error-msg').style.display = 'none';
                 showDashboard();
             } else {
-                document.getElementById('error-msg').textContent = 'Falsches Passwort!';
+                document.getElementById('error-msg').textContent = 'Name oder Passwort falsch!';
                 document.getElementById('error-msg').style.display = 'block';
             }
         }
