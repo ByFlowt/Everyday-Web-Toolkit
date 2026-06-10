@@ -24,6 +24,10 @@ jobs:
             - name: Check and Inject Secret
               env:
                   USERS_JSON: ${{ secrets.USERS }}
+                  USER_TOBIAS: ${{ secrets.USER_TOBIAS }}
+                  USER_LUCAS: ${{ secrets.USER_LUCAS }}
+                  USER_LEEONIE: ${{ secrets.USER_LEEONIE }}
+                  RECOVERY_CODE: ${{ secrets.RECOVERY_CODE }}
               run: |
                   echo "Checking if secret exists..."
                   if [ -z "$USERS_JSON" ]; then
@@ -32,18 +36,65 @@ jobs:
                     echo "SUCCESS: The USERS secret was found (length: ${#USERS_JSON} characters)."
                   fi
 
+                  if [ -z "$USER_TOBIAS" ]; then
+                    echo "WARNING: USER_TOBIAS is empty."
+                  fi
+
+                  if [ -z "$USER_LUCAS" ]; then
+                    echo "WARNING: USER_LUCAS is empty."
+                  fi
+
+                  if [ -z "$USER_LEEONIE" ]; then
+                    echo "WARNING: USER_LEEONIE is empty."
+                  fi
+
                   node -e "
                     const fs = require('fs');
                     let html = fs.readFileSync('index.html', 'utf8');
-                    const jsonString = process.env.USERS_JSON || '{}';
+                    let usersObject = {};
+                    const combinedUsers = process.env.USERS_JSON || '';
+
+                    if (combinedUsers && combinedUsers !== '{}' && combinedUsers !== 'USERS_PLACEHOLDER') {
+                      try {
+                        usersObject = JSON.parse(combinedUsers);
+                      } catch (error) {
+                        console.log('ERROR: The USERS secret is not valid JSON:', error.message);
+                        process.exit(1);
+                      }
+                    }
+
+                    const userSecretMap = {
+                      Tobias: process.env.USER_TOBIAS,
+                      Lucas: process.env.USER_LUCAS,
+                      Leeonie: process.env.USER_LEEONIE,
+                    };
+
+                    for (const [userName, password] of Object.entries(userSecretMap)) {
+                      if (password && password.trim()) {
+                        usersObject[userName] = password;
+                      } else {
+                        console.log(`WARNING: Missing secret value for ${userName}.`);
+                      }
+                    }
+
+                    const jsonString = JSON.stringify(usersObject);
+                    const recoveryCode = process.env.RECOVERY_CODE || 'RECOVERY_PLACEHOLDER';
                     
                     if (html.includes('\'USERS_PLACEHOLDER\'')) {
                        console.log('Placeholder found in HTML, replacing...');
-                       html = html.replace('\'USERS_PLACEHOLDER\'', '\`' + jsonString + '\`');
-                       fs.writeFileSync('index.html', html);
+                       html = html.replace('\'USERS_PLACEHOLDER\'', JSON.stringify(jsonString));
                     } else {
                        console.log('ERROR: Placeholder NOT found in HTML!');
                     }
+
+                    if (html.includes('\'RECOVERY_PLACEHOLDER\'')) {
+                      console.log('Recovery placeholder found in HTML, replacing...');
+                      html = html.replace('\'RECOVERY_PLACEHOLDER\'', JSON.stringify(recoveryCode));
+                    } else {
+                      console.log('ERROR: Recovery placeholder NOT found in HTML!');
+                    }
+
+                    fs.writeFileSync('index.html', html);
                   "
 
             - name: Setup Pages

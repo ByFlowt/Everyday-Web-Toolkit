@@ -207,6 +207,70 @@
             opacity: 0.9;
         }
 
+        .btn-secondary {
+            background: transparent;
+            color: var(--md-primary);
+            border: 1px solid var(--md-primary);
+            padding: 12px 24px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            width: 100%;
+            transition: all var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: var(--md-primary-container);
+            transform: translateY(-1px);
+        }
+
+        .recovery-panel {
+            margin-top: 1.25rem;
+            padding: 1rem 1.1rem 0.9rem;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.02);
+            text-align: left;
+        }
+
+        .recovery-panel summary {
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--md-primary);
+        }
+
+        .recovery-panel summary::marker {
+            color: var(--md-primary);
+        }
+
+        .recovery-copy {
+            color: #3f484a;
+            font-size: 0.95rem;
+            line-height: 1.45;
+            margin: 0.85rem 0 1rem;
+        }
+
+        .recovery-actions {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .status-msg {
+            display: none;
+            margin-top: 0.85rem;
+            font-size: 0.9rem;
+        }
+
+        .status-msg.success {
+            color: #0f7a3b;
+        }
+
+        .status-msg.error {
+            color: #ba1a1a;
+        }
+
         .logout-btn {
             position: absolute;
             top: 2rem;
@@ -248,19 +312,23 @@
             body {
                 padding: 1rem;
             }
+
             .nav-card {
                 width: 100%;
                 box-sizing: border-box;
             }
+
             .login-card {
                 box-sizing: border-box;
                 padding: 1.5rem;
             }
+
             .logout-btn {
                 position: static;
                 align-self: flex-end;
                 margin-bottom: 1.5rem;
             }
+
             h1 {
                 font-size: 2rem;
             }
@@ -281,14 +349,47 @@
         <form class="login-card" onsubmit="event.preventDefault(); login();">
             <div class="form-group">
                 <label for="nameInput">Name</label>
-                <input type="text" id="nameInput" name="username" autocomplete="username" placeholder="Dein Name" required>
+                <input type="text" id="nameInput" name="username" autocomplete="username" placeholder="Dein Name"
+                    required>
             </div>
             <div class="form-group">
                 <label for="passwordInput">Passwort</label>
-                <input type="password" id="passwordInput" name="password" autocomplete="current-password" placeholder="Passwort eingeben" required>
+                <input type="password" id="passwordInput" name="password" autocomplete="current-password"
+                    placeholder="Passwort eingeben" required>
             </div>
             <div id="error-msg">Falsches Passwort!</div>
             <button type="submit" class="btn-primary">Anmelden</button>
+
+            <details class="recovery-panel">
+                <summary>Passwort zurücksetzen</summary>
+                <p class="recovery-copy">
+                    Wenn dein eigenes Passwort vergessen wurde, kannst du mit dem Recovery-Code ein neues Passwort
+                    setzen.
+                    Die Änderung wird lokal gespeichert. Für die dauerhafte GitHub-Version kannst du den exportierten
+                    JSON-Stand
+                    danach wieder als Secret eintragen.
+                </p>
+                <div class="recovery-actions">
+                    <div class="form-group">
+                        <label for="recoveryCodeInput">Recovery-Code</label>
+                        <input type="password" id="recoveryCodeInput" placeholder="Recovery-Code eingeben"
+                            autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="resetNameInput">Benutzer</label>
+                        <input type="text" id="resetNameInput" placeholder="Name des Benutzers" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPasswordInput">Neues Passwort</label>
+                        <input type="password" id="newPasswordInput" placeholder="Neues Passwort"
+                            autocomplete="new-password">
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="resetPassword()">Passwort speichern</button>
+                    <button type="button" class="btn-secondary" onclick="downloadUsersJson()">Aktuellen Nutzerstand
+                        herunterladen</button>
+                </div>
+                <div id="reset-msg" class="status-msg"></div>
+            </details>
         </form>
     </div>
 
@@ -327,52 +428,190 @@
     <script>
         // Inactivity timeout (1 hour in milliseconds)
         const INACTIVITY_LIMIT = 60 * 60 * 1000;
+        const USERS_OVERRIDE_KEY = 'usersOverride';
+        let RECOVERY_CODE = 'RECOVERY_PLACEHOLDER';
 
-        function resetActivityTimer() {
-            if (localStorage.getItem('isAuth') === 'true') {
-                localStorage.setItem('lastActivity', Date.now());
+        let BASE_USERS_LIST = {};
+        let USERS_LIST = {};
+
+        function setStatusMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                return;
+            }
+
+            element.textContent = message;
+            element.className = 'status-msg ' + type;
+            element.style.display = 'block';
+        }
+
+        function clearStatusMessage(elementId) {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                return;
+            }
+
+            element.textContent = '';
+            element.className = 'status-msg';
+            element.style.display = 'none';
+        }
+
+        function getStoredUsersOverride() {
+            try {
+                const rawOverride = localStorage.getItem(USERS_OVERRIDE_KEY);
+                if (!rawOverride) {
+                    return {};
+                }
+
+                const parsedOverride = JSON.parse(rawOverride);
+                return parsedOverride && typeof parsedOverride === 'object' ? parsedOverride : {};
+            } catch (error) {
+                console.warn('Gespeicherte Passwort-Überschreibung ist ungültig:', error);
+                return {};
             }
         }
 
-        function checkInactivity() {
-            if (localStorage.getItem('isAuth') === 'true') {
-                const lastActivity = localStorage.getItem('lastActivity');
-                if (lastActivity && (Date.now() - parseInt(lastActivity)) > INACTIVITY_LIMIT) {
-                    alert('Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.');
-                    logout();
-                }
+        function refreshUsersList() {
+            USERS_LIST = { ...BASE_USERS_LIST, ...getStoredUsersOverride() };
+        }
+
+        function isAuthenticated() {
+            return localStorage.getItem('isAuth') === 'true';
+        }
+
+        function getLastActivityTimestamp() {
+            const timestamp = Number(localStorage.getItem('lastActivity'));
+            return Number.isFinite(timestamp) ? timestamp : null;
+        }
+
+        function markActivity() {
+            if (isAuthenticated()) {
+                localStorage.setItem('lastActivity', String(Date.now()));
             }
+        }
+
+        function resetActivityTimer() {
+            markActivity();
+        }
+
+        function checkInactivity() {
+            if (!isAuthenticated()) {
+                return;
+            }
+
+            const lastActivity = getLastActivityTimestamp();
+            if (lastActivity === null || (Date.now() - lastActivity) > INACTIVITY_LIMIT) {
+                alert('Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.');
+                logout();
+            }
+        }
+
+        function showResetMessage(message, type) {
+            setStatusMessage('reset-msg', message, type);
+        }
+
+        function saveUserOverrides(updatedUsers) {
+            localStorage.setItem(USERS_OVERRIDE_KEY, JSON.stringify(updatedUsers));
+            refreshUsersList();
+        }
+
+        function resetPassword() {
+            clearStatusMessage('reset-msg');
+
+            if (RECOVERY_CODE === 'RECOVERY_PLACEHOLDER') {
+                showResetMessage('Der Recovery-Code ist noch nicht in GitHub Actions hinterlegt.', 'error');
+                return;
+            }
+
+            const recoveryCode = document.getElementById('recoveryCodeInput').value.trim();
+            const targetName = document.getElementById('resetNameInput').value.trim();
+            const newPassword = document.getElementById('newPasswordInput').value.trim();
+
+            if (!recoveryCode || !targetName || !newPassword) {
+                showResetMessage('Bitte Recovery-Code, Benutzer und neues Passwort ausfüllen.', 'error');
+                return;
+            }
+
+            if (recoveryCode !== RECOVERY_CODE) {
+                showResetMessage('Recovery-Code ist falsch.', 'error');
+                return;
+            }
+
+            const userKey = Object.keys(USERS_LIST).find(key => key.toLowerCase() === targetName.toLowerCase()) || targetName;
+            const updatedUsers = { ...getStoredUsersOverride(), [userKey]: newPassword };
+
+            saveUserOverrides(updatedUsers);
+            document.getElementById('newPasswordInput').value = '';
+            showResetMessage(`Passwort für ${userKey} wurde gespeichert.`, 'success');
+
+            const currentUser = localStorage.getItem('userName');
+            if (currentUser && currentUser.toLowerCase() === userKey.toLowerCase()) {
+                markActivity();
+            }
+        }
+
+        function downloadUsersJson() {
+            const blob = new Blob([JSON.stringify(USERS_LIST, null, 2)], { type: 'application/json' });
+            const downloadUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = downloadUrl;
+            link.download = 'users.json';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(downloadUrl);
+
+            showResetMessage('Die aktuelle Nutzerliste wurde heruntergeladen.', 'success');
+        }
+
+        function enforceSessionState() {
+            checkInactivity();
+            return isAuthenticated();
         }
 
         // Check Auth Status on Load
         document.addEventListener('DOMContentLoaded', () => {
+            refreshUsersList();
             checkInactivity(); // Check immediately on load
-            setInterval(checkInactivity, 60000); // Check every minute
+            setInterval(checkInactivity, 30000); // Check every 30 seconds
 
             // Attach listeners to reset timer on user interaction
             ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {
                 window.addEventListener(event, resetActivityTimer);
             });
 
-            const isAuth = localStorage.getItem('isAuth') === 'true';
-            if (isAuth) {
+            window.addEventListener('focus', checkInactivity);
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    checkInactivity();
+                }
+            });
+
+            if (isAuthenticated()) {
                 showDashboard();
             } else {
                 showLogin();
             }
         });
 
-        let USERS_LIST = {};
         let SYSTEM_ERROR = "";
         try {
             // Replaced securely via Node.js in the GitHub Action using backticks.
             const rawUsers = 'USERS_PLACEHOLDER';
-            
+            const rawRecoveryCode = 'RECOVERY_PLACEHOLDER';
+
             // Checking if the placeholder is still there or empty
             if (rawUsers !== 'USERS_PLACEHOLDER' && rawUsers !== '' && rawUsers !== '{}') {
-                USERS_LIST = JSON.parse(rawUsers);
+                BASE_USERS_LIST = JSON.parse(rawUsers);
+                refreshUsersList();
             } else {
                 SYSTEM_ERROR = "GitHub Secret ist leer oder wurde nicht injiziert.";
+            }
+
+            if (rawRecoveryCode !== 'RECOVERY_PLACEHOLDER' && rawRecoveryCode !== '') {
+                RECOVERY_CODE = rawRecoveryCode;
             }
         } catch (e) {
             console.warn("User list invalid JSON format:", e);
@@ -380,6 +619,8 @@
         }
 
         function login() {
+            refreshUsersList();
+
             const name = document.getElementById('nameInput').value.trim();
             const pw = document.getElementById('passwordInput').value.trim();
 
@@ -407,9 +648,10 @@
             if (foundUserKey && USERS_LIST[foundUserKey] === pw) {
                 localStorage.setItem('isAuth', 'true');
                 localStorage.setItem('userName', foundUserKey);
-                localStorage.setItem('lastActivity', Date.now()); // Set initial activity time
+                localStorage.setItem('lastActivity', String(Date.now())); // Set initial activity time
                 document.getElementById('passwordInput').value = '';
                 document.getElementById('error-msg').style.display = 'none';
+                clearStatusMessage('reset-msg');
                 showDashboard();
             } else {
                 document.getElementById('error-msg').textContent = 'Name oder Passwort falsch! (Tipp: Achte auf Groß-/Kleinschreibung beim Passwort)';
