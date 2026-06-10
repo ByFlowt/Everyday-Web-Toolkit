@@ -38,9 +38,9 @@ If a password needs to be changed:
 2. Push the change or rerun the deployment workflow.
 3. The workflow rebuilds the page with the new password value.
 
-The download button in the recovery panel exports the current merged user list as `users.json`.
-It is a snapshot of the current passwords loaded in the page.
-If you want the change to persist on GitHub Pages, copy the updated password back into the matching GitHub Secret.
+The recovery panel is reset-only now.
+It does **not** show or download the current password.
+Use it to set a new password for the selected user when you know the recovery code.
 
 If you forgot the admin recovery code, you must update it in GitHub Secrets too.
 

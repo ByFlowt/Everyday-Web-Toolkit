@@ -385,8 +385,6 @@
                             autocomplete="new-password">
                     </div>
                     <button type="button" class="btn-secondary" onclick="resetPassword()">Passwort speichern</button>
-                    <button type="button" class="btn-secondary" onclick="downloadUsersJson()">Aktuellen Nutzerstand
-                        herunterladen</button>
                 </div>
                 <div id="reset-msg" class="status-msg"></div>
             </details>
@@ -548,21 +546,6 @@
             if (currentUser && currentUser.toLowerCase() === userKey.toLowerCase()) {
                 markActivity();
             }
-        }
-
-        function downloadUsersJson() {
-            const blob = new Blob([JSON.stringify(USERS_LIST, null, 2)], { type: 'application/json' });
-            const downloadUrl = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-
-            link.href = downloadUrl;
-            link.download = 'users.json';
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            URL.revokeObjectURL(downloadUrl);
-
-            showResetMessage('Die aktuelle Nutzerliste wurde heruntergeladen.', 'success');
         }
 
         function enforceSessionState() {
