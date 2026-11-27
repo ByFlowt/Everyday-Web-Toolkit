@@ -1,110 +1,78 @@
-name: Deploy to GitHub Pages
+name: Test and deploy
 
 on:
     push:
         branches:
             - main
+    pull_request:
+    workflow_dispatch:
 
 permissions:
     contents: read
-    pages: write
-    id-token: write
 
 jobs:
-    deploy:
+    test:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+              with:
+                  persist-credentials: false
+
+            - name: Setup Node
+              uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+              with:
+                  node-version: 24
+
+            - name: Run tests
+              run: node --test
+
+    deploy:
+        needs: test
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
+        concurrency:
+            group: pages
+            cancel-in-progress: false
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+              with:
+                  persist-credentials: false
 
-            - name: Check and Inject Secret
+            - name: Setup Node
+              uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+              with:
+                  node-version: 24
+
+            # The only step that sees the secrets. It writes salted hashes, never passwords.
+            - name: Build site
               env:
-                  USERS_JSON: ${{ secrets.USERS }}
+                  USERS: ${{ secrets.USERS }}
                   USER_TOBIAS: ${{ secrets.USER_TOBIAS }}
                   USER_LUCAS: ${{ secrets.USER_LUCAS }}
                   USER_LEEONIE: ${{ secrets.USER_LEEONIE }}
-                  RECOVERY_CODE: ${{ secrets.RECOVERY_CODE }}
-              run: |
-                  echo "Checking if secret exists..."
-                  if [ -z "$USERS_JSON" ]; then
-                    echo "ERROR: The USERS secret is completely empty or not accessible by this job!"
-                  else
-                    echo "SUCCESS: The USERS secret was found (length: ${#USERS_JSON} characters)."
-                  fi
-
-                  if [ -z "$USER_TOBIAS" ]; then
-                    echo "WARNING: USER_TOBIAS is empty."
-                  fi
-
-                  if [ -z "$USER_LUCAS" ]; then
-                    echo "WARNING: USER_LUCAS is empty."
-                  fi
-
-                  if [ -z "$USER_LEEONIE" ]; then
-                    echo "WARNING: USER_LEEONIE is empty."
-                  fi
-
-                  node -e "
-                    const fs = require('fs');
-                    let html = fs.readFileSync('index.html', 'utf8');
-                    let usersObject = {};
-                    const combinedUsers = process.env.USERS_JSON || '';
-
-                    if (combinedUsers && combinedUsers !== '{}' && combinedUsers !== 'USERS_PLACEHOLDER') {
-                      try {
-                        usersObject = JSON.parse(combinedUsers);
-                      } catch (error) {
-                        console.log('ERROR: The USERS secret is not valid JSON:', error.message);
-                        process.exit(1);
-                      }
-                    }
-
-                    const userSecretMap = {
-                      Tobias: process.env.USER_TOBIAS,
-                      Lucas: process.env.USER_LUCAS,
-                      Leeonie: process.env.USER_LEEONIE,
-                    };
-
-                    for (const [userName, password] of Object.entries(userSecretMap)) {
-                      if (password && password.trim()) {
-                        usersObject[userName] = password;
-                      } else {
-                        console.log(`WARNING: Missing secret value for ${userName}.`);
-                      }
-                    }
-
-                    const jsonString = JSON.stringify(usersObject);
-                    const recoveryCode = process.env.RECOVERY_CODE || 'RECOVERY_PLACEHOLDER';
-                    
-                    if (html.includes('\'USERS_PLACEHOLDER\'')) {
-                       console.log('Placeholder found in HTML, replacing...');
-                       html = html.replace('\'USERS_PLACEHOLDER\'', JSON.stringify(jsonString));
-                    } else {
-                       console.log('ERROR: Placeholder NOT found in HTML!');
-                    }
-
-                    if (html.includes('\'RECOVERY_PLACEHOLDER\'')) {
-                      console.log('Recovery placeholder found in HTML, replacing...');
-                      html = html.replace('\'RECOVERY_PLACEHOLDER\'', JSON.stringify(recoveryCode));
-                    } else {
-                      console.log('ERROR: Recovery placeholder NOT found in HTML!');
-                    }
-
-                    fs.writeFileSync('index.html', html);
-                  "
+              run: node scripts/build.mjs
 
             - name: Setup Pages
-              uses: actions/configure-pages@v5
+              uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
 
             - name: Upload artifact
-              uses: actions/upload-pages-artifact@v3
+              uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
               with:
-                  path: .
+                  path: _site
 
             - name: Deploy to GitHub Pages
               id: deployment
-              uses: actions/deploy-pages@v4
+              uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

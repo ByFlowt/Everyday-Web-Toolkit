@@ -1,0 +1,127 @@
+/* Work time calculator (TimeCalculator.html). */
+
+.tabs {
+    margin-bottom: 24px;
+}
+
+.tabs .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+.field-row {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 12px;
+}
+
+.field-row .field {
+    flex: 1 1 12rem;
+}
+
+.switch-row .material-symbols-outlined {
+    color: var(--md-primary);
+}
+
+.overtime-section {
+    margin-top: 16px;
+}
+
+.overtime-section .supporting {
+    margin-bottom: 0;
+}
+
+/* ---------- Hero result card ---------- */
+.result-card {
+    padding: 32px 16px;
+    border-radius: var(--shape-xxl);
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    text-align: center;
+}
+
+.result-card__label {
+    font: var(--type-title-medium);
+    letter-spacing: var(--tracking-title-medium);
+}
+
+.result-time {
+    margin: 8px 0;
+    font: var(--type-display-medium);
+    font-weight: var(--weight-emphasized);
+    letter-spacing: var(--tracking-display-medium);
+}
+
+@media (min-width: 400px) {
+    .result-time {
+        font: var(--type-display-large);
+        font-weight: var(--weight-emphasized);
+        letter-spacing: var(--tracking-display-large);
+    }
+}
+
+.day-note {
+    margin-bottom: 8px;
+    font-weight: var(--weight-emphasized);
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 16px;
+    border-radius: var(--shape-lg);
+    background: var(--md-surface);
+    color: var(--md-on-surface);
+    font: var(--type-label-large);
+    letter-spacing: var(--tracking-label-large);
+}
+
+.badge[data-tone="positive"] {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+}
+
+.badge[data-tone="negative"],
+.badge[data-tone="error"] {
+    background: var(--md-error-container);
+    color: var(--md-on-error-container);
+}
+
+/* ---------- Save toast (visual only) ---------- */
+.toast {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    z-index: 1;
+    width: max-content;
+    max-width: calc(100% - 32px);
+    padding: 12px 16px;
+    border-radius: var(--shape-xs);
+    background: var(--md-inverse-surface);
+    box-shadow: var(--elevation-3);
+    color: var(--md-inverse-on-surface);
+    font: var(--type-body-medium);
+    letter-spacing: var(--tracking-body-medium);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 16px);
+    transition:
+        transform var(--spring-default-spatial-duration) var(--spring-default-spatial),
+        opacity var(--spring-default-effects-duration) var(--spring-default-effects),
+        visibility var(--spring-default-effects-duration);
+}
+
+.toast.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+}
+
+.info h2 {
+    margin-bottom: 16px;
+}
+
+.info p {
+    margin-bottom: 16px;
+    color: var(--md-on-surface-variant);
+}

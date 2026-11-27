@@ -1,273 +1,113 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-page="protected">
+
 <head>
-    <script>
-        // Simple Auth Check für GitHub Pages
-        if (localStorage.getItem('isAuth') !== 'true') {
-            window.location.href = 'index.html';
-        }
-    </script>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://generativelanguage.googleapis.com; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5fafc">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1416">
     <title>KI Konverter | Material 3</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
-    <style>
-        :root {
-            /* M3 Expressive Colors & Radii */
-            --md-primary: #00687a;
-            --md-on-primary: #ffffff;
-            --md-primary-container: #abedff;
-            --md-on-primary-container: #001f26;
-            --md-surface: #fbfcfe;
-            --md-surface-container-high: #e5e9eb;
-            --md-on-surface: #191c1d;
-            --md-bg: #f0f4f5;
-
-            --radius-xl: 32px;
-            --radius-full: 9999px;
-            --elevation-1: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.1);
-            --transition: 400ms cubic-bezier(0.2, 0, 0, 1);
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--md-bg);
-            color: var(--md-on-surface);
-            margin: 0;
-            padding: 2rem;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .top-nav {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--md-on-primary-container);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 12px 24px;
-            background: var(--md-primary-container);
-            border-radius: var(--radius-full);
-            transition: all var(--transition);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-        .back-btn:hover { 
-            background: #96dbeb; 
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .m3-card {
-            background: var(--md-surface);
-            padding: 3rem;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--elevation-1);
-            width: 100%;
-            max-width: 600px;
-            margin-top: 3rem;
-            transition: transform var(--transition);
-        }
-        
-        .m3-card:hover {
-            transform: translateY(-4px);
-        }
-
-        h1 {
-            font-family: 'Roboto Serif', serif;
-            text-align: center;
-            color: var(--md-primary);
-            font-size: 2.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .form-group {
-            background: var(--md-surface-container-high);
-            border-radius: 12px 12px 0 0;
-            padding: 12px 20px;
-            margin-bottom: 2rem;
-            border-bottom: 3px solid #70797b;
-            transition: all var(--transition);
-        }
-
-        .form-group:focus-within {
-            background: #dce3e5;
-            border-bottom-color: var(--md-primary);
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--md-primary);
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-family: 'Roboto', sans-serif;
-            font-size: 1.1rem;
-            color: var(--md-on-surface);
-            outline: none;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            height: 120px;
-            margin-top: 6px;
-            line-height: 1.5;
-        }
-
-        /* Override autofill styling */
-        input:-webkit-autofill {
-            -webkit-box-shadow: 0 0 0 1000px var(--md-surface-container-high) inset !important;
-            -webkit-text-fill-color: var(--md-on-surface) !important;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: var(--radius-full);
-            font-family: 'Roboto', sans-serif;
-            font-weight: 500;
-            cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s, background-color var(--transition);
-            min-width: 140px;
-        }
-
-        .btn-royal { background: #6750A4; color: white; }
-        .btn-youth { background: #B3261E; color: white; }
-        .btn-linkedin { background: #006493; color: white; }
-        button:hover { opacity: 0.9; transform: translateY(-2px); }
-        button:active { transform: scale(0.98); }
-
-        .result-box {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border-radius: 16px;
-            background: var(--md-primary-container);
-            color: var(--md-on-primary-container);
-            white-space: pre-wrap;
-            position: relative;
-            box-shadow: var(--elevation-1);
-        }
-
-        .loading {
-            text-align: center;
-            color: var(--md-primary);
-            font-style: italic;
-            display: none;
-            margin-top: 20px;
-        }
-
-    </style>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;500;700&family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/converter.css">
+    <script src="assets/js/session.js"></script>
+    <script src="assets/js/session-guard.js"></script>
+    <script type="module" src="assets/js/converter.js"></script>
 </head>
+
 <body>
-    <div class="top-nav">
-        <a href="index.html" class="back-btn">
-            <span class="material-symbols-outlined">arrow_back</span>
-            Dashboard
+    <noscript>
+        <p>Diese Seite benötigt JavaScript. Bitte aktiviere es, um den Konverter zu nutzen.</p>
+    </noscript>
+
+    <header class="top-app-bar">
+        <a class="icon-btn" href="index.html" aria-label="Zurück zum Dashboard" title="Zurück zum Dashboard">
+            <span class="material-symbols-outlined" aria-hidden="true" translate="no">arrow_back</span>
         </a>
-    </div>
+        <h1 class="title">Text Konverter</h1>
+        <button type="button" class="btn btn--tonal" data-logout>
+            <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
+            <span class="btn-label">Logout</span>
+        </button>
+    </header>
 
-    <div class="m3-card">
-        <h1>Text Konverter</h1>
+    <main class="page">
+        <section class="card">
+            <div class="key-row">
+                <div class="field">
+                    <label for="apiKey">Google Gemini API-Key</label>
+                    <!-- Not a password field: managers would fill the login password here or overwrite the login entry.
+                        Disabled until secret-field.js has made sure the value is masked. -->
+                    <input type="text" id="apiKey" class="secret-input" placeholder="Key aus Google AI Studio"
+                        autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-1p-ignore
+                        data-lpignore="true" data-bwignore aria-describedby="keyHint" disabled>
+                </div>
+                <button type="button" id="toggleKey" class="btn btn--tonal" aria-pressed="false"
+                    aria-controls="apiKey" aria-label="API-Key anzeigen">Anzeigen</button>
+            </div>
+            <p id="keyHint" class="supporting">Beschränke den Key in Google Cloud bzw. AI Studio auf die Gemini API
+                und auf den HTTP-Referrer dieser Website. Dein Text wird zur Verarbeitung an Google gesendet.</p>
+            <div class="switch-row">
+                <label for="rememberKey">Auf diesem Gerät merken</label>
+                <input type="checkbox" role="switch" id="rememberKey" class="switch" autocomplete="off">
+            </div>
+            <button type="button" id="deleteKey" class="btn">
+                <span class="material-symbols-outlined" aria-hidden="true" translate="no">delete</span>
+                Key löschen
+            </button>
+        </section>
 
-        <div class="form-group">
-            <label>Google Gemini API Key (wird im Browser gespeichert)</label>
-            <input type="password" id="apiKey" placeholder="sk-..." />
-        </div>
+        <section class="card">
+            <div class="field field--supported">
+                <label for="inputText">Gib deinen Text ein</label>
+                <textarea id="inputText" maxlength="4000" autocomplete="off" aria-describedby="charCount"
+                    placeholder="z.B. 'Ich mache heute früher Feierabend'"></textarea>
+            </div>
+            <p id="charCount" class="supporting counter">0 / 4000 Zeichen</p>
 
-        <div class="form-group">
-            <label>Gebe deinen Text ein</label>
-            <textarea id="inputText" placeholder="z.B. 'Ich mache heute früher Feierabend'"></textarea>
-        </div>
+            <fieldset id="modePicker">
+                <legend>Stil</legend>
+                <div class="connected">
+                    <input type="radio" class="sr-only" name="mode" id="modeRoyal" value="royal" checked>
+                    <label for="modeRoyal">Höfisch</label>
+                    <input type="radio" class="sr-only" name="mode" id="modeYouth" value="youth">
+                    <label for="modeYouth">Gen-Z</label>
+                    <input type="radio" class="sr-only" name="mode" id="modeLinkedin" value="linkedin">
+                    <label for="modeLinkedin">LinkedIn</label>
+                </div>
+            </fieldset>
 
-        <div class="button-group">
-            <button class="btn-royal" onclick="convert('royal')">👑 Höfisch</button>
-            <button class="btn-youth" onclick="convert('youth')">🧢 Gen-Z</button>
-            <button class="btn-linkedin" onclick="convert('linkedin')">💼 LinkedIn</button>
-        </div>
+            <button type="button" id="convertButton" class="btn btn--filled btn--m btn--block">
+                <span class="material-symbols-outlined" aria-hidden="true" translate="no">auto_awesome</span>
+                Umwandeln
+            </button>
 
-        <div id="loading" class="loading">Wird transformiert... ⏳</div>
+            <div class="progress">
+                <span id="loadingIndicator" class="loading-indicator" aria-hidden="true" hidden></span>
+                <p id="status" role="status"></p>
+                <button type="button" id="cancelButton" class="btn btn--outlined" hidden>Abbrechen</button>
+            </div>
+            <p id="error" class="message message--error" role="alert"></p>
 
-        <div id="output" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- Generative AI import -->
-    <script type="importmap">
-    {
-      "imports": {
-        "@google/generative-ai": "https://esm.run/@google/generative-ai"
-      }
-    }
-    </script>
-    <script type="module">
-        import { GoogleGenerativeAI } from "@google/generative-ai";
-
-        // Local Storage Init
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedKey = localStorage.getItem('geminiApiKey');
-            if (savedKey) document.getElementById('apiKey').value = savedKey;
-        });
-
-        const PROMPTS = {
-            royal: 'Du bist ein Adeliger des Heiligen Römischen Reiches... (Schreibe extrem höfisch, archaisch, von mir an dich). Text: ',
-            youth: 'Du schreibst wie ein normaler Mensch zw. 18-25 auf WhatsApp. Locker, kurz, manchmal ohne Verb, Kleinschreibung. Text: ',
-            linkedin: 'Du bist ein extremer LinkedIn-Influencer. Formuliere die Aussage um in Broetry-Stil. Nutze Business-Denglisch und Emojis. Text: '
-        };
-
-        window.convert = async function (mode) {
-            const apiKey = document.getElementById('apiKey').value;
-            const inputText = document.getElementById('inputText').value;
-            const outputDiv = document.getElementById('output');
-            const loading = document.getElementById('loading');
-
-            if (!apiKey) return alert("Bitte API Key eingeben!");
-            if (!inputText) return alert("Bitte Text eingeben!");
-
-            // Speichern des API Keys!
-            localStorage.setItem('geminiApiKey', apiKey);
-
-            outputDiv.style.display = 'none';
-            loading.style.display = 'block';
-
-            try {
-                const genAI = new GoogleGenerativeAI(apiKey);
-                const model = genAI.getGenerativeModel({ model: "gemini-4-hydrogen" });
-                const prompt = PROMPTS[mode] + `"${inputText}"`;
-                
-                const result = await model.generateContent(prompt);
-                const text = await result.response.text();
-                
-                outputDiv.innerHTML = text;
-                outputDiv.style.display = 'block';
-            } catch (err) {
-                alert("Fehler bei der API: " + err.message);
-            } finally {
-                loading.style.display = 'none';
-            }
-        };
-    </script>
+            <div aria-live="polite">
+                <div id="output" class="result"></div>
+            </div>
+            <div class="result-actions">
+                <button type="button" id="copyButton" class="btn btn--tonal" hidden>
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">content_copy</span>
+                    <span id="copyLabel">Kopieren</span>
+                </button>
+            </div>
+        </section>
+    </main>
 </body>
+
 </html>

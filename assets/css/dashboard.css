@@ -1,0 +1,162 @@
+/* Login and dashboard (index.html). */
+
+/* session-guard.js sets data-view on <html> before the body is rendered. */
+.view {
+    display: none;
+}
+
+html[data-view="login"] .view--login,
+html[data-view="dashboard"] .view--dashboard {
+    display: block;
+}
+
+.view > .headline {
+    margin-bottom: 8px;
+}
+
+/* Focused by script after login so it is announced; it is not interactive, so it gets no ring. */
+#welcomeMessage:focus {
+    outline: none;
+}
+
+.subtitle {
+    margin-bottom: 32px;
+    color: var(--md-on-surface-variant);
+    text-align: center;
+}
+
+.view-actions {
+    display: flex;
+    justify-content: flex-end;
+    min-height: 48px;
+    align-items: center;
+}
+
+.login-card {
+    max-width: 25rem;
+    margin-inline: auto;
+}
+
+/* ---------- Morphing expressive hero shape ---------- */
+.hero-shape {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 128px;
+    height: 128px;
+    margin: 16px auto 32px;
+    color: var(--md-on-primary-container);
+    animation: float 8s ease-in-out infinite;
+}
+
+.hero-shape::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--md-primary-container);
+    clip-path: var(--morph-burst);
+    animation: shape-morph 20s var(--spring-slow-spatial) infinite;
+}
+
+.hero-shape .material-symbols-outlined {
+    position: relative;
+    font-size: 3.5rem;
+}
+
+@keyframes float {
+    50% { transform: translateY(-12px); }
+}
+
+/* ---------- Segmented list ---------- */
+.segmented-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--shape-lg);
+    list-style: none;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 5.5rem;
+    padding: 10px 16px;
+    border-radius: var(--shape-xs);
+    background: var(--md-surface-container);
+    color: var(--md-on-surface);
+    text-decoration: none;
+    transition: border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial);
+}
+
+.segmented-list li:first-child .list-item {
+    border-start-start-radius: var(--shape-lg);
+    border-start-end-radius: var(--shape-lg);
+}
+
+.segmented-list li:last-child .list-item {
+    border-end-start-radius: var(--shape-lg);
+    border-end-end-radius: var(--shape-lg);
+}
+
+.segmented-list li .list-item:hover {
+    border-radius: var(--shape-md);
+    background-image: linear-gradient(var(--state-hover), var(--state-hover));
+}
+
+.segmented-list li .list-item:focus-visible {
+    border-radius: var(--shape-lg);
+    background-image: linear-gradient(var(--state-focus), var(--state-focus));
+    outline-offset: -3px;
+}
+
+.segmented-list li .list-item:active {
+    border-radius: var(--shape-lg);
+    background-image: linear-gradient(var(--state-pressed), var(--state-pressed));
+}
+
+.list-item__icon {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    color: var(--md-on-primary-container);
+}
+
+.list-item__icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--md-primary-container);
+    clip-path: var(--morph-cookie9);
+}
+
+.list-item__icon--alt::before {
+    clip-path: var(--morph-cookie4);
+}
+
+.list-item__icon .material-symbols-outlined {
+    position: relative;
+}
+
+.list-item__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.list-item__headline {
+    font-weight: 500;
+}
+
+.list-item__supporting {
+    color: var(--md-on-surface-variant);
+    font: var(--type-body-medium);
+    letter-spacing: var(--tracking-body-medium);
+}
