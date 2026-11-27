@@ -34,7 +34,7 @@ for (const page of PAGES) {
             'style-src': "'self' https://fonts.googleapis.com",
             'font-src': 'https://fonts.gstatic.com',
             'img-src': "'self' data:",
-            'connect-src': page === 'Converter.html' ? 'https://generativelanguage.googleapis.com' : "'none'",
+            'connect-src': page === 'index.html' ? 'https://generativelanguage.googleapis.com' : "'none'",
             'base-uri': "'none'",
             'form-action': "'none'"
         });
@@ -59,8 +59,9 @@ for (const page of PAGES) {
         for (const [, url] of html.matchAll(/\s(?:href|src)="([^"]+)"/g)) {
             if (url.startsWith('https://')) {
                 assert.ok(url.startsWith('https://fonts.googleapis.com/css2?'), url);
-            } else {
-                assert.ok(files.has(url), `missing: ${url}`);
+            } else if (!url.startsWith('#')) {
+                const pathOnly = url.split('#', 1)[0];
+                assert.ok(files.has(pathOnly), `missing: ${url}`);
             }
         }
     });
@@ -85,11 +86,16 @@ for (const page of PAGES) {
         }
     });
 
-    test(`${page}: loads the shared session guard synchronously`, () => {
-        const session = html.indexOf('<script src="assets/js/session.js"></script>');
-        const guard = html.indexOf('<script src="assets/js/session-guard.js"></script>');
-        assert.ok(session > -1 && guard > session && guard < html.indexOf('<body'));
-        assert.equal(/data-page="protected"/.test(html), page !== 'index.html');
+    test(`${page}: loads the shared session guard or route redirect synchronously`, () => {
+        if (page === 'index.html') {
+            const session = html.indexOf('<script src="assets/js/session.js"></script>');
+            const guard = html.indexOf('<script src="assets/js/session-guard.js"></script>');
+            assert.ok(session > -1 && guard > session && guard < html.indexOf('<body'));
+        } else {
+            const redirect = html.indexOf('<script src="assets/js/route-redirect.js"></script>');
+            assert.ok(redirect > -1 && redirect < html.indexOf('<body'));
+            assert.match(html, new RegExp(`data-redirect="${page === 'Converter.html' ? 'converter' : 'calculator'}"`));
+        }
     });
 }
 
@@ -101,7 +107,7 @@ test('the login form cannot put the password into the URL', () => {
 });
 
 test('the API key field ships masked, disabled and ignored by password managers', () => {
-    const html = read('Converter.html');
+    const html = read('index.html');
     const tag = /<input[^>]*id="apiKey"[^>]*>/.exec(html)[0];
     for (const attribute of [
         'type="text"', 'class="secret-input"', 'autocomplete="off"', 'autocapitalize="off"', 'spellcheck="false"',
@@ -109,16 +115,17 @@ test('the API key field ships masked, disabled and ignored by password managers'
     ]) {
         assert.match(tag, new RegExp(`\\s${attribute}(?=[\\s>])`), attribute);
     }
-    assert.doesNotMatch(html, /type="password"/);
     const styles = read('assets/css/converter.css');
     assert.match(styles, /\.secret-input\[type="text"\] \{\s*-webkit-text-security: disc;/);
     assert.match(styles, /@supports not \(-webkit-text-security: disc\)[\s\S]*?color: transparent;/);
 });
 
 test('the browser may not restore text or calculator values across users', () => {
-    assert.match(read('Converter.html'), /<textarea id="inputText"[^>]*\sautocomplete="off"/);
-    const inputs = read('TimeCalculator.html').match(/<input\b[^>]*>/g);
-    for (const tag of inputs) {
+    const html = read('index.html');
+    assert.match(html, /<textarea id="inputText"[^>]*\sautocomplete="off"/);
+    for (const id of ['startTime', 'workHours', 'breakMinutes', 'currentOvertime', 'toggleOvertime', 'dailyOvertimeCalc']) {
+        const tag = new RegExp(`<input[^>]*id="${id}"[^>]*>`).exec(html)?.[0];
+        assert.ok(tag, id);
         assert.match(tag, /\sautocomplete="off"/, tag);
     }
 });

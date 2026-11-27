@@ -216,6 +216,8 @@
     --morph-pentagon: polygon(50% 0%, 56.4% 1.1%, 62.3% 4%, 67.4% 8%, 71.9% 12%, 76.5% 15.5%, 81.4% 18.6%, 86.7% 21.8%, 91.9% 25.8%, 96% 31%, 98.2% 37.1%, 98.3% 43.6%, 96.7% 50%, 94.4% 55.8%, 92.1% 61.3%, 90.4% 66.7%, 89.1% 72.5%, 87.4% 78.7%, 84.7% 84.7%, 80.4% 89.6%, 74.8% 92.9%, 68.4% 94.3%, 61.9% 94.3%, 55.8% 93.8%, 50% 93.5%, 44.2% 93.8%, 38.1% 94.3%, 31.6% 94.3%, 25.2% 92.9%, 19.6% 89.6%, 15.3% 84.7%, 12.6% 78.7%, 10.9% 72.5%, 9.6% 66.7%, 7.9% 61.3%, 5.6% 55.8%, 3.3% 50%, 1.7% 43.6%, 1.8% 37.1%, 4% 31%, 8.1% 25.8%, 13.3% 21.8%, 18.6% 18.6%, 23.5% 15.5%, 28.1% 12%, 32.6% 8%, 37.7% 4%, 43.6% 1.1%);
     --morph-pill: polygon(50% 0%, 56.6% 0.1%, 63.2% 0.8%, 69.5% 2.8%, 75.1% 6.5%, 79.5% 11.6%, 82.4% 17.6%, 84.2% 23.8%, 85.2% 29.7%, 85.7% 35.2%, 85.9% 40.4%, 86% 45.3%, 86% 50%, 86% 54.7%, 85.9% 59.6%, 85.7% 64.8%, 85.2% 70.3%, 84.2% 76.2%, 82.4% 82.4%, 79.5% 88.4%, 75.1% 93.5%, 69.5% 97.2%, 63.2% 99.2%, 56.6% 99.9%, 50% 100%, 43.4% 99.9%, 36.8% 99.2%, 30.5% 97.2%, 24.9% 93.5%, 20.5% 88.4%, 17.6% 82.4%, 15.8% 76.2%, 14.8% 70.3%, 14.3% 64.8%, 14.1% 59.6%, 14% 54.7%, 14% 50%, 14% 45.3%, 14.1% 40.4%, 14.3% 35.2%, 14.8% 29.7%, 15.8% 23.8%, 17.6% 17.6%, 20.5% 11.6%, 24.9% 6.5%, 30.5% 2.8%, 36.8% 0.8%, 43.4% 0.1%);
     --morph-cookie4: polygon(50% 0%, 56.4% 1.2%, 62.2% 4.5%, 66.9% 9.1%, 70.7% 14.2%, 73.9% 18.8%, 77.2% 22.8%, 81.2% 26.1%, 85.8% 29.3%, 90.9% 33.1%, 95.5% 37.8%, 98.8% 43.6%, 100% 50%, 98.8% 56.4%, 95.5% 62.2%, 90.9% 66.9%, 85.8% 70.7%, 81.2% 73.9%, 77.2% 77.2%, 73.9% 81.2%, 70.7% 85.8%, 66.9% 90.9%, 62.2% 95.5%, 56.4% 98.8%, 50% 100%, 43.6% 98.8%, 37.8% 95.5%, 33.1% 90.9%, 29.3% 85.8%, 26.1% 81.2%, 22.8% 77.2%, 18.8% 73.9%, 14.2% 70.7%, 9.1% 66.9%, 4.5% 62.2%, 1.2% 56.4%, 0% 50%, 1.2% 43.6%, 4.5% 37.8%, 9.1% 33.1%, 14.2% 29.3%, 18.8% 26.1%, 22.8% 22.8%, 26.1% 18.8%, 29.3% 14.2%, 33.1% 9.1%, 37.8% 4.5%, 43.6% 1.2%);
+    --morph-sunny: polygon(50% 2%, 56% 7%, 63% 4%, 67% 11%, 75% 10%, 78% 18%, 86% 19%, 86% 27%, 93% 31%, 91% 39%, 97% 44%, 94% 51%, 98% 58%, 92% 63%, 94% 71%, 87% 74%, 87% 82%, 79% 83%, 77% 90%, 69% 89%, 65% 96%, 57% 93%, 51% 98%, 45% 93%, 37% 96%, 33% 89%, 25% 90%, 23% 83%, 15% 82%, 15% 74%, 8% 71%, 10% 63%, 4% 58%, 8% 51%, 5% 44%, 11% 39%, 9% 31%, 16% 27%, 16% 19%, 24% 18%, 27% 10%, 35% 11%, 39% 4%, 46% 7%, 48% 3%, 49% 2%, 49.5% 2%, 49.8% 2%);
+    --morph-oval: polygon(50% 4%, 58% 4.5%, 66% 6%, 73% 8.5%, 79.5% 12%, 85% 16.5%, 89.5% 22%, 93% 28%, 95.5% 34.5%, 97% 41%, 97.5% 47.5%, 97% 54%, 95.5% 60.5%, 93% 67%, 89.5% 73%, 85% 78.5%, 79.5% 83%, 73% 86.5%, 66% 89%, 58% 90.5%, 50% 91%, 42% 90.5%, 34% 89%, 27% 86.5%, 20.5% 83%, 15% 78.5%, 10.5% 73%, 7% 67%, 4.5% 60.5%, 3% 54%, 2.5% 47.5%, 3% 41%, 4.5% 34.5%, 7% 28%, 10.5% 22%, 15% 16.5%, 20.5% 12%, 27% 8.5%, 34% 6%, 42% 4.5%, 45% 4.2%, 47% 4.1%, 48% 4%, 48.5% 4%, 49% 4%, 49.3% 4%, 49.6% 4%, 49.8% 4%);
 
     --rail-width: 248px;
 }
@@ -571,8 +573,34 @@ html[data-rail="collapsed"] .rail-user {
     display: none;
 }
 
-.short-nav-bar {
+.floating-nav-bar {
     display: none;
+}
+
+.nav-badge-dot {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--shape-full);
+    background: var(--md-primary);
+    box-shadow: 0 0 0 2px var(--md-surface-container);
+}
+
+.app-view {
+    animation: view-enter 220ms var(--spring-default-effects);
+}
+
+@keyframes view-enter {
+    from {
+        opacity: 0;
+        translate: 0 6px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
 }
 
 .workspace {
@@ -666,64 +694,70 @@ html[data-rail="collapsed"] .rail-user {
     }
 
     .workspace {
-        padding: 18px 16px calc(92px + env(safe-area-inset-bottom));
+        padding: 18px 16px calc(108px + env(safe-area-inset-bottom));
     }
 
     .workspace-header {
         margin-bottom: 16px;
     }
 
-    .short-nav-bar {
+    /* Compose 1.5.0 M3 Expressive Floating Navigation Bar (16dp side margins, 64dp pill capsule) */
+    .floating-nav-bar {
         position: fixed;
-        inset-inline: 0;
-        bottom: 0;
+        left: 50%;
+        bottom: calc(14px + env(safe-area-inset-bottom));
         z-index: 20;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         align-items: center;
-        min-height: calc(68px + env(safe-area-inset-bottom));
-        padding: 6px 8px calc(8px + env(safe-area-inset-bottom));
-        background: var(--md-surface-container);
-        border-top: 1px solid color-mix(in srgb, var(--md-outline-variant) 55%, transparent);
+        gap: 4px;
+        width: min(calc(100% - 32px), 368px);
+        height: 64px;
+        padding: 6px;
+        border: 1px solid color-mix(in srgb, var(--md-outline-variant) 60%, transparent);
+        border-radius: var(--shape-full);
+        background: color-mix(in srgb, var(--md-surface-container-highest) 94%, transparent);
+        backdrop-filter: blur(16px);
+        box-shadow: var(--elevation-3);
+        transform: translateX(-50%);
     }
 
-    .short-nav-item {
+    .floating-nav-item {
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 4px;
-        min-height: 52px;
-        color: var(--md-on-surface-variant);
-        font: var(--type-label-medium);
-        letter-spacing: var(--tracking-label-medium);
-        text-decoration: none;
-    }
-
-    .short-nav-item__pill {
-        display: grid;
-        place-items: center;
-        width: 56px;
-        height: 30px;
+        gap: 2px;
+        height: 52px;
+        padding: 4px 8px;
         border-radius: var(--shape-full);
+        color: var(--md-on-surface-variant);
+        font: var(--type-label-small);
+        letter-spacing: var(--tracking-label-small);
+        text-decoration: none;
         transition:
-            width var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
-            background-color var(--spring-default-effects-duration) var(--spring-default-effects);
+            border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
+            background-color var(--spring-default-effects-duration) var(--spring-default-effects),
+            color var(--spring-default-effects-duration) var(--spring-default-effects);
     }
 
-    .short-nav-item[aria-current="page"] {
-        color: var(--md-on-surface);
+    .floating-nav-item:active {
+        border-radius: var(--shape-lg);
+    }
+
+    .floating-nav-item[aria-current="page"] {
+        background: var(--md-primary-container);
+        color: var(--md-on-primary-container);
         font-weight: var(--weight-emphasized);
     }
 
-    .short-nav-item[aria-current="page"] .short-nav-item__pill {
-        width: 64px;
-        background: var(--md-secondary-container);
-        color: var(--md-on-secondary-container);
+    .floating-nav-item[aria-current="page"] .material-symbols-outlined {
+        font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
     }
 
-    .short-nav-item[aria-current="page"] .material-symbols-outlined {
-        font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    .floating-nav-item .material-symbols-outlined {
+        font-size: 1.3rem;
     }
 }
 
@@ -890,6 +924,184 @@ noscript p {
 .icon-btn:active {
     border-radius: var(--shape-md);
     background: var(--state-pressed);
+}
+
+/* Compose 1.5.0 ToggleButton shape morphing */
+.icon-btn[aria-pressed="true"] {
+    border-radius: var(--shape-md);
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+}
+
+.icon-btn[aria-pressed="true"] .material-symbols-outlined,
+.btn[aria-pressed="true"] .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ---------- Compose 1.5.0 SplitButton & Dropdown Menu ---------- */
+.split-button-wrap {
+    position: relative;
+}
+
+.split-button {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    width: 100%;
+}
+
+.split-button__lead {
+    flex: 1;
+    border-radius: var(--shape-full) var(--shape-xs) var(--shape-xs) var(--shape-full);
+}
+
+.split-button__trail {
+    flex: none;
+    min-width: 3.25rem;
+    padding-inline: 12px;
+    border-radius: var(--shape-xs) var(--shape-full) var(--shape-full) var(--shape-xs);
+}
+
+.split-button__trail .material-symbols-outlined {
+    transition: transform var(--spring-fast-spatial-duration) var(--spring-fast-spatial);
+}
+
+.split-button__trail[aria-expanded="true"] {
+    border-radius: var(--shape-full);
+}
+
+.split-button__trail[aria-expanded="true"] .material-symbols-outlined {
+    transform: rotate(180deg);
+}
+
+.split-menu {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 8px);
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 15.5rem;
+    padding: 6px;
+    border: 1px solid color-mix(in srgb, var(--md-outline-variant) 55%, transparent);
+    border-radius: var(--shape-lg);
+    background: var(--md-surface-container-high);
+    box-shadow: var(--elevation-3);
+}
+
+.split-menu__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: var(--shape-md);
+    background: transparent;
+    color: var(--md-on-surface);
+    font: var(--type-label-large);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--spring-fast-effects-duration) var(--spring-fast-effects);
+}
+
+.split-menu__item:hover {
+    background: var(--state-hover);
+}
+
+.split-menu__item:active {
+    background: var(--state-pressed);
+}
+
+.split-menu__item .material-symbols-outlined {
+    font-size: 1.2rem;
+    color: var(--md-primary);
+}
+
+.split-menu__item--danger,
+.split-menu__item--danger .material-symbols-outlined {
+    color: var(--md-error);
+}
+
+/* ---------- Compose 1.5.0 SegmentedListItem ---------- */
+.segmented-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.segmented-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 64px;
+    padding: 12px 16px;
+    border: 1px solid color-mix(in srgb, var(--md-outline-variant) 45%, transparent);
+    border-radius: var(--shape-xs);
+    background: var(--md-surface-container-lowest);
+    color: var(--md-on-surface);
+    font: var(--type-body-large);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
+        background-color var(--spring-default-effects-duration) var(--spring-default-effects);
+}
+
+.segmented-list li:first-child .segmented-item {
+    border-start-start-radius: var(--shape-lg);
+    border-start-end-radius: var(--shape-lg);
+}
+
+.segmented-list li:last-child .segmented-item {
+    border-end-start-radius: var(--shape-lg);
+    border-end-end-radius: var(--shape-lg);
+}
+
+.segmented-item:hover {
+    border-radius: var(--shape-md);
+    background-image: linear-gradient(var(--state-hover), var(--state-hover));
+}
+
+.segmented-item:active {
+    border-radius: var(--shape-lg);
+    background-image: linear-gradient(var(--state-pressed), var(--state-pressed));
+}
+
+.segmented-item__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--shape-md);
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
+}
+
+.segmented-item__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.segmented-item__title {
+    font: var(--type-title-small);
+    font-weight: 600;
+}
+
+.segmented-item__supporting {
+    color: var(--md-on-surface-variant);
+    font: var(--type-body-small);
 }
 
 /* ---------- Compose 1.5.0 ConnectedButtonGroup ---------- */
@@ -1301,13 +1513,55 @@ legend {
     border-radius: var(--shape-full);
 }
 
+/* ---------- Compose 1.5.0 LinearWavyProgressIndicator ---------- */
+.wavy-progress {
+    width: 100%;
+    height: 16px;
+    overflow: hidden;
+}
+
+.wavy-progress__svg {
+    display: block;
+    width: 100%;
+    height: 16px;
+}
+
+.wavy-progress__track {
+    fill: none;
+    stroke: var(--md-surface-container-highest);
+    stroke-width: 4;
+    stroke-linecap: round;
+}
+
+.wavy-progress__wave {
+    fill: none;
+    stroke: var(--md-primary);
+    stroke-width: 4;
+    stroke-linecap: round;
+}
+
+.wavy-progress[data-state="working"] .wavy-progress__wave {
+    animation: wavy-flow 1.8s linear infinite;
+}
+
+.wavy-progress__stop {
+    fill: var(--md-primary);
+}
+
+@keyframes wavy-flow {
+    from { transform: translateX(0); }
+    to { transform: translateX(-24px); }
+}
+
 /* ---------- Shape morphing & reduced motion ---------- */
 @keyframes shape-morph {
     0%, 100% { clip-path: var(--morph-burst); }
-    20% { clip-path: var(--morph-cookie9); }
-    40% { clip-path: var(--morph-pentagon); }
-    60% { clip-path: var(--morph-pill); }
-    80% { clip-path: var(--morph-cookie4); }
+    14% { clip-path: var(--morph-cookie9); }
+    28% { clip-path: var(--morph-pentagon); }
+    42% { clip-path: var(--morph-pill); }
+    57% { clip-path: var(--morph-cookie4); }
+    71% { clip-path: var(--morph-sunny); }
+    85% { clip-path: var(--morph-oval); }
 }
 
 @keyframes spin {

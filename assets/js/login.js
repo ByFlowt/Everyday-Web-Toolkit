@@ -1,11 +1,15 @@
-// Page script for index.html: login form, adaptive shell, and live dashboard tool summaries.
+// SPA entry script for index.html: login form, adaptive shell, dashboard, converter, and calculator.
 import { isCryptoAvailable, verifyLogin } from './auth.js';
+import { initCalculator } from './calculator.js';
+import { initConverter } from './converter.js';
 import { createKeyStore } from './key-store.js';
 import { initShell } from './shell.js';
 import { calculate, loadUserState } from './time-calc.js';
 import { USERS } from './users.js';
 
-initShell();
+const shell = initShell();
+const converter = initConverter({ setNavBusy: shell.setNavBusy });
+const calculator = initCalculator();
 
 const guard = globalThis.sessionGuard;
 const keyStore = createKeyStore({
@@ -27,6 +31,8 @@ const dashboardDate = document.getElementById('dashboardDate');
 const converterStatusChip = document.getElementById('converterStatusChip');
 const calculatorStatusChip = document.getElementById('calculatorStatusChip');
 const calculatorLivePreview = document.getElementById('calculatorLivePreview');
+const quickStartNow = document.getElementById('quickStartNow');
+const quickManageKey = document.getElementById('quickManageKey');
 
 const STORAGE_PROBLEM = 'Der Browser-Speicher ist nicht verfügbar. Bitte erlaube Website-Daten, um dich anzumelden.';
 
@@ -40,7 +46,6 @@ function configurationProblem() {
     return '';
 }
 
-// Live regions only change when the text does, so repeated session checks are not re-announced.
 function setText(element, text) {
     if (element && element.textContent !== text) {
         element.textContent = text;
@@ -120,7 +125,9 @@ function render() {
         if (shownState === 'login') {
             form.reset();
             updatePasswordVisibility(false);
-            welcome.focus();
+            if (shell.getRoute() === 'dashboard') {
+                welcome.focus();
+            }
         }
         shownState = 'dashboard';
         return;
@@ -170,6 +177,23 @@ async function login() {
 togglePasswordButton.addEventListener('click', () => {
     const currentlyVisible = togglePasswordButton.getAttribute('aria-pressed') === 'true';
     updatePasswordVisibility(!currentlyVisible);
+});
+
+quickStartNow.addEventListener('click', () => {
+    calculator.startNow();
+    shell.navigate('calculator');
+});
+
+quickManageKey.addEventListener('click', () => {
+    shell.navigate('converter', { focusHeading: false });
+    converter.openKeyPanel();
+});
+
+document.addEventListener('routechange', (event) => {
+    const status = guard.getStatus();
+    if (status.state === 'active' && event.detail?.route === 'dashboard') {
+        updateToolSummaries(status.userName ?? '');
+    }
 });
 
 window.addEventListener('storage', () => {

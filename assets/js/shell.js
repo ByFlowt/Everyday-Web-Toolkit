@@ -1,7 +1,14 @@
-// Shared adaptive shell wiring (WideNavigationRail, ShortNavigationBar, theme toggle, user badge).
-// No HTML injection sinks; updates textContent, dataset, and ARIA attributes only.
+// Shared adaptive shell & zero-reload SPA hash router (WideNavigationRail + FloatingNavigationBar).
+// No HTML injection sinks; updates textContent, hidden, dataset, and ARIA attributes only.
 
 const RAIL_STORAGE_KEY = 'uiRailCollapsed';
+const VALID_ROUTES = new Set(['dashboard', 'converter', 'calculator']);
+
+const ROUTE_TITLES = Object.freeze({
+    dashboard: { mobile: 'Übersicht', doc: 'Übersicht · Everyday Web Toolkit' },
+    converter: { mobile: 'Konverter', doc: 'Sprach-Konverter · Everyday Web Toolkit' },
+    calculator: { mobile: 'Arbeitszeit', doc: 'Arbeitszeit-Rechner · Everyday Web Toolkit' }
+});
 
 const THEME_META = Object.freeze({
     system: { icon: 'brightness_auto', label: 'System', aria: 'Design wechseln: aktuell System' },
@@ -29,12 +36,20 @@ function writeRailCollapsed(collapsed) {
     }
 }
 
+export function parseRoute(hash = window.location.hash) {
+    const clean = String(hash ?? '').replace(/^#\/?/, '').trim().toLowerCase();
+    return VALID_ROUTES.has(clean) ? clean : 'dashboard';
+}
+
 export function initShell() {
     const root = document.documentElement;
     const themeButtons = [...document.querySelectorAll('[data-theme-toggle]')];
     const railToggleButtons = [...document.querySelectorAll('[data-rail-toggle]')];
     const userNameNodes = [...document.querySelectorAll('[data-user-name]')];
     const userAvatarNodes = [...document.querySelectorAll('[data-user-avatar]')];
+    const routeLinks = [...document.querySelectorAll('[data-route-link]')];
+    const routeViews = [...document.querySelectorAll('.app-view[data-route]')];
+    const mobileTitle = document.getElementById('mobileTopTitle');
 
     function syncThemeControls() {
         const mode = globalThis.uiTheme?.get?.() ?? 'system';
@@ -46,8 +61,7 @@ export function initShell() {
             if (icon) {
                 icon.textContent = meta.icon;
             }
-            const label = button.querySelector('[data-theme-label]');
-            if (label) {
+            for (const label of button.querySelectorAll('[data-theme-label]')) {
                 label.textContent = meta.label;
             }
         }
@@ -83,6 +97,64 @@ export function initShell() {
         }
     }
 
+    let currentRoute = parseRoute();
+
+    function applyRoute(route, { focusHeading = false } = {}) {
+        const target = VALID_ROUTES.has(route) ? route : 'dashboard';
+        currentRoute = target;
+
+        for (const view of routeViews) {
+            view.hidden = view.dataset.route !== target;
+        }
+        for (const link of routeLinks) {
+            if (link.dataset.routeLink === target) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+        }
+
+        const titles = ROUTE_TITLES[target] ?? ROUTE_TITLES.dashboard;
+        if (mobileTitle) {
+            mobileTitle.textContent = titles.mobile;
+        }
+        if (globalThis.sessionGuard?.getStatus?.().state === 'active') {
+            document.title = titles.doc;
+        } else {
+            document.title = 'Everyday Web Toolkit';
+        }
+
+        if (focusHeading) {
+            const activeView = routeViews.find((view) => view.dataset.route === target);
+            const heading = activeView?.querySelector('h1');
+            if (heading) {
+                heading.focus();
+            }
+        }
+
+        document.dispatchEvent(new CustomEvent('routechange', { detail: { route: target } }));
+    }
+
+    function navigate(route, { focusHeading = true } = {}) {
+        const target = VALID_ROUTES.has(route) ? route : 'dashboard';
+        const nextHash = `#${target}`;
+        if (window.location.hash !== nextHash) {
+            window.location.hash = nextHash;
+            if (focusHeading) {
+                const activeView = routeViews.find((view) => view.dataset.route === target);
+                activeView?.querySelector('h1')?.focus();
+            }
+        } else {
+            applyRoute(target, { focusHeading });
+        }
+    }
+
+    function setNavBusy(route, busy) {
+        for (const dot of document.querySelectorAll(`[data-nav-busy="${route}"]`)) {
+            dot.hidden = !busy;
+        }
+    }
+
     for (const button of themeButtons) {
         button.addEventListener('click', () => {
             globalThis.uiTheme?.cycle?.();
@@ -98,8 +170,14 @@ export function initShell() {
         });
     }
 
+    window.addEventListener('hashchange', () => {
+        applyRoute(parseRoute());
+    });
     document.addEventListener('themechange', syncThemeControls);
-    document.addEventListener('sessionchange', syncUserBadge);
+    document.addEventListener('sessionchange', () => {
+        syncUserBadge();
+        applyRoute(parseRoute());
+    });
     window.addEventListener('storage', (event) => {
         if (event.key === RAIL_STORAGE_KEY || event.key === null) {
             applyRailState(readRailCollapsed());
@@ -109,4 +187,11 @@ export function initShell() {
     applyRailState(readRailCollapsed());
     syncThemeControls();
     syncUserBadge();
+    applyRoute(currentRoute);
+
+    return {
+        getRoute: () => currentRoute,
+        navigate,
+        setNavBusy
+    };
 }

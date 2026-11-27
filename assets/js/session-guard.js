@@ -47,10 +47,13 @@
         apply(session.check());
     }
 
-    // Re-checks right now. True only while the user this protected page was loaded for is signed in.
+    // Re-checks right now. True only while an active user (matching userAtLoad on protected pages) is signed in.
     function isPageUserSignedIn() {
         refresh();
-        return status.state === 'active' && status.userName === userAtLoad;
+        if (status.state !== 'active') {
+            return false;
+        }
+        return isProtected ? status.userName === userAtLoad : Boolean(status.userName);
     }
 
     function onActivity() {

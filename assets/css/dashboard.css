@@ -285,3 +285,13 @@ html[data-view="dashboard"] .view--dashboard {
     color: var(--md-primary);
     font-size: 1.25rem;
 }
+
+.quick-actions-section {
+    margin-top: 22px;
+}
+
+.quick-actions-section__title {
+    margin: 0 0 10px 4px;
+    color: var(--md-on-surface-variant);
+    font: var(--type-label-large);
+}
