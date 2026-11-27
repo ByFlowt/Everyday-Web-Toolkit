@@ -61,8 +61,6 @@ jobs:
               env:
                   USERS: ${{ secrets.USERS }}
                   USER_TOBIAS: ${{ secrets.USER_TOBIAS }}
-                  USER_LUCAS: ${{ secrets.USER_LUCAS }}
-                  USER_LEEONIE: ${{ secrets.USER_LEEONIE }}
               run: node scripts/build.mjs
 
             - name: Setup Pages

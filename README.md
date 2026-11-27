@@ -14,11 +14,9 @@ A small static site for GitHub Pages: a login page with a dashboard, a Gemini-po
 | --- | --- |
 | `USERS` | JSON object mapping user names to passwords: `{"<name>": "<password>"}` |
 | `USER_TOBIAS` | Password for the user `Tobias` |
-| `USER_LUCAS` | Password for the user `Lucas` |
-| `USER_LEEONIE` | Password for the user `Leeonie` |
 
 - You need at least one user. Each secret is optional on its own.
-- A `USER_*` secret overrides the `USERS` entry with the same name, ignoring case.
+- `USER_TOBIAS` overrides the `USERS` entry with the same name, ignoring case.
 - In `USERS`, the user name is the key and the password is the value. Names are published. They may have up to 40 characters: letters, digits, spaces and `. _ - '`. These checks cannot catch every swapped pair, so check the order.
 - **Recommended:** store the secrets as secrets of the `github-pages` environment, restrict that environment's deployment branches to `main`, and remove the repository-level copies. Otherwise anyone with write access can read repository secrets through a workflow on any branch.
 - **Every password needs at least 12 characters.** Leading and trailing spaces are ignored. User names ignore case.

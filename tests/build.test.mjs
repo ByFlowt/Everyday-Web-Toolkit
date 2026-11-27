@@ -25,7 +25,7 @@ async function outputDir() {
 }
 
 function runBuild(outDir, secrets) {
-    const env = { ...process.env, USERS: '', USER_TOBIAS: '', USER_LUCAS: '', USER_LEEONIE: '', ...secrets };
+    const env = { ...process.env, USERS: '', USER_TOBIAS: '', ...secrets };
     return new Promise((done) => {
         execFile(process.execPath, [SCRIPT, outDir], { env }, (error, stdout, stderr) => {
             done({ code: error ? error.code : 0, output: stdout + stderr });
@@ -46,7 +46,7 @@ test('build output has only allowlisted files and no plaintext password', async 
     const second = fakePassword();
     const result = await runBuild(outDir, {
         USERS: JSON.stringify({ Testperson: `  ${first}  ` }),
-        USER_LUCAS: second
+        USER_TOBIAS: second
     });
     assert.equal(result.code, 0, result.output);
 
@@ -72,7 +72,7 @@ test('build output has only allowlisted files and no plaintext password', async 
 
     // Hashes from node:crypto verify with the browser's WebCrypto code.
     const { USERS } = await import(pathToFileURL(join(outDir, 'assets/js/users.js')));
-    assert.deepEqual(USERS.map((user) => user.name), ['Testperson', 'Lucas']);
+    assert.deepEqual(USERS.map((user) => user.name), ['Testperson', 'Tobias']);
     assert.deepEqual(Object.keys(USERS[0]).sort(), ['hash', 'iterations', 'name', 'salt']);
     assert.equal(USERS[0].iterations, 600000);
     assert.equal(Buffer.from(USERS[0].salt, 'base64').length, 16);
@@ -97,16 +97,19 @@ test('USER_* overrides replace the USERS entry ignoring case', () => {
     const [old, replacement, other] = [fakePassword(), fakePassword(), fakePassword()];
     const users = collectUsers({
         USERS: JSON.stringify({ tobias: old, Jemand: other }),
-        USER_TOBIAS: ` ${replacement}\n`,
-        USER_LUCAS: '',
-        USER_LEEONIE: '   '
+        USER_TOBIAS: ` ${replacement}\n`
     });
     assert.deepEqual(users, [{ name: 'Tobias', password: replacement }, { name: 'Jemand', password: other }]);
+    // An unset or blank override adds nobody.
+    for (const blank of ['', '   ']) {
+        const kept = collectUsers({ USERS: JSON.stringify({ Jemand: other }), USER_TOBIAS: blank });
+        assert.deepEqual(kept, [{ name: 'Jemand', password: other }]);
+    }
 });
 
 test('an override can replace a too short USERS entry', () => {
     const password = fakePassword();
-    assert.equal(collectUsers({ USERS: '{"Lucas":"short"}', USER_LUCAS: password })[0].password, password);
+    assert.equal(collectUsers({ USERS: '{"Tobias":"short"}', USER_TOBIAS: password })[0].password, password);
 });
 
 test('the build fails on bad input without ever printing the secret', async () => {
@@ -166,8 +169,8 @@ test('error messages never quote a secret placed where the user name belongs', a
         assert.equal(result.output.toLowerCase().includes(secret.slice(0, 6).toLowerCase()), false, label);
     }));
 
-    const override = await runBuild(await outputDir(), { USER_LEEONIE: secret.slice(0, 11) });
-    assert.match(override.output, /USER_LEEONIE: the password needs at least 12 characters/);
+    const override = await runBuild(await outputDir(), { USER_TOBIAS: secret.slice(0, 11) });
+    assert.match(override.output, /USER_TOBIAS: the password needs at least 12 characters/);
 });
 
 test('user names are limited to name-like characters and 40 characters', () => {
@@ -187,7 +190,7 @@ test('the build refuses to delete a directory that is not called _site', async (
     const victim = await mkdtemp(join(tmpdir(), 'toolkit-guard-'));
     temporary.push(victim);
     await writeFile(join(victim, 'keep.txt'), 'keep');
-    await assert.rejects(build({ env: { USER_LUCAS: fakePassword() }, outDir: victim }), /named _site/);
+    await assert.rejects(build({ env: { USER_TOBIAS: fakePassword() }, outDir: victim }), /named _site/);
     assert.equal(await readFile(join(victim, 'keep.txt'), 'utf8'), 'keep');
 });
 
@@ -205,7 +208,7 @@ test('the preview server rejects path traversal', () => {
 
 test('the preview server serves only the given directory', async () => {
     const outDir = await outputDir();
-    await build({ env: { USER_LUCAS: fakePassword() }, outDir });
+    await build({ env: { USER_TOBIAS: fakePassword() }, outDir });
     const server = createStaticServer(outDir);
     await new Promise((done) => server.listen(0, '127.0.0.1', done));
     try {

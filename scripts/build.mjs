@@ -16,7 +16,7 @@ const MIN_PASSWORD_LENGTH = 12;
 const MAX_NAME_LENGTH = 40;
 // Names are published, so anything that does not look like a name is refused.
 const NAME_PATTERN = /^[\p{L}\p{M}\p{Nd} ._'-]+$/u;
-const OVERRIDES = Object.freeze({ USER_TOBIAS: 'Tobias', USER_LUCAS: 'Lucas', USER_LEEONIE: 'Leeonie' });
+const OVERRIDES = Object.freeze({ USER_TOBIAS: 'Tobias' });
 
 // Messages of this class are safe to print. They never quote anything from a secret: if a name and its
 // password are swapped, the "name" is the password. Entries are identified by position or variable name.
@@ -70,7 +70,7 @@ export function collectUsers(env) {
     }
 
     if (users.size === 0) {
-        throw new BuildError('No users configured. Set USERS and/or USER_TOBIAS, USER_LUCAS, USER_LEEONIE.');
+        throw new BuildError('No users configured. Set USERS and/or USER_TOBIAS.');
     }
     for (const { password, source } of users.values()) {
         if ([...password].length < MIN_PASSWORD_LENGTH) {
