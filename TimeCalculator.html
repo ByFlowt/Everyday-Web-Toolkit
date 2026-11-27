@@ -8,18 +8,19 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5fafc">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1416">
-    <title>Arbeitszeit-Rechner | Material 3</title>
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eff4f6">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171d1e">
+    <title>Arbeitszeit-Rechner | Everyday Web Toolkit</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;500;700&family=Roboto:wght@400;500;700&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght,ROND@6..144,300..800,0..100&display=swap">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-50..200&display=block">
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/calculator.css">
     <script src="assets/js/session.js"></script>
     <script src="assets/js/session-guard.js"></script>
+    <script src="assets/js/theme.js"></script>
     <script type="module" src="assets/js/calculator.js"></script>
 </head>
 
@@ -28,99 +29,240 @@
         <p>Diese Seite benötigt JavaScript. Bitte aktiviere es, um den Rechner zu nutzen.</p>
     </noscript>
 
-    <header class="top-app-bar">
-        <a class="icon-btn" href="index.html" aria-label="Zurück zum Dashboard" title="Zurück zum Dashboard">
-            <span class="material-symbols-outlined" aria-hidden="true" translate="no">arrow_back</span>
-        </a>
-        <h1 class="title">Arbeitszeit-Rechner</h1>
-        <button type="button" class="btn btn--tonal" data-logout>
-            <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
-            <span class="btn-label">Logout</span>
-        </button>
-    </header>
+    <div class="app-shell">
+        <aside class="wide-rail" aria-label="Hauptnavigation">
+            <div class="wide-rail__header">
+                <a class="rail-brand" href="index.html">
+                    <img class="rail-brand__mark" src="assets/favicon.svg" alt="" width="36" height="36">
+                    <span class="rail-brand__title">Web Toolkit</span>
+                </a>
+                <button type="button" class="icon-btn" data-rail-toggle aria-expanded="true"
+                    aria-label="Navigation einklappen" title="Navigation einklappen">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">menu_open</span>
+                </button>
+            </div>
 
-    <main class="page">
-        <div class="connected tabs" role="tablist" aria-label="Ansicht">
-            <button type="button" role="tab" id="tabCalculator" aria-selected="true" aria-controls="panelCalculator">
-                <span class="material-symbols-outlined" aria-hidden="true" translate="no">timer</span>
-                Rechner
+            <nav class="wide-rail__nav" aria-label="Werkzeuge">
+                <a class="rail-item" href="index.html">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">dashboard</span>
+                    <span class="rail-item__label">Übersicht</span>
+                </a>
+                <a class="rail-item" href="Converter.html">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                    <span class="rail-item__label">Sprach-Konverter</span>
+                </a>
+                <a class="rail-item" href="TimeCalculator.html" aria-current="page">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                    <span class="rail-item__label">Arbeitszeit</span>
+                </a>
+            </nav>
+
+            <div class="wide-rail__footer">
+                <div class="rail-user">
+                    <span class="rail-user__avatar" data-user-avatar aria-hidden="true">U</span>
+                    <span class="rail-user__name" data-user-name>Angemeldet</span>
+                </div>
+                <button type="button" class="rail-action" data-theme-toggle aria-label="Design wechseln">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">brightness_auto</span>
+                    <span class="rail-action__label" data-theme-label>System</span>
+                </button>
+                <button type="button" class="rail-action rail-action--danger" data-logout>
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
+                    <span class="rail-action__label">Abmelden</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="shell-main">
+            <header class="mobile-top-bar">
+                <a class="icon-btn" href="index.html" aria-label="Zurück zur Übersicht" title="Zurück zur Übersicht">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">arrow_back</span>
+                </a>
+                <span class="mobile-top-bar__title">Arbeitszeit</span>
+                <button type="button" class="icon-btn" data-theme-toggle aria-label="Design wechseln"
+                    title="Design wechseln">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">brightness_auto</span>
+                </button>
+                <button type="button" class="icon-btn" data-logout aria-label="Abmelden" title="Abmelden">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
+                </button>
+            </header>
+
+            <main class="workspace">
+                <header class="workspace-header">
+                    <div class="workspace-header__text">
+                        <h1 class="headline">Arbeitszeit-Rechner</h1>
+                        <p class="workspace-header__subtitle">Feierabend, Pause &amp; Überstundenkonto auf einen Blick</p>
+                    </div>
+                    <div class="workspace-header__actions">
+                        <button type="button" id="openInfoButton" class="btn btn--tonal">
+                            <span class="material-symbols-outlined" aria-hidden="true" translate="no">info</span>
+                            Hilfe &amp; Hinweise
+                        </button>
+                    </div>
+                </header>
+
+                <div class="pane-grid calculator-grid">
+                    <section class="card calc-inputs-card" aria-labelledby="calcInputsTitle">
+                        <h2 id="calcInputsTitle" class="sr-only">Eingaben</h2>
+                        <div class="start-time-row">
+                            <div class="field">
+                                <label for="startTime">Anfangszeit</label>
+                                <input type="time" id="startTime" autocomplete="off" required>
+                            </div>
+                            <button type="button" id="setNowButton" class="btn btn--tonal start-now-btn"
+                                title="Aktuelle Uhrzeit als Startzeit setzen">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                                Jetzt
+                            </button>
+                        </div>
+
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="workHours">Reguläre Arbeitszeit (h)</label>
+                                <input type="number" id="workHours" step="0.5" placeholder="7.5" min="1" max="12"
+                                    inputmode="decimal" autocomplete="off">
+                            </div>
+                            <div class="field">
+                                <label for="breakMinutes">Pausenzeit (Minuten)</label>
+                                <input type="number" id="breakMinutes" placeholder="45" min="0" max="120"
+                                    inputmode="numeric" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="currentOvertime">Bisherige Überstunden (h)</label>
+                            <input type="number" id="currentOvertime" step="0.25" placeholder="0" autocomplete="off">
+                        </div>
+
+                        <div class="switch-row">
+                            <label for="toggleOvertime">
+                                <span class="material-symbols-outlined" aria-hidden="true"
+                                    translate="no">more_time</span>
+                                Überstunden verwalten (Auf-/Abbau heute)
+                            </label>
+                            <input type="checkbox" role="switch" id="toggleOvertime" class="switch"
+                                autocomplete="off">
+                        </div>
+
+                        <div class="overtime-section" id="overtimeSection" hidden>
+                            <div class="quick-chips" role="group" aria-label="Schnellauswahl geplante Überstunden">
+                                <button type="button" class="btn btn--xs btn--tonal" data-overtime-delta="-60">-60m</button>
+                                <button type="button" class="btn btn--xs btn--tonal" data-overtime-delta="-30">-30m</button>
+                                <button type="button" class="btn btn--xs btn--tonal" data-overtime-delta="-15">-15m</button>
+                                <button type="button" class="btn btn--xs btn--outlined" data-overtime-reset="true">0</button>
+                                <button type="button" class="btn btn--xs btn--tonal" data-overtime-delta="15">+15m</button>
+                                <button type="button" class="btn btn--xs btn--tonal" data-overtime-delta="30">+30m</button>
+                                <button type="button" class="btn btn--xs btn--tonal" data-overtime-delta="60">+60m</button>
+                            </div>
+                            <div class="field field--supported">
+                                <label for="dailyOvertimeCalc">Geplante Überstunden heute (+/- Minuten)</label>
+                                <input type="number" id="dailyOvertimeCalc" placeholder="0" min="-1440" max="1440"
+                                    autocomplete="off" aria-describedby="overtimeHint">
+                            </div>
+                            <p id="overtimeHint" class="supporting">Z.B. -30 = 30 Minuten früher, 60 = 1 Stunde länger</p>
+                        </div>
+
+                        <div class="calc-card__footer">
+                            <button type="button" id="resetCalcButton" class="btn btn--xs">
+                                <span class="material-symbols-outlined" aria-hidden="true"
+                                    translate="no">restart_alt</span>
+                                Eingaben zurücksetzen
+                            </button>
+                        </div>
+                    </section>
+
+                    <div class="calc-result-column">
+                        <section class="result-card" aria-live="polite" aria-atomic="true">
+                            <p class="result-card__label">Dein Feierabend ist um</p>
+                            <p class="result-time tabular-nums" id="endTime">--:--</p>
+                            <p class="day-note" id="dayNote" hidden></p>
+                            <p class="badge" id="overtimeBadge">
+                                <span id="badgeIcon" class="material-symbols-outlined" aria-hidden="true"
+                                    translate="no">schedule</span>
+                                <span id="badgeText">Bitte Anfangszeit eingeben</span>
+                            </p>
+                        </section>
+
+                        <section id="summaryCard" class="card summary-card" aria-labelledby="summaryTitle"
+                            hidden>
+                            <h2 id="summaryTitle" class="sr-only">Tagesübersicht und Fortschritt</h2>
+                            <div class="summary-metrics">
+                                <div class="metric-tile">
+                                    <span class="metric-tile__label">Start</span>
+                                    <span id="summaryStart" class="metric-tile__value tabular-nums">--:--</span>
+                                </div>
+                                <div class="metric-tile">
+                                    <span class="metric-tile__label">Dauer</span>
+                                    <span id="summaryDuration" class="metric-tile__value tabular-nums">--</span>
+                                </div>
+                                <div class="metric-tile">
+                                    <span class="metric-tile__label">Pause</span>
+                                    <span id="summaryBreak" class="metric-tile__value tabular-nums">--</span>
+                                </div>
+                            </div>
+
+                            <div class="progress-block">
+                                <div class="progress-block__header">
+                                    <span id="progressLabel" class="progress-block__label tabular-nums">Fortschritt</span>
+                                    <span id="progressPercent" class="progress-block__percent tabular-nums">0 %</span>
+                                </div>
+                                <progress id="workdayProgress" class="m3-progress" max="100" value="0"
+                                    aria-labelledby="progressLabel"></progress>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div id="saveToast" class="toast" aria-hidden="true">Deine Eingaben wurden gespeichert!</div>
+            </main>
+        </div>
+
+        <nav class="short-nav-bar" aria-label="Mobile Navigation">
+            <a class="short-nav-item" href="index.html">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">dashboard</span>
+                </span>
+                <span>Übersicht</span>
+            </a>
+            <a class="short-nav-item" href="Converter.html">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                </span>
+                <span>Konverter</span>
+            </a>
+            <a class="short-nav-item" href="TimeCalculator.html" aria-current="page">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                </span>
+                <span>Arbeitszeit</span>
+            </a>
+        </nav>
+    </div>
+
+    <dialog id="infoDialog" class="m3-dialog" aria-labelledby="infoDialogTitle">
+        <div class="m3-dialog__header">
+            <h2 id="infoDialogTitle" class="title">Über diesen Rechner</h2>
+            <button type="button" id="closeInfoIcon" class="icon-btn" aria-label="Dialog schließen" title="Schließen">
+                <span class="material-symbols-outlined" aria-hidden="true" translate="no">close</span>
             </button>
-            <button type="button" role="tab" id="tabInfo" aria-selected="false" aria-controls="panelInfo"
-                tabindex="-1">
-                <span class="material-symbols-outlined" aria-hidden="true" translate="no">info</span>
-                Info
-            </button>
         </div>
-
-        <div id="panelCalculator" role="tabpanel" aria-labelledby="tabCalculator">
-            <div class="card">
-                <div class="field">
-                    <label for="startTime">Anfangszeit</label>
-                    <input type="time" id="startTime" autocomplete="off" required>
-                </div>
-
-                <div class="field-row">
-                    <div class="field">
-                        <label for="workHours">Reguläre Arbeitszeit (h)</label>
-                        <input type="number" id="workHours" step="0.5" placeholder="7.5" min="1" max="12"
-                            inputmode="decimal" autocomplete="off">
-                    </div>
-                    <div class="field">
-                        <label for="breakMinutes">Pausenzeit (Minuten)</label>
-                        <input type="number" id="breakMinutes" placeholder="45" min="0" max="120" inputmode="numeric"
-                            autocomplete="off">
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label for="currentOvertime">Bisherige Überstunden (h)</label>
-                    <input type="number" id="currentOvertime" step="0.25" placeholder="0" autocomplete="off">
-                </div>
-
-                <div class="switch-row">
-                    <label for="toggleOvertime">
-                        <span class="material-symbols-outlined" aria-hidden="true" translate="no">more_time</span>
-                        Überstunden verwalten (Auf-/Abbau heute)
-                    </label>
-                    <input type="checkbox" role="switch" id="toggleOvertime" class="switch" autocomplete="off">
-                </div>
-
-                <div class="overtime-section" id="overtimeSection" hidden>
-                    <div class="field field--supported">
-                        <label for="dailyOvertimeCalc">Geplante Überstunden heute (+/- Minuten)</label>
-                        <input type="number" id="dailyOvertimeCalc" placeholder="0" min="-1440" max="1440"
-                            autocomplete="off" aria-describedby="overtimeHint">
-                    </div>
-                    <p id="overtimeHint" class="supporting">Z.B. -30 = 30 Minuten früher, 60 = 1 Stunde länger</p>
-                </div>
-            </div>
-
-            <div class="result-card" aria-live="polite" aria-atomic="true">
-                <p class="result-card__label">Dein Feierabend ist um</p>
-                <p class="result-time" id="endTime">--:--</p>
-                <p class="day-note" id="dayNote" hidden></p>
-                <p class="badge" id="overtimeBadge">Bitte Anfangszeit eingeben</p>
-            </div>
-
-            <div id="saveToast" class="toast" aria-hidden="true">Deine Eingaben wurden gespeichert!</div>
+        <div class="m3-dialog__body">
+            <p>Dieser Arbeitszeit-Rechner orientiert sich an der <strong>Material 3 Expressive</strong> Design
+                Language (Compose Material 3 1.5.0).</p>
+            <p>Er berechnet deinen Feierabend aus Beginn, regulärer Arbeitszeit (Standard: 7,5 h) und Pause (Standard:
+                45 Min.). Im Überstunden-Modus verschiebt ein geplanter Auf- oder Abbau (in Minuten) das Ende. Liegt es
+                nach Mitternacht, wird das angezeigt.</p>
+            <p>Das neue Konto ist das bisherige Konto plus dem heutigen Auf- oder Abbau. Es wird nicht automatisch
+                fortgeschrieben: Trage den neuen Stand beim nächsten Mal selbst ein.</p>
+            <p>Deine Eingaben werden nur in diesem Browser gespeichert, getrennt nach Benutzername, und bleiben auch
+                nach dem Logout erhalten. Diese Trennung betrifft nur die Anzeige und ist kein Zugriffsschutz: Wer
+                diesen Browser nutzt, kann die Werte auslesen.</p>
         </div>
-
-        <div id="panelInfo" role="tabpanel" aria-labelledby="tabInfo" tabindex="0" hidden>
-            <div class="card info">
-                <h2 class="title">Über diesen Rechner</h2>
-                <p>Dieser Arbeitszeit-Rechner orientiert sich an der <strong>Material 3 Expressive</strong> Design
-                    Language.</p>
-                <p>Er berechnet deinen Feierabend aus Beginn, regulärer Arbeitszeit und Pause. Im
-                    Überstunden-Modus verschiebt ein geplanter Auf- oder Abbau (in Minuten) das Ende. Liegt es nach
-                    Mitternacht, wird das angezeigt.</p>
-                <p>Das neue Konto ist das bisherige Konto plus dem heutigen Auf- oder Abbau. Es wird nicht
-                    automatisch fortgeschrieben: Trage den neuen Stand beim nächsten Mal selbst ein.</p>
-                <p>Deine Eingaben werden nur in diesem Browser gespeichert, getrennt nach Benutzername, und bleiben
-                    auch nach dem Logout erhalten. Diese Trennung betrifft nur die Anzeige und ist kein
-                    Zugriffsschutz: Wer diesen Browser nutzt, kann die Werte auslesen.</p>
-            </div>
+        <div class="m3-dialog__actions">
+            <button type="button" id="closeInfoButton" class="btn btn--filled">Verstanden</button>
         </div>
-    </main>
+    </dialog>
 </body>
 
 </html>

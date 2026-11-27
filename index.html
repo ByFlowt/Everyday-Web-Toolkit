@@ -8,18 +8,19 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5fafc">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1416">
-    <title>WebApp Dashboard</title>
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eff4f6">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171d1e">
+    <title>Everyday Web Toolkit | Dashboard</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;500;700&family=Roboto:wght@400;500;700&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght,ROND@6..144,300..800,0..100&display=swap">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-50..200&display=block">
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
     <script src="assets/js/session.js"></script>
     <script src="assets/js/session-guard.js"></script>
+    <script src="assets/js/theme.js"></script>
     <script type="module" src="assets/js/login.js"></script>
 </head>
 
@@ -28,77 +29,215 @@
         <p>Diese Seite benötigt JavaScript. Bitte aktiviere es, um dich anzumelden.</p>
     </noscript>
 
-    <main class="page">
-        <section class="view view--login">
-            <div class="hero-shape">
-                <span class="material-symbols-outlined" aria-hidden="true" translate="no">lock</span>
-            </div>
-            <h1 class="headline">Login</h1>
-            <p class="subtitle">Bitte melde dich an, um das Dashboard zu nutzen.</p>
-
-            <div class="login-card">
-                <p id="loginNotice" class="message message--notice" role="status"></p>
-                <form id="loginForm" class="card" method="post">
-                    <div class="field">
-                        <label for="nameInput">Name</label>
-                        <input type="text" id="nameInput" name="username" autocomplete="username"
-                            autocapitalize="none" spellcheck="false" placeholder="Dein Name" required>
+    <main class="view view--login">
+        <div class="auth-shell">
+            <section class="auth-card">
+                <div class="auth-showcase">
+                    <div class="auth-showcase__top">
+                        <div class="auth-brand">
+                            <img class="auth-brand__mark" src="assets/favicon.svg" alt="" width="44" height="44">
+                            <span class="auth-brand__label">Everyday Web Toolkit</span>
+                        </div>
+                        <button type="button" class="icon-btn auth-theme-btn" data-theme-toggle
+                            aria-label="Design wechseln" title="Design wechseln">
+                            <span class="material-symbols-outlined" aria-hidden="true" translate="no">brightness_auto</span>
+                        </button>
                     </div>
-                    <div class="field">
-                        <label for="passwordInput">Passwort</label>
-                        <input type="password" id="passwordInput" name="password" autocomplete="current-password"
-                            placeholder="Passwort eingeben" required>
+                    <div class="auth-showcase__body">
+                        <h1 class="headline auth-showcase__title">Deine Alltags-Tools an einem Ort.</h1>
+                        <p class="auth-showcase__copy">Schlank, privat im Browser gespeichert und direkt einsatzbereit.</p>
+                        <div class="auth-features">
+                            <span class="chip" data-tone="primary">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                                Sprach-Konverter
+                            </span>
+                            <span class="chip" data-tone="primary">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                                Arbeitszeit-Rechner
+                            </span>
+                        </div>
                     </div>
-                    <p id="loginError" class="message message--error" role="alert"></p>
-                    <button type="submit" id="loginButton" class="btn btn--filled btn--m btn--block"
-                        disabled>Anmelden</button>
-                </form>
-            </div>
-        </section>
+                </div>
 
-        <section class="view view--dashboard">
-            <div class="view-actions">
-                <button type="button" class="btn btn--tonal" data-logout>
-                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
-                    Logout
+                <div class="auth-form-pane">
+                    <div class="auth-form-pane__header">
+                        <h2 class="headline headline--medium">Anmelden</h2>
+                        <p class="auth-form-pane__subtitle">Melde dich an, um auf deine Werkzeuge zuzugreifen.</p>
+                    </div>
+
+                    <p id="loginNotice" class="message message--notice" role="status"></p>
+
+                    <form id="loginForm" method="post">
+                        <div class="field">
+                            <label for="nameInput">Name</label>
+                            <input type="text" id="nameInput" name="username" autocomplete="username"
+                                autocapitalize="none" spellcheck="false" placeholder="Dein Name" required>
+                        </div>
+                        <div class="field field--trailing">
+                            <div class="field--trailing__body">
+                                <label for="passwordInput">Passwort</label>
+                                <input type="password" id="passwordInput" name="password"
+                                    autocomplete="current-password" placeholder="Passwort eingeben" required>
+                            </div>
+                            <button type="button" id="toggleLoginPassword" class="icon-btn" aria-pressed="false"
+                                aria-controls="passwordInput" aria-label="Passwort anzeigen" title="Passwort anzeigen">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">visibility</span>
+                            </button>
+                        </div>
+                        <p id="loginError" class="message message--error" role="alert"></p>
+                        <button type="submit" id="loginButton" class="btn btn--filled btn--m btn--block"
+                            disabled>Anmelden</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="view view--dashboard app-shell">
+        <aside class="wide-rail" aria-label="Hauptnavigation">
+            <div class="wide-rail__header">
+                <a class="rail-brand" href="index.html">
+                    <img class="rail-brand__mark" src="assets/favicon.svg" alt="" width="36" height="36">
+                    <span class="rail-brand__title">Web Toolkit</span>
+                </a>
+                <button type="button" class="icon-btn" data-rail-toggle aria-expanded="true"
+                    aria-label="Navigation einklappen" title="Navigation einklappen">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">menu_open</span>
                 </button>
             </div>
-            <div class="hero-shape">
-                <span class="material-symbols-outlined" aria-hidden="true" translate="no">widgets</span>
-            </div>
-            <h1 id="welcomeMessage" class="headline" tabindex="-1">Willkommen zurück</h1>
-            <p class="subtitle">Wähle dein Tool aus dem Dashboard</p>
 
-            <ul class="segmented-list">
-                <li>
-                    <a class="list-item" href="Converter.html">
-                        <span class="list-item__icon">
-                            <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
-                        </span>
-                        <span class="list-item__text">
-                            <span class="list-item__headline">Sprach-Konverter</span>
-                            <span class="list-item__supporting">KI-gestützte Übersetzung für Hofzeremoniell,
-                                Jugendsprache &amp; LinkedIn.</span>
-                        </span>
-                        <span class="material-symbols-outlined" aria-hidden="true" translate="no">chevron_right</span>
+            <nav class="wide-rail__nav" aria-label="Werkzeuge">
+                <a class="rail-item" href="index.html" aria-current="page">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">dashboard</span>
+                    <span class="rail-item__label">Übersicht</span>
+                </a>
+                <a class="rail-item" href="Converter.html">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                    <span class="rail-item__label">Sprach-Konverter</span>
+                </a>
+                <a class="rail-item" href="TimeCalculator.html">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                    <span class="rail-item__label">Arbeitszeit</span>
+                </a>
+            </nav>
+
+            <div class="wide-rail__footer">
+                <div class="rail-user">
+                    <span class="rail-user__avatar" data-user-avatar aria-hidden="true">U</span>
+                    <span class="rail-user__name" data-user-name>Angemeldet</span>
+                </div>
+                <button type="button" class="rail-action" data-theme-toggle aria-label="Design wechseln">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">brightness_auto</span>
+                    <span class="rail-action__label" data-theme-label>System</span>
+                </button>
+                <button type="button" class="rail-action rail-action--danger" data-logout>
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
+                    <span class="rail-action__label">Abmelden</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="shell-main">
+            <header class="mobile-top-bar">
+                <img class="mobile-top-bar__brand" src="assets/favicon.svg" alt="" width="28" height="28">
+                <span class="mobile-top-bar__title">Übersicht</span>
+                <button type="button" class="icon-btn" data-theme-toggle aria-label="Design wechseln"
+                    title="Design wechseln">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">brightness_auto</span>
+                </button>
+                <button type="button" class="icon-btn" data-logout aria-label="Abmelden" title="Abmelden">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
+                </button>
+            </header>
+
+            <main class="workspace">
+                <header class="workspace-header">
+                    <div class="workspace-header__text">
+                        <h1 id="welcomeMessage" class="headline" tabindex="-1">Willkommen zurück</h1>
+                        <p id="dashboardDate" class="workspace-header__subtitle">Wähle ein Werkzeug für heute</p>
+                    </div>
+                </header>
+
+                <section class="tool-grid" aria-label="Verfügbare Werkzeuge">
+                    <a class="tool-card" href="Converter.html">
+                        <div class="tool-card__top">
+                            <span class="tool-card__icon" aria-hidden="true">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                            </span>
+                            <span id="converterStatusChip" class="chip">API-Key einrichten</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h2 class="title">Sprach-Konverter</h2>
+                            <p class="tool-card__copy">Formuliert deinen Text mit Gemini blitzschnell um – vom höfischen
+                                Zeremoniell bis zum LinkedIn-Post.</p>
+                        </div>
+                        <div class="tool-card__meta">
+                            <span class="chip">Höfisch</span>
+                            <span class="chip">Gen-Z</span>
+                            <span class="chip">LinkedIn</span>
+                        </div>
+                        <div class="tool-card__footer">
+                            <span class="tool-card__cta">
+                                Öffnen
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">arrow_forward</span>
+                            </span>
+                        </div>
                     </a>
-                </li>
-                <li>
-                    <a class="list-item" href="TimeCalculator.html">
-                        <span class="list-item__icon list-item__icon--alt">
-                            <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
-                        </span>
-                        <span class="list-item__text">
-                            <span class="list-item__headline">Arbeitszeit-Rechner</span>
-                            <span class="list-item__supporting">Dein Feierabend-Rechner mit smartem
-                                Überstunden-Management.</span>
-                        </span>
-                        <span class="material-symbols-outlined" aria-hidden="true" translate="no">chevron_right</span>
+
+                    <a class="tool-card" href="TimeCalculator.html">
+                        <div class="tool-card__top">
+                            <span class="tool-card__icon tool-card__icon--alt" aria-hidden="true">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                            </span>
+                            <span id="calculatorStatusChip" class="chip" data-tone="primary">Bereit</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h2 class="title">Arbeitszeit-Rechner</h2>
+                            <p class="tool-card__copy">Berechnet deinen Feierabend inklusive Pause, Überstundenkonto und
+                                Tagesfortschritt.</p>
+                        </div>
+                        <div class="tool-card__meta">
+                            <span id="calculatorLivePreview" class="chip tabular-nums">Noch keine Startzeit gespeichert</span>
+                        </div>
+                        <div class="tool-card__footer">
+                            <span class="tool-card__cta">
+                                Öffnen
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">arrow_forward</span>
+                            </span>
+                        </div>
                     </a>
-                </li>
-            </ul>
-        </section>
-    </main>
+                </section>
+
+                <section class="session-strip" aria-label="Sitzung und Datenschutz">
+                    <span class="material-symbols-outlined session-strip__icon" aria-hidden="true"
+                        translate="no">verified_user</span>
+                    <p class="session-strip__text">Sitzung aktiv · Automatische Abmeldung nach 60 Minuten Inaktivität.
+                        Alle Werkzeug-Daten bleiben lokal in diesem Browser.</p>
+                </section>
+            </main>
+        </div>
+
+        <nav class="short-nav-bar" aria-label="Mobile Navigation">
+            <a class="short-nav-item" href="index.html" aria-current="page">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">dashboard</span>
+                </span>
+                <span>Übersicht</span>
+            </a>
+            <a class="short-nav-item" href="Converter.html">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                </span>
+                <span>Konverter</span>
+            </a>
+            <a class="short-nav-item" href="TimeCalculator.html">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                </span>
+                <span>Arbeitszeit</span>
+            </a>
+        </nav>
+    </div>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-    calculate, formatBalance, loadUserState, parseStartTime, parseStoredState, saveUserState, stateStorageKey
+    calculate, computeProgress, formatBalance, formatDuration, loadUserState, parseStartTime, parseStoredState, saveUserState, stateStorageKey
 } from '../assets/js/time-calc.js';
 
 function fakeStorage(initial = {}) {
@@ -157,4 +157,28 @@ test('stored state: zero is restored and unknown or mistyped fields are dropped'
     }));
     assert.deepEqual(state, { startTime: '07:00', workHours: '8', breakMinutes: '0', currentOvertime: '0' });
     assert.equal(parseStoredState('{"toggleOvertime":true}').toggleOvertime, true);
+});
+
+test('calculate returns durationMinutes and formatDuration formats hours and minutes', () => {
+    const result = calculate(input());
+    assert.equal(result.durationMinutes, 495);
+    assert.equal(result.breakMinutes, 45);
+    assert.equal(formatDuration(495), '8h 15m');
+    assert.equal(formatDuration(-5), '0h 0m');
+});
+
+test('computeProgress handles before, working, done, and overnight shifts', () => {
+    assert.deepEqual(computeProgress({ startTime: '08:00', durationMinutes: 480, nowMinutes: 450 }), {
+        totalMinutes: 480, percent: 0, remainingMinutes: 480, state: 'before', startsInMinutes: 30
+    });
+    assert.deepEqual(computeProgress({ startTime: '08:00', durationMinutes: 480, nowMinutes: 720 }), {
+        totalMinutes: 480, percent: 50, remainingMinutes: 240, state: 'working'
+    });
+    assert.deepEqual(computeProgress({ startTime: '08:00', durationMinutes: 480, nowMinutes: 1000 }), {
+        totalMinutes: 480, percent: 100, remainingMinutes: 0, state: 'done'
+    });
+    assert.deepEqual(computeProgress({ startTime: '22:00', durationMinutes: 480, nowMinutes: 120 }), {
+        totalMinutes: 480, percent: 50, remainingMinutes: 240, state: 'working'
+    });
+    assert.equal(computeProgress({ startTime: '', durationMinutes: 480, nowMinutes: 500 }), null);
 });

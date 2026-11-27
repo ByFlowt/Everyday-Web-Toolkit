@@ -1,16 +1,32 @@
-// Page script for index.html: login form and dashboard greeting.
+// Page script for index.html: login form, adaptive shell, and live dashboard tool summaries.
 import { isCryptoAvailable, verifyLogin } from './auth.js';
+import { createKeyStore } from './key-store.js';
+import { initShell } from './shell.js';
+import { calculate, loadUserState } from './time-calc.js';
 import { USERS } from './users.js';
 
+initShell();
+
 const guard = globalThis.sessionGuard;
+const keyStore = createKeyStore({
+    getLocal: () => window.localStorage,
+    getSession: () => window.sessionStorage,
+    getUserName: () => guard.getStatus().userName ?? '',
+    keys: globalThis.Session.KEYS
+});
 
 const form = document.getElementById('loginForm');
 const nameInput = document.getElementById('nameInput');
 const passwordInput = document.getElementById('passwordInput');
+const togglePasswordButton = document.getElementById('toggleLoginPassword');
 const button = document.getElementById('loginButton');
 const notice = document.getElementById('loginNotice');
 const errorMessage = document.getElementById('loginError');
 const welcome = document.getElementById('welcomeMessage');
+const dashboardDate = document.getElementById('dashboardDate');
+const converterStatusChip = document.getElementById('converterStatusChip');
+const calculatorStatusChip = document.getElementById('calculatorStatusChip');
+const calculatorLivePreview = document.getElementById('calculatorLivePreview');
 
 const STORAGE_PROBLEM = 'Der Browser-Speicher ist nicht verfügbar. Bitte erlaube Website-Daten, um dich anzumelden.';
 
@@ -26,8 +42,69 @@ function configurationProblem() {
 
 // Live regions only change when the text does, so repeated session checks are not re-announced.
 function setText(element, text) {
-    if (element.textContent !== text) {
+    if (element && element.textContent !== text) {
         element.textContent = text;
+    }
+}
+
+function updatePasswordVisibility(visible) {
+    passwordInput.type = visible ? 'text' : 'password';
+    togglePasswordButton.setAttribute('aria-pressed', String(visible));
+    const label = visible ? 'Passwort verbergen' : 'Passwort anzeigen';
+    togglePasswordButton.setAttribute('aria-label', label);
+    togglePasswordButton.setAttribute('title', label);
+    const icon = togglePasswordButton.querySelector('.material-symbols-outlined');
+    if (icon) {
+        icon.textContent = visible ? 'visibility_off' : 'visibility';
+    }
+}
+
+function formatGermanDate(date = new Date()) {
+    try {
+        return new Intl.DateTimeFormat('de-DE', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long'
+        }).format(date);
+    } catch {
+        return 'Wähle ein Werkzeug für heute';
+    }
+}
+
+function updateToolSummaries(userName) {
+    setText(dashboardDate, `${formatGermanDate()} · Wähle dein Werkzeug`);
+
+    const storedKey = keyStore.load();
+    if (storedKey.key) {
+        setText(converterStatusChip, storedKey.remember ? 'API-Key gemerkt' : 'API-Key aktiv');
+        converterStatusChip.dataset.tone = 'primary';
+    } else {
+        setText(converterStatusChip, 'API-Key einrichten');
+        delete converterStatusChip.dataset.tone;
+    }
+
+    if (!userName) {
+        setText(calculatorStatusChip, 'Bereit');
+        calculatorStatusChip.dataset.tone = 'primary';
+        setText(calculatorLivePreview, 'Noch keine Startzeit gespeichert');
+        return;
+    }
+
+    let state = {};
+    try {
+        state = loadUserState(window.localStorage, userName);
+    } catch {
+        state = {};
+    }
+    const calc = calculate(state);
+    if (calc.ok) {
+        setText(calculatorStatusChip, `Feierabend ${calc.endTime} Uhr`);
+        calculatorStatusChip.dataset.tone = calc.dailyMinutes < 0 ? 'negative' : 'primary';
+        setText(calculatorLivePreview, `Konto: ${calc.balance} · Start ${state.startTime}`);
+    } else {
+        setText(calculatorStatusChip, 'Startzeit festlegen');
+        delete calculatorStatusChip.dataset.tone;
+        setText(calculatorLivePreview, 'Noch keine Startzeit gespeichert');
     }
 }
 
@@ -39,8 +116,10 @@ function render() {
         setText(welcome, status.userName ? `Willkommen zurück, ${status.userName}!` : 'Willkommen zurück!');
         setText(notice, '');
         setText(errorMessage, '');
+        updateToolSummaries(status.userName ?? '');
         if (shownState === 'login') {
             form.reset();
+            updatePasswordVisibility(false);
             welcome.focus();
         }
         shownState = 'dashboard';
@@ -87,6 +166,25 @@ async function login() {
         setChecking(false);
     }
 }
+
+togglePasswordButton.addEventListener('click', () => {
+    const currentlyVisible = togglePasswordButton.getAttribute('aria-pressed') === 'true';
+    updatePasswordVisibility(!currentlyVisible);
+});
+
+window.addEventListener('storage', () => {
+    const status = guard.getStatus();
+    if (status.state === 'active') {
+        updateToolSummaries(status.userName ?? '');
+    }
+});
+
+window.addEventListener('pageshow', () => {
+    const status = guard.getStatus();
+    if (status.state === 'active') {
+        updateToolSummaries(status.userName ?? '');
+    }
+});
 
 document.addEventListener('sessionchange', render);
 render();

@@ -47,6 +47,11 @@ export function formatBalance(totalMinutes) {
     return `${sign}${Math.floor(rounded / 60)}h ${rounded % 60}m`;
 }
 
+export function formatDuration(totalMinutes) {
+    const rounded = Math.max(0, Math.round(totalMinutes));
+    return `${Math.floor(rounded / 60)}h ${rounded % 60}m`;
+}
+
 export function formatClock(minutesOfDay) {
     const hours = String(Math.floor(minutesOfDay / 60)).padStart(2, '0');
     const minutes = String(minutesOfDay % 60).padStart(2, '0');
@@ -81,7 +86,8 @@ export function calculate(input) {
     }
 
     const dailyMinutes = Math.round(values.dailyOvertime);
-    const duration = Math.round(values.workHours * 60) + Math.round(values.breakMinutes) + dailyMinutes;
+    const breakMinutes = Math.round(values.breakMinutes);
+    const duration = Math.round(values.workHours * 60) + breakMinutes + dailyMinutes;
     if (duration < 0) {
         return { ok: false, invalid: true, message: 'Der Abbau ist größer als Arbeitszeit und Pause zusammen.' };
     }
@@ -92,7 +98,40 @@ export function calculate(input) {
         endTime: formatClock(end % MINUTES_PER_DAY),
         dayOffset: Math.floor(end / MINUTES_PER_DAY),
         balance: formatBalance(values.currentOvertime * 60 + dailyMinutes),
-        dailyMinutes
+        dailyMinutes,
+        durationMinutes: duration,
+        breakMinutes
+    };
+}
+
+// Computes workday progress relative to the current minute of day (0..1439).
+export function computeProgress({ startTime, durationMinutes, nowMinutes }) {
+    const start = parseStartTime(startTime);
+    if (start === null || !Number.isFinite(durationMinutes) || durationMinutes < 0) {
+        return null;
+    }
+    const total = Math.round(durationMinutes);
+    if (total === 0) {
+        return { totalMinutes: 0, percent: 100, remainingMinutes: 0, state: 'done' };
+    }
+
+    const end = start + total;
+    let elapsed = nowMinutes - start;
+    if (end > MINUTES_PER_DAY && nowMinutes < start && nowMinutes <= end - MINUTES_PER_DAY) {
+        elapsed += MINUTES_PER_DAY;
+    }
+
+    if (elapsed < 0) {
+        return { totalMinutes: total, percent: 0, remainingMinutes: total, state: 'before', startsInMinutes: -elapsed };
+    }
+    if (elapsed >= total) {
+        return { totalMinutes: total, percent: 100, remainingMinutes: 0, state: 'done' };
+    }
+    return {
+        totalMinutes: total,
+        percent: Math.round((elapsed / total) * 100),
+        remainingMinutes: total - elapsed,
+        state: 'working'
     };
 }
 

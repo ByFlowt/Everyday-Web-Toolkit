@@ -148,9 +148,12 @@ const theme = read('assets/css/theme.css').replace(/\/\*[\s\S]*?\*\//g, '');
 const declarations = (block) => Object.fromEntries(
     [...block.matchAll(/(--md-[\w-]+):\s*(#[0-9a-f]{6});/g)].map((match) => [match[1].slice(5), match[2]]));
 const darkStart = theme.indexOf('@media (prefers-color-scheme: dark)');
+const explicitDarkStart = theme.indexOf(':root[data-theme="dark"]');
+const shapeStart = theme.indexOf('--shape-none');
 const schemes = {
     light: declarations(theme.slice(0, darkStart)),
-    dark: declarations(theme.slice(darkStart))
+    dark: declarations(theme.slice(darkStart, explicitDarkStart)),
+    explicitDark: declarations(theme.slice(explicitDarkStart, shapeStart))
 };
 
 function luminance(hex) {
@@ -171,6 +174,7 @@ const SURFACES = ['surface', 'surface-dim', 'surface-container-lowest', 'surface
 
 test('light and dark define the same color roles', () => {
     assert.deepEqual(Object.keys(schemes.light).sort(), Object.keys(schemes.dark).sort());
+    assert.deepEqual(schemes.explicitDark, schemes.dark);
     assert.equal(schemes.light.primary, '#00687a');
 });
 

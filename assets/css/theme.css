@@ -1,6 +1,6 @@
-/* Material 3 Expressive tokens and shared components (names and values follow Compose Material3). */
+/* Material 3 Expressive (Compose Material3 1.5.0) design tokens, adaptive shell, and components. */
 
-/* ---------- Color: light scheme, teal seed ---------- */
+/* ---------- Color: light scheme, teal seed (#00687a) ---------- */
 :root {
     color-scheme: light;
 
@@ -8,19 +8,28 @@
     --md-on-primary: #ffffff;
     --md-primary-container: #abedff;
     --md-on-primary-container: #001f26;
+    --md-primary-fixed: #abedff;
+    --md-primary-fixed-dim: #84d2e8;
+    --md-on-primary-fixed: #001f26;
+    --md-on-primary-fixed-variant: #004e5c;
     --md-secondary: #4b6268;
     --md-on-secondary: #ffffff;
     --md-secondary-container: #cee7ee;
     --md-on-secondary-container: #061f24;
+    --md-secondary-fixed: #cee7ee;
+    --md-on-secondary-fixed: #061f24;
     --md-tertiary: #555d7e;
     --md-on-tertiary: #ffffff;
     --md-tertiary-container: #dce1ff;
     --md-on-tertiary-container: #111a37;
+    --md-tertiary-fixed: #dce1ff;
+    --md-on-tertiary-fixed: #111a37;
     --md-error: #ba1a1a;
     --md-on-error: #ffffff;
     --md-error-container: #ffdad6;
     --md-on-error-container: #410002;
     --md-surface: #f5fafc;
+    --md-surface-bright: #f5fafc;
     --md-surface-dim: #d5dbdd;
     --md-surface-container-lowest: #ffffff;
     --md-surface-container-low: #eff4f6;
@@ -33,31 +42,41 @@
     --md-outline-variant: #bfc8cb;
     --md-inverse-surface: #2b3133;
     --md-inverse-on-surface: #ecf2f3;
-    --md-shadow: rgb(0 0 0 / 0.3);
+    --md-scrim: #000000;
+    --md-shadow: rgb(0 0 0 / 0.25);
 }
 
-/* ---------- Color: dark scheme ---------- */
+/* ---------- Color: dark scheme (system preference & explicit toggle) ---------- */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
         color-scheme: dark;
 
         --md-primary: #84d2e8;
         --md-on-primary: #003640;
         --md-primary-container: #004e5c;
         --md-on-primary-container: #abedff;
+        --md-primary-fixed: #abedff;
+        --md-primary-fixed-dim: #84d2e8;
+        --md-on-primary-fixed: #001f26;
+        --md-on-primary-fixed-variant: #004e5c;
         --md-secondary: #b2cbd2;
         --md-on-secondary: #1d343a;
         --md-secondary-container: #334a50;
         --md-on-secondary-container: #cee7ee;
+        --md-secondary-fixed: #cee7ee;
+        --md-on-secondary-fixed: #061f24;
         --md-tertiary: #bdc5eb;
         --md-on-tertiary: #272f4d;
         --md-tertiary-container: #3d4565;
         --md-on-tertiary-container: #dce1ff;
+        --md-tertiary-fixed: #dce1ff;
+        --md-on-tertiary-fixed: #111a37;
         --md-error: #ffb4ab;
         --md-on-error: #690005;
         --md-error-container: #93000a;
         --md-on-error-container: #ffdad6;
         --md-surface: #0f1416;
+        --md-surface-bright: #353b3d;
         --md-surface-dim: #0f1416;
         --md-surface-container-lowest: #090f11;
         --md-surface-container-low: #171d1e;
@@ -70,13 +89,59 @@
         --md-outline-variant: #3f484b;
         --md-inverse-surface: #dee3e5;
         --md-inverse-on-surface: #2b3133;
-        --md-shadow: rgb(0 0 0 / 0.6);
+        --md-scrim: #000000;
+        --md-shadow: rgb(0 0 0 / 0.55);
     }
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --md-primary: #84d2e8;
+    --md-on-primary: #003640;
+    --md-primary-container: #004e5c;
+    --md-on-primary-container: #abedff;
+    --md-primary-fixed: #abedff;
+    --md-primary-fixed-dim: #84d2e8;
+    --md-on-primary-fixed: #001f26;
+    --md-on-primary-fixed-variant: #004e5c;
+    --md-secondary: #b2cbd2;
+    --md-on-secondary: #1d343a;
+    --md-secondary-container: #334a50;
+    --md-on-secondary-container: #cee7ee;
+    --md-secondary-fixed: #cee7ee;
+    --md-on-secondary-fixed: #061f24;
+    --md-tertiary: #bdc5eb;
+    --md-on-tertiary: #272f4d;
+    --md-tertiary-container: #3d4565;
+    --md-on-tertiary-container: #dce1ff;
+    --md-tertiary-fixed: #dce1ff;
+    --md-on-tertiary-fixed: #111a37;
+    --md-error: #ffb4ab;
+    --md-on-error: #690005;
+    --md-error-container: #93000a;
+    --md-on-error-container: #ffdad6;
+    --md-surface: #0f1416;
+    --md-surface-bright: #353b3d;
+    --md-surface-dim: #0f1416;
+    --md-surface-container-lowest: #090f11;
+    --md-surface-container-low: #171d1e;
+    --md-surface-container: #1b2122;
+    --md-surface-container-high: #252b2c;
+    --md-surface-container-highest: #303637;
+    --md-on-surface: #dee3e5;
+    --md-on-surface-variant: #bfc8cb;
+    --md-outline: #899295;
+    --md-outline-variant: #3f484b;
+    --md-inverse-surface: #dee3e5;
+    --md-inverse-on-surface: #2b3133;
+    --md-scrim: #000000;
+    --md-shadow: rgb(0 0 0 / 0.55);
 }
 
 /* ---------- Shape, elevation, state, type, motion ---------- */
 :root {
-    --shape-none: 0;
+    --shape-none: 0px;
     --shape-xs: 4px;
     --shape-sm: 8px;
     --shape-md: 12px;
@@ -87,63 +152,85 @@
     --shape-xxl: 48px;
     --shape-full: 9999px;
 
-    --elevation-3: 0 4px 8px 3px rgb(0 0 0 / 0.15), 0 1px 3px var(--md-shadow);
+    --elevation-1: 0 1px 3px 1px rgb(0 0 0 / 0.08), 0 1px 2px var(--md-shadow);
+    --elevation-2: 0 2px 6px 2px rgb(0 0 0 / 0.12), 0 1px 2px var(--md-shadow);
+    --elevation-3: 0 6px 14px 3px rgb(0 0 0 / 0.16), 0 2px 4px var(--md-shadow);
 
     --state-hover: color-mix(in srgb, currentColor 8%, transparent);
     --state-focus: color-mix(in srgb, currentColor 10%, transparent);
-    --state-pressed: color-mix(in srgb, currentColor 10%, transparent);
+    --state-pressed: color-mix(in srgb, currentColor 12%, transparent);
 
-    --font-plain: 'Roboto', system-ui, sans-serif;
-    --font-brand: 'Roboto Serif', Georgia, serif;
+    --font-plain: 'Google Sans Flex', system-ui, -apple-system, sans-serif;
+    --font-brand: 'Google Sans Flex', system-ui, -apple-system, sans-serif;
 
-    /* rem keeps user font scaling working (16px = 1rem). Shorthand: weight size/line family. */
-    --type-display-large: 400 3.5625rem/4rem var(--font-brand);
-    --tracking-display-large: -0.015625rem;
-    --type-display-medium: 400 2.8125rem/3.25rem var(--font-brand);
-    --tracking-display-medium: 0;
+    /* M3 Expressive type scale (baseline + emphasized) */
+    --type-display-large: 400 3.5rem/4rem var(--font-brand);
+    --tracking-display-large: -0.02rem;
+    --type-display-medium: 400 2.75rem/3.25rem var(--font-brand);
+    --tracking-display-medium: -0.015rem;
+    --type-display-small: 400 2.25rem/2.75rem var(--font-brand);
+    --tracking-display-small: -0.01rem;
     --type-headline-large: 400 2rem/2.5rem var(--font-brand);
-    --tracking-headline-large: 0;
+    --tracking-headline-large: -0.015rem;
     --type-headline-medium: 400 1.75rem/2.25rem var(--font-brand);
-    --tracking-headline-medium: 0;
+    --tracking-headline-medium: -0.01rem;
     --type-headline-small: 400 1.5rem/2rem var(--font-brand);
     --tracking-headline-small: 0;
-    --type-title-large: 400 1.375rem/1.75rem var(--font-brand);
-    --tracking-title-large: 0;
+    --type-title-large: 500 1.375rem/1.75rem var(--font-brand);
+    --tracking-title-large: -0.005rem;
     --type-title-medium: 500 1rem/1.5rem var(--font-plain);
-    --tracking-title-medium: 0.009375rem;
+    --tracking-title-medium: 0.00625rem;
+    --type-title-small: 500 0.875rem/1.25rem var(--font-plain);
+    --tracking-title-small: 0.00625rem;
     --type-body-large: 400 1rem/1.5rem var(--font-plain);
-    --tracking-body-large: 0.03125rem;
+    --tracking-body-large: 0.015rem;
     --type-body-medium: 400 0.875rem/1.25rem var(--font-plain);
-    --tracking-body-medium: 0.015625rem;
+    --tracking-body-medium: 0.0125rem;
     --type-body-small: 400 0.75rem/1rem var(--font-plain);
-    --tracking-body-small: 0.025rem;
+    --tracking-body-small: 0.02rem;
     --type-label-large: 500 0.875rem/1.25rem var(--font-plain);
     --tracking-label-large: 0.00625rem;
+    --type-label-medium: 500 0.75rem/1rem var(--font-plain);
+    --tracking-label-medium: 0.025rem;
+    --type-label-small: 500 0.6875rem/1rem var(--font-plain);
+    --tracking-label-small: 0.025rem;
     --weight-emphasized: 700;
 
-    /* cubic-bezier fallbacks; replaced below by sampled springs where linear() is supported. */
+    /* M3 Expressive MotionScheme.expressive() spring curves & durations */
     --spring-fast-spatial: cubic-bezier(0.42, 1.67, 0.21, 0.9);
     --spring-default-spatial: cubic-bezier(0.38, 1.21, 0.22, 1);
     --spring-slow-spatial: cubic-bezier(0.39, 1.29, 0.35, 0.98);
     --spring-fast-effects: cubic-bezier(0.31, 0.94, 0.34, 1);
     --spring-default-effects: cubic-bezier(0.34, 0.8, 0.34, 1);
     --spring-slow-effects: cubic-bezier(0.34, 0.88, 0.34, 1);
-    --spring-fast-spatial-duration: 360ms;
-    --spring-default-spatial-duration: 440ms;
-    --spring-slow-spatial-duration: 600ms;
+    --spring-fast-spatial-duration: 350ms;
+    --spring-default-spatial-duration: 460ms;
+    --spring-slow-spatial-duration: 620ms;
     --spring-fast-effects-duration: 150ms;
     --spring-default-effects-duration: 240ms;
-    --spring-slow-effects-duration: 330ms;
+    --spring-slow-effects-duration: 340ms;
 
-    /* 48-point polygons (equal counts, so they morph into each other). */
+    /* 48-point MaterialShapes polygons for ContainedLoadingIndicator & expressive badges */
     --morph-burst: polygon(50% 0%, 56.3% 2.5%, 61.3% 7.7%, 66% 11.4%, 71.9% 12.1%, 79.2% 12%, 85.4% 14.6%, 88% 20.8%, 87.9% 28.1%, 88.6% 34%, 92.3% 38.7%, 97.5% 43.7%, 100% 50%, 97.5% 56.3%, 92.3% 61.3%, 88.6% 66%, 87.9% 71.9%, 88% 79.2%, 85.4% 85.4%, 79.2% 88%, 71.9% 87.9%, 66% 88.6%, 61.3% 92.3%, 56.3% 97.5%, 50% 100%, 43.7% 97.5%, 38.7% 92.3%, 34% 88.6%, 28.1% 87.9%, 20.8% 88%, 14.6% 85.4%, 12% 79.2%, 12.1% 71.9%, 11.4% 66%, 7.7% 61.3%, 2.5% 56.3%, 0% 50%, 2.5% 43.7%, 7.7% 38.7%, 11.4% 34%, 12.1% 28.1%, 12% 20.8%, 14.6% 14.6%, 20.8% 12%, 28.1% 12.1%, 34% 11.4%, 38.7% 7.7%, 43.7% 2.5%);
     --morph-cookie9: polygon(50% 0%, 56.3% 2.2%, 61.7% 6.4%, 67.1% 8.8%, 73.6% 9.1%, 80.3% 10.5%, 84.8% 15.2%, 86.6% 21.9%, 88.4% 27.8%, 92.6% 32.4%, 97.5% 37.3%, 99.4% 43.5%, 97.2% 50%, 94.2% 55.8%, 93.6% 61.7%, 94.6% 68.5%, 93.3% 75%, 88.3% 79.4%, 81.9% 81.9%, 77.1% 85.3%, 73.6% 90.9%, 69.1% 96%, 62.7% 97.5%, 56% 95.7%, 50% 94.3%, 44% 95.7%, 37.3% 97.5%, 30.9% 96%, 26.4% 90.9%, 22.9% 85.3%, 18.1% 81.9%, 11.7% 79.4%, 6.7% 75%, 5.4% 68.5%, 6.4% 61.7%, 5.8% 55.8%, 2.8% 50%, 0.6% 43.5%, 2.5% 37.3%, 7.4% 32.4%, 11.6% 27.8%, 13.4% 21.9%, 15.2% 15.2%, 19.7% 10.5%, 26.4% 9.1%, 32.9% 8.8%, 38.3% 6.4%, 43.7% 2.2%);
     --morph-pentagon: polygon(50% 0%, 56.4% 1.1%, 62.3% 4%, 67.4% 8%, 71.9% 12%, 76.5% 15.5%, 81.4% 18.6%, 86.7% 21.8%, 91.9% 25.8%, 96% 31%, 98.2% 37.1%, 98.3% 43.6%, 96.7% 50%, 94.4% 55.8%, 92.1% 61.3%, 90.4% 66.7%, 89.1% 72.5%, 87.4% 78.7%, 84.7% 84.7%, 80.4% 89.6%, 74.8% 92.9%, 68.4% 94.3%, 61.9% 94.3%, 55.8% 93.8%, 50% 93.5%, 44.2% 93.8%, 38.1% 94.3%, 31.6% 94.3%, 25.2% 92.9%, 19.6% 89.6%, 15.3% 84.7%, 12.6% 78.7%, 10.9% 72.5%, 9.6% 66.7%, 7.9% 61.3%, 5.6% 55.8%, 3.3% 50%, 1.7% 43.6%, 1.8% 37.1%, 4% 31%, 8.1% 25.8%, 13.3% 21.8%, 18.6% 18.6%, 23.5% 15.5%, 28.1% 12%, 32.6% 8%, 37.7% 4%, 43.6% 1.1%);
     --morph-pill: polygon(50% 0%, 56.6% 0.1%, 63.2% 0.8%, 69.5% 2.8%, 75.1% 6.5%, 79.5% 11.6%, 82.4% 17.6%, 84.2% 23.8%, 85.2% 29.7%, 85.7% 35.2%, 85.9% 40.4%, 86% 45.3%, 86% 50%, 86% 54.7%, 85.9% 59.6%, 85.7% 64.8%, 85.2% 70.3%, 84.2% 76.2%, 82.4% 82.4%, 79.5% 88.4%, 75.1% 93.5%, 69.5% 97.2%, 63.2% 99.2%, 56.6% 99.9%, 50% 100%, 43.4% 99.9%, 36.8% 99.2%, 30.5% 97.2%, 24.9% 93.5%, 20.5% 88.4%, 17.6% 82.4%, 15.8% 76.2%, 14.8% 70.3%, 14.3% 64.8%, 14.1% 59.6%, 14% 54.7%, 14% 50%, 14% 45.3%, 14.1% 40.4%, 14.3% 35.2%, 14.8% 29.7%, 15.8% 23.8%, 17.6% 17.6%, 20.5% 11.6%, 24.9% 6.5%, 30.5% 2.8%, 36.8% 0.8%, 43.4% 0.1%);
     --morph-cookie4: polygon(50% 0%, 56.4% 1.2%, 62.2% 4.5%, 66.9% 9.1%, 70.7% 14.2%, 73.9% 18.8%, 77.2% 22.8%, 81.2% 26.1%, 85.8% 29.3%, 90.9% 33.1%, 95.5% 37.8%, 98.8% 43.6%, 100% 50%, 98.8% 56.4%, 95.5% 62.2%, 90.9% 66.9%, 85.8% 70.7%, 81.2% 73.9%, 77.2% 77.2%, 73.9% 81.2%, 70.7% 85.8%, 66.9% 90.9%, 62.2% 95.5%, 56.4% 98.8%, 50% 100%, 43.6% 98.8%, 37.8% 95.5%, 33.1% 90.9%, 29.3% 85.8%, 26.1% 81.2%, 22.8% 77.2%, 18.8% 73.9%, 14.2% 70.7%, 9.1% 66.9%, 4.5% 62.2%, 1.2% 56.4%, 0% 50%, 1.2% 43.6%, 4.5% 37.8%, 9.1% 33.1%, 14.2% 29.3%, 18.8% 26.1%, 22.8% 22.8%, 26.1% 18.8%, 29.3% 14.2%, 33.1% 9.1%, 37.8% 4.5%, 43.6% 1.2%);
+
+    --rail-width: 248px;
 }
 
-/* Damped springs (mass 1; damping ratio / stiffness), sampled until within 0.1% of rest. */
+html[data-rail="collapsed"] {
+    --rail-width: 84px;
+}
+
+@media (max-width: 1079px) and (min-width: 840px) {
+    :root:not([data-rail="expanded"]) {
+        --rail-width: 84px;
+    }
+}
+
+/* Damped springs sampled for linear() */
 @supports (animation-timing-function: linear(0, 1)) {
     :root {
         --spring-fast-spatial: linear(0, 0.008 1.3%, 0.029 2.5%, 0.07 4%, 0.124 5.5%, 0.245 8.3%, 0.533 14%, 0.651 16.5%, 0.758 19%, 0.85 21.5%, 0.919 23.8%, 0.981 26.3%, 1.027 28.8%, 1.063 31.5%, 1.089 35.3%, 1.094 39.5%, 1.081 44.5%, 1.019 58.8%, 0.998 67%, 0.991 77.8%, 1);
@@ -162,12 +249,10 @@
     box-sizing: border-box;
 }
 
-/* Must beat every component display rule. */
 [hidden] {
     display: none !important;
 }
 
-/* Protected pages stay blank until session-guard.js confirms the session. */
 html[data-page="protected"]:not([data-auth="ok"]) body > :not(noscript) {
     display: none !important;
 }
@@ -175,41 +260,49 @@ html[data-page="protected"]:not([data-auth="ok"]) body > :not(noscript) {
 body {
     margin: 0;
     min-height: 100vh;
-    background: var(--md-surface);
+    background: var(--md-surface-container-low);
     color: var(--md-on-surface);
     font: var(--type-body-large);
+    font-variation-settings: 'ROND' 40;
     letter-spacing: var(--tracking-body-large);
     overflow-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
+h3,
 p {
     margin: 0;
 }
 
-.page {
-    width: 100%;
-    max-width: 38rem;
-    margin: 0 auto;
-    padding: 16px 16px 48px;
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
 }
 
 .headline {
     font: var(--type-headline-large);
     font-weight: var(--weight-emphasized);
+    font-variation-settings: 'ROND' 100;
     letter-spacing: var(--tracking-headline-large);
-    text-align: center;
+}
+
+.headline--medium {
+    font: var(--type-headline-medium);
+    font-weight: var(--weight-emphasized);
+    font-variation-settings: 'ROND' 100;
+    letter-spacing: var(--tracking-headline-medium);
 }
 
 .title {
     font: var(--type-title-large);
-    font-weight: 500;
+    font-weight: 600;
+    font-variation-settings: 'ROND' 80;
     letter-spacing: var(--tracking-title-large);
 }
 
 .supporting {
-    margin: 4px 16px 16px;
+    margin: 6px 4px 0;
     color: var(--md-on-surface-variant);
     font: var(--type-body-small);
     letter-spacing: var(--tracking-body-small);
@@ -234,26 +327,411 @@ p {
     width: 1em;
     overflow: hidden;
     user-select: none;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    transition: font-variation-settings var(--spring-fast-effects-duration) var(--spring-fast-effects);
 }
 
+/* ---------- Cards & surfaces ---------- */
 .card {
-    margin-bottom: 16px;
     padding: 24px;
-    background: var(--md-surface-container);
+    background: var(--md-surface-container-lowest);
+    border: 1px solid color-mix(in srgb, var(--md-outline-variant) 55%, transparent);
     border-radius: var(--shape-xl);
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
     .card {
-        padding: 16px;
+        padding: 18px;
+        border-radius: var(--shape-lg-increased);
     }
 }
 
-/* ---------- Messages (live regions stay in the DOM and collapse while empty) ---------- */
+/* ---------- Adaptive M3 Expressive Shell (WideNavigationRail + ShortNavigationBar) ---------- */
+.app-shell {
+    display: grid;
+    grid-template-columns: var(--rail-width) minmax(0, 1fr);
+    min-height: 100vh;
+    transition: grid-template-columns var(--spring-default-spatial-duration) var(--spring-default-spatial);
+}
+
+.wide-rail {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100vh;
+    padding: 16px 12px;
+    background: var(--md-surface-container);
+    border-inline-end: 1px solid color-mix(in srgb, var(--md-outline-variant) 50%, transparent);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.wide-rail__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 48px;
+    padding-inline: 4px;
+}
+
+.rail-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    color: var(--md-on-surface);
+    text-decoration: none;
+}
+
+.rail-brand__mark {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--shape-md);
+}
+
+.rail-brand__title {
+    font: var(--type-title-medium);
+    font-weight: var(--weight-emphasized);
+    font-variation-settings: 'ROND' 100;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wide-rail__nav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.rail-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 10px 14px;
+    border-radius: var(--shape-full);
+    color: var(--md-on-surface-variant);
+    font: var(--type-label-large);
+    letter-spacing: var(--tracking-label-large);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
+        background-color var(--spring-default-effects-duration) var(--spring-default-effects),
+        color var(--spring-default-effects-duration) var(--spring-default-effects);
+}
+
+.rail-item:hover {
+    background: var(--state-hover);
+    color: var(--md-on-surface);
+}
+
+.rail-item:active {
+    border-radius: var(--shape-md);
+}
+
+.rail-item[aria-current="page"] {
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
+    font-weight: var(--weight-emphasized);
+}
+
+.rail-item[aria-current="page"] .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.wide-rail__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid color-mix(in srgb, var(--md-outline-variant) 50%, transparent);
+}
+
+.rail-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--shape-lg);
+    background: var(--md-surface-container-low);
+    color: var(--md-on-surface);
+    min-width: 0;
+}
+
+.rail-user__avatar {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--shape-full);
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    font: var(--type-label-large);
+    font-weight: var(--weight-emphasized);
+}
+
+.rail-user__name {
+    font: var(--type-label-large);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rail-action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: var(--shape-full);
+    background: transparent;
+    color: var(--md-on-surface-variant);
+    font: var(--type-label-large);
+    letter-spacing: var(--tracking-label-large);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+        border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
+        background-color var(--spring-default-effects-duration) var(--spring-default-effects),
+        color var(--spring-default-effects-duration) var(--spring-default-effects);
+}
+
+.rail-action:hover {
+    background: var(--state-hover);
+    color: var(--md-on-surface);
+}
+
+.rail-action:active {
+    border-radius: var(--shape-md);
+}
+
+.rail-action--danger {
+    color: var(--md-error);
+}
+
+html[data-rail="collapsed"] .wide-rail__header {
+    justify-content: center;
+    padding-inline: 0;
+}
+
+html[data-rail="collapsed"] .rail-brand,
+html[data-rail="collapsed"] .rail-item__label,
+html[data-rail="collapsed"] .rail-user__name,
+html[data-rail="collapsed"] .rail-action__label {
+    display: none;
+}
+
+html[data-rail="collapsed"] .rail-item,
+html[data-rail="collapsed"] .rail-action,
+html[data-rail="collapsed"] .rail-user {
+    justify-content: center;
+    padding-inline: 0;
+}
+
+@media (max-width: 1079px) and (min-width: 840px) {
+    html:not([data-rail="expanded"]) .wide-rail__header {
+        justify-content: center;
+        padding-inline: 0;
+    }
+
+    html:not([data-rail="expanded"]) .rail-brand,
+    html:not([data-rail="expanded"]) .rail-item__label,
+    html:not([data-rail="expanded"]) .rail-user__name,
+    html:not([data-rail="expanded"]) .rail-action__label {
+        display: none;
+    }
+
+    html:not([data-rail="expanded"]) .rail-item,
+    html:not([data-rail="expanded"]) .rail-action,
+    html:not([data-rail="expanded"]) .rail-user {
+        justify-content: center;
+        padding-inline: 0;
+    }
+}
+
+.shell-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.mobile-top-bar {
+    display: none;
+}
+
+.short-nav-bar {
+    display: none;
+}
+
+.workspace {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 32px 48px;
+}
+
+.workspace-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 20px;
+    margin-bottom: 24px;
+}
+
+.workspace-header__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.workspace-header__subtitle {
+    color: var(--md-on-surface-variant);
+    font: var(--type-body-medium);
+    letter-spacing: var(--tracking-body-medium);
+}
+
+.workspace-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.pane-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .pane-grid {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+}
+
+@media (max-width: 839px) {
+    .app-shell {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .wide-rail {
+        display: none;
+    }
+
+    .mobile-top-bar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 60px;
+        padding: 8px 12px 8px 16px;
+        background: color-mix(in srgb, var(--md-surface-container-low) 92%, transparent);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid color-mix(in srgb, var(--md-outline-variant) 45%, transparent);
+    }
+
+    .mobile-top-bar__brand {
+        width: 28px;
+        height: 28px;
+        border-radius: var(--shape-sm);
+        flex: none;
+    }
+
+    .mobile-top-bar__title {
+        flex: 1;
+        min-width: 0;
+        font: var(--type-title-large);
+        font-weight: var(--weight-emphasized);
+        font-variation-settings: 'ROND' 100;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .workspace {
+        padding: 18px 16px calc(92px + env(safe-area-inset-bottom));
+    }
+
+    .workspace-header {
+        margin-bottom: 16px;
+    }
+
+    .short-nav-bar {
+        position: fixed;
+        inset-inline: 0;
+        bottom: 0;
+        z-index: 20;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: center;
+        min-height: calc(68px + env(safe-area-inset-bottom));
+        padding: 6px 8px calc(8px + env(safe-area-inset-bottom));
+        background: var(--md-surface-container);
+        border-top: 1px solid color-mix(in srgb, var(--md-outline-variant) 55%, transparent);
+    }
+
+    .short-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        min-height: 52px;
+        color: var(--md-on-surface-variant);
+        font: var(--type-label-medium);
+        letter-spacing: var(--tracking-label-medium);
+        text-decoration: none;
+    }
+
+    .short-nav-item__pill {
+        display: grid;
+        place-items: center;
+        width: 56px;
+        height: 30px;
+        border-radius: var(--shape-full);
+        transition:
+            width var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
+            background-color var(--spring-default-effects-duration) var(--spring-default-effects);
+    }
+
+    .short-nav-item[aria-current="page"] {
+        color: var(--md-on-surface);
+        font-weight: var(--weight-emphasized);
+    }
+
+    .short-nav-item[aria-current="page"] .short-nav-item__pill {
+        width: 64px;
+        background: var(--md-secondary-container);
+        color: var(--md-on-secondary-container);
+    }
+
+    .short-nav-item[aria-current="page"] .material-symbols-outlined {
+        font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+}
+
+/* ---------- Messages ---------- */
 .message:not(:empty) {
     margin-bottom: 16px;
     padding: 12px 16px;
-    border-radius: var(--shape-md);
+    border-radius: var(--shape-lg);
     font: var(--type-body-medium);
     letter-spacing: var(--tracking-body-medium);
 }
@@ -272,12 +750,12 @@ noscript p {
     display: block;
     margin: 16px;
     padding: 16px;
-    border-radius: var(--shape-md);
+    border-radius: var(--shape-lg);
     background: var(--md-error-container);
     color: var(--md-on-error-container);
 }
 
-/* ---------- Buttons: size S by default, .btn--m for medium ---------- */
+/* ---------- Buttons: M3 Expressive S (40px) and M (52px) ---------- */
 .btn {
     --btn-radius-pressed: var(--shape-sm);
     position: relative;
@@ -285,30 +763,31 @@ noscript p {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 2.5rem;
-    padding: 4px 16px;
+    min-height: 2.75rem;
+    padding: 6px 16px;
     border: 1px solid transparent;
-    border-radius: 1.25rem;
+    border-radius: var(--shape-full);
     background-color: transparent;
     color: var(--md-primary);
     font: var(--type-label-large);
+    font-variation-settings: 'ROND' 80;
     letter-spacing: var(--tracking-label-large);
     cursor: pointer;
     transition:
         border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
+        transform var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
         background-color var(--spring-default-effects-duration) var(--spring-default-effects),
         color var(--spring-default-effects-duration) var(--spring-default-effects);
 }
 
-/* 48px touch target around the 40px container. */
 .btn::after {
     content: '';
     position: absolute;
-    inset: -5px 0;
+    inset: -4px 0;
 }
 
 .btn .material-symbols-outlined {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
 }
 
 .btn:hover {
@@ -326,15 +805,15 @@ noscript p {
 
 .btn--m {
     --btn-radius-pressed: var(--shape-md);
-    min-height: 3.5rem;
-    padding: 8px 24px;
-    border-radius: 1.75rem;
+    min-height: 3.25rem;
+    padding: 10px 24px;
     font: var(--type-title-medium);
+    font-weight: 600;
     letter-spacing: var(--tracking-title-medium);
 }
 
 .btn--m .material-symbols-outlined {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
 }
 
 .btn--block {
@@ -351,20 +830,30 @@ noscript p {
     color: var(--md-on-secondary-container);
 }
 
+.btn--error-tonal {
+    background-color: var(--md-error-container);
+    color: var(--md-on-error-container);
+}
+
 .btn--outlined {
-    border-color: var(--md-outline);
-    color: var(--md-on-surface-variant);
+    border-color: var(--md-outline-variant);
+    color: var(--md-on-surface);
+}
+
+.btn--xs {
+    min-height: 2.375rem;
+    padding: 6px 12px;
+    font: var(--type-label-medium);
+}
+
+.btn--xs::after {
+    inset: -5px -2px;
 }
 
 .btn[aria-pressed="true"] {
     border-radius: var(--shape-md);
-    border-color: var(--md-inverse-surface);
-    background-color: var(--md-inverse-surface);
-    color: var(--md-inverse-on-surface);
-}
-
-.btn[aria-pressed="true"]:active {
-    border-radius: var(--shape-sm);
+    background-color: var(--md-primary-container);
+    color: var(--md-on-primary-container);
 }
 
 .btn:disabled {
@@ -379,16 +868,23 @@ noscript p {
     display: inline-grid;
     flex: none;
     place-items: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    color: var(--md-on-surface);
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: var(--shape-full);
+    background: transparent;
+    color: var(--md-on-surface-variant);
     text-decoration: none;
-    transition: border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial);
+    cursor: pointer;
+    transition:
+        border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
+        background-color var(--spring-default-effects-duration) var(--spring-default-effects),
+        color var(--spring-default-effects-duration) var(--spring-default-effects);
 }
 
 .icon-btn:hover {
     background: var(--state-hover);
+    color: var(--md-on-surface);
 }
 
 .icon-btn:active {
@@ -396,11 +892,11 @@ noscript p {
     background: var(--state-pressed);
 }
 
-/* ---------- Connected button group (radio labels or tabs) ---------- */
+/* ---------- Compose 1.5.0 ConnectedButtonGroup ---------- */
 .connected {
     position: relative;
     display: flex;
-    gap: 2px;
+    gap: 4px;
 }
 
 .connected > button,
@@ -413,17 +909,19 @@ noscript p {
     justify-content: center;
     gap: 8px;
     min-width: 0;
-    min-height: 2.5rem;
-    padding: 4px 8px;
+    min-height: 2.75rem;
+    padding: 6px 12px;
     border: 0;
     border-radius: var(--inner);
-    background-color: var(--md-secondary-container);
-    color: var(--md-on-secondary-container);
+    background-color: var(--md-surface-container-high);
+    color: var(--md-on-surface);
     font: var(--type-label-large);
+    font-variation-settings: 'ROND' 80;
     letter-spacing: var(--tracking-label-large);
     text-align: center;
     cursor: pointer;
     transition:
+        flex-grow var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
         border-radius var(--spring-fast-spatial-duration) var(--spring-fast-spatial),
         background-color var(--spring-default-effects-duration) var(--spring-default-effects),
         color var(--spring-default-effects-duration) var(--spring-default-effects);
@@ -437,11 +935,11 @@ noscript p {
 }
 
 .connected > :first-of-type {
-    border-radius: 1.25rem var(--inner) var(--inner) 1.25rem;
+    border-radius: var(--shape-full) var(--inner) var(--inner) var(--shape-full);
 }
 
 .connected > :last-of-type {
-    border-radius: var(--inner) 1.25rem 1.25rem var(--inner);
+    border-radius: var(--inner) var(--shape-full) var(--shape-full) var(--inner);
 }
 
 .connected > button:hover,
@@ -452,15 +950,22 @@ noscript p {
 .connected > button:active,
 .connected > label:active {
     --inner: var(--shape-xs);
+    flex-grow: 1.12;
     background-image: linear-gradient(var(--state-pressed), var(--state-pressed));
 }
 
 .connected > button[aria-selected="true"],
 .connected > input:checked + label {
-    border-radius: 1.25rem;
+    flex-grow: 1.08;
+    border-radius: var(--shape-full);
     background-color: var(--md-primary);
     color: var(--md-on-primary);
     font-weight: var(--weight-emphasized);
+}
+
+.connected > input:checked + label .material-symbols-outlined,
+.connected > button[aria-selected="true"] .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
 }
 
 .connected > input:focus-visible + label {
@@ -475,7 +980,7 @@ noscript p {
 
 fieldset {
     min-width: 0;
-    margin: 0 0 24px;
+    margin: 0;
     padding: 0;
     border: 0;
 }
@@ -487,27 +992,42 @@ legend {
     font: var(--type-label-large);
 }
 
-/* ---------- Filled text field ---------- */
+/* ---------- Expressive Text Fields (no focus ring on mouse click, crisp border focus) ---------- */
 .field {
+    position: relative;
     min-width: 0;
     margin-bottom: 16px;
-    padding: 8px 16px;
-    border-radius: var(--shape-xs) var(--shape-xs) var(--shape-none) var(--shape-none);
-    background: var(--md-surface-container-highest);
-    box-shadow: inset 0 -1px 0 var(--md-on-surface-variant);
+    padding: 10px 16px;
+    border: 1px solid var(--md-outline-variant);
+    border-radius: var(--shape-lg);
+    background: var(--md-surface-container-low);
+    transition:
+        border-color var(--spring-fast-effects-duration) var(--spring-fast-effects),
+        box-shadow var(--spring-fast-effects-duration) var(--spring-fast-effects),
+        background-color var(--spring-fast-effects-duration) var(--spring-fast-effects);
+}
+
+.field:hover {
+    border-color: var(--md-outline);
 }
 
 .field:focus-within {
-    box-shadow: inset 0 -2px 0 var(--md-primary);
-    outline: 3px solid var(--md-secondary);
+    border-color: var(--md-primary);
+    box-shadow: 0 0 0 1px var(--md-primary);
+    background: var(--md-surface-container-lowest);
+}
+
+.field:focus-within:has(:focus-visible) {
+    outline: 3px solid color-mix(in srgb, var(--md-primary) 28%, transparent);
     outline-offset: 2px;
 }
 
 .field label {
     display: block;
+    margin-bottom: 2px;
     color: var(--md-on-surface-variant);
-    font: var(--type-body-small);
-    letter-spacing: var(--tracking-body-small);
+    font: var(--type-label-medium);
+    letter-spacing: var(--tracking-label-medium);
 }
 
 .field:focus-within label {
@@ -526,33 +1046,43 @@ legend {
     color: var(--md-on-surface);
     font: var(--type-body-large);
     letter-spacing: var(--tracking-body-large);
-    /* The ring is drawn on .field:focus-within instead. */
     outline: none;
 }
 
 .field input::placeholder,
 .field textarea::placeholder {
-    color: var(--md-on-surface-variant);
+    color: color-mix(in srgb, var(--md-on-surface-variant) 70%, transparent);
 }
 
 .field input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 100px var(--md-surface-container-highest) inset;
+    -webkit-box-shadow: 0 0 0 100px var(--md-surface-container-low) inset;
     -webkit-text-fill-color: var(--md-on-surface);
     caret-color: var(--md-on-surface);
 }
 
-/* A field with supporting text directly below it. */
+.field--trailing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-inline-end: 8px;
+}
+
+.field--trailing__body {
+    flex: 1;
+    min-width: 0;
+}
+
 .field--supported {
     margin-bottom: 0;
 }
 
 @media (forced-colors: active) {
     .field {
-        border-bottom: 1px solid;
+        border: 1px solid;
     }
 }
 
-/* ---------- Switch ---------- */
+/* ---------- M3 Switch ---------- */
 .switch-row {
     display: flex;
     align-items: center;
@@ -565,8 +1095,9 @@ legend {
     display: flex;
     flex: 1;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     align-self: stretch;
+    font: var(--type-body-medium);
     cursor: pointer;
 }
 
@@ -576,7 +1107,7 @@ legend {
     flex: none;
     width: 52px;
     height: 32px;
-    margin: 8px 0;
+    margin: 4px 0;
     border: 2px solid var(--md-outline);
     border-radius: 16px;
     background: var(--md-surface-container-highest);
@@ -584,7 +1115,6 @@ legend {
     transition: background-color var(--spring-default-effects-duration) var(--spring-default-effects);
 }
 
-/* Handle: 16px off, 24px on, 28px pressed. Coordinates are relative to the 48x28 padding box. */
 .switch::before {
     content: '';
     position: absolute;
@@ -601,7 +1131,6 @@ legend {
         height var(--spring-fast-spatial-duration) var(--spring-fast-spatial);
 }
 
-/* The 40px state layer is a halo around the handle. */
 .switch:hover::before {
     box-shadow: 0 0 0 12px color-mix(in srgb, var(--md-on-surface) 8%, transparent);
 }
@@ -620,7 +1149,7 @@ legend {
 }
 
 .switch:checked:hover::before {
-    box-shadow: 0 0 0 8px color-mix(in srgb, var(--md-primary) 8%, transparent);
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--md-primary) 12%, transparent);
 }
 
 .switch:active::before {
@@ -634,11 +1163,6 @@ legend {
     left: 20px;
 }
 
-.switch:active:hover::before {
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--md-primary) 10%, transparent);
-}
-
-/* Check icon inside the selected handle (16px box). */
 .switch:checked::after {
     content: '';
     position: absolute;
@@ -662,42 +1186,122 @@ legend {
     }
 }
 
-/* ---------- Small top app bar (tool pages); part of the normal flow, so it covers nothing ---------- */
-.top-app-bar {
+/* ---------- Chips / Status Badges ---------- */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: var(--shape-full);
+    background: var(--md-surface-container-high);
+    color: var(--md-on-surface-variant);
+    font: var(--type-label-medium);
+    letter-spacing: var(--tracking-label-medium);
+}
+
+.chip .material-symbols-outlined {
+    font-size: 1rem;
+}
+
+.chip[data-tone="primary"] {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+}
+
+.chip[data-tone="positive"] {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+}
+
+.chip[data-tone="negative"],
+.chip[data-tone="error"] {
+    background: var(--md-error-container);
+    color: var(--md-on-error-container);
+}
+
+/* ---------- Compose 1.5.0 HorizontalFloatingToolbar ---------- */
+.floating-toolbar {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border-radius: var(--shape-full);
+    background: var(--md-surface-container-high);
+    border: 1px solid color-mix(in srgb, var(--md-outline-variant) 55%, transparent);
+    box-shadow: var(--elevation-2);
+}
+
+/* ---------- Expressive Dialog ---------- */
+.m3-dialog {
+    width: min(34rem, calc(100vw - 32px));
+    max-height: calc(100vh - 48px);
+    margin: auto;
+    padding: 24px;
+    border: 1px solid color-mix(in srgb, var(--md-outline-variant) 55%, transparent);
+    border-radius: var(--shape-xl);
+    background: var(--md-surface-container-high);
+    color: var(--md-on-surface);
+    box-shadow: var(--elevation-3);
+}
+
+.m3-dialog::backdrop {
+    background: color-mix(in srgb, var(--md-scrim) 48%, transparent);
+    backdrop-filter: blur(4px);
+}
+
+.m3-dialog__header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.m3-dialog__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--md-on-surface-variant);
+    font: var(--type-body-medium);
+    letter-spacing: var(--tracking-body-medium);
+}
+
+.m3-dialog__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+/* ---------- Expressive Progress Bar ---------- */
+.m3-progress {
+    appearance: none;
+    display: block;
     width: 100%;
-    max-width: 38rem;
-    min-height: 64px;
-    margin: 0 auto;
-    padding: 8px 16px 8px 8px;
+    height: 10px;
+    border: 0;
+    border-radius: var(--shape-full);
+    background: var(--md-surface-container-highest);
+    overflow: hidden;
 }
 
-.top-app-bar h1 {
-    flex: 1;
-    min-width: 0;
-    font-weight: var(--weight-emphasized);
-    hyphens: auto;
+.m3-progress::-webkit-progress-bar {
+    background: var(--md-surface-container-highest);
+    border-radius: var(--shape-full);
 }
 
-@media (max-width: 480px) {
-    .top-app-bar .btn {
-        min-width: 3rem;
-        padding-inline: 12px;
-    }
-
-    .top-app-bar .btn-label {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip-path: inset(50%);
-        white-space: nowrap;
-    }
+.m3-progress::-webkit-progress-value {
+    background: var(--md-primary);
+    border-radius: var(--shape-full);
+    transition: width var(--spring-default-spatial-duration) var(--spring-default-spatial);
 }
 
-/* ---------- Shape morphing ---------- */
+.m3-progress::-moz-progress-bar {
+    background: var(--md-primary);
+    border-radius: var(--shape-full);
+}
+
+/* ---------- Shape morphing & reduced motion ---------- */
 @keyframes shape-morph {
     0%, 100% { clip-path: var(--morph-burst); }
     20% { clip-path: var(--morph-cookie9); }
