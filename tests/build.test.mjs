@@ -223,3 +223,29 @@ test('the preview server serves only the given directory', async () => {
         server.close();
     }
 });
+
+test('build stamps local CSS/JS references and ES imports with a content hash for cache busting', async () => {
+    const outDir = await outputDir();
+    await build({ env: { USER_TOBIAS: fakePassword() }, outDir });
+
+    const html = await readFile(join(outDir, 'index.html'), 'utf8');
+    const loginJs = await readFile(join(outDir, 'assets/js/login.js'), 'utf8');
+    const cssMatch = /href="assets\/css\/theme\.css\?v=([0-9a-f]{8})"/.exec(html);
+    const jsMatch = /src="assets\/js\/login\.js\?v=([0-9a-f]{8})"/.exec(html);
+    const importMatch = /from '\.\/calculator\.js\?v=([0-9a-f]{8})'/.exec(loginJs);
+    assert.ok(cssMatch, 'theme.css should be versioned');
+    assert.ok(jsMatch, 'login.js should be versioned');
+    assert.ok(importMatch, 'ES module import should be versioned');
+    assert.equal(cssMatch[1], jsMatch[1]);
+    assert.equal(jsMatch[1], importMatch[1]);
+
+    const server = createStaticServer(outDir);
+    await new Promise((done) => server.listen(0, '127.0.0.1', done));
+    try {
+        const origin = `http://127.0.0.1:${server.address().port}`;
+        const asset = await fetch(`${origin}/assets/js/login.js?v=${jsMatch[1]}`);
+        assert.equal(asset.status, 200);
+    } finally {
+        server.close();
+    }
+});
