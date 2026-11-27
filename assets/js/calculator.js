@@ -4,28 +4,23 @@ import { calculate, computeProgress, formatClock, formatDuration, loadUserState,
 const TOAST_DELAY_MS = 800;
 const TOAST_DURATION_MS = 2000;
 const PROGRESS_INTERVAL_MS = 30 * 1000;
-const SVG_WIDTH = 240;
+const SVG_WIDTH = 320;
 const SVG_START_X = 2;
-const SVG_END_X = 238;
+const SVG_END_X = 318;
 const SVG_CENTER_Y = 8;
-const SVG_GAP = 5;
-const WAVE_PERIOD = 24;
+const SVG_GAP = 6;
+const WAVE_PERIOD = 32;
 
-function buildWavyPath(endX, amplitude) {
+function buildWavyPath(amplitude) {
     const start = -WAVE_PERIOD;
-    if (endX <= SVG_START_X) {
-        return '';
-    }
+    const end = SVG_WIDTH + WAVE_PERIOD;
     if (amplitude <= 0.15) {
-        return `M ${start} ${SVG_CENTER_Y} L ${endX.toFixed(1)} ${SVG_CENTER_Y}`;
+        return `M ${start} ${SVG_CENTER_Y} L ${end} ${SVG_CENTER_Y}`;
     }
-    const parts = [`M ${start} ${SVG_CENTER_Y}`];
-    for (let x = start; x < endX; x += WAVE_PERIOD / 2) {
-        const nextX = Math.min(endX, x + WAVE_PERIOD / 2);
-        const midX = (x + nextX) / 2;
-        const sign = Math.round((x - start) / (WAVE_PERIOD / 2)) % 2 === 0 ? -1 : 1;
-        const ctrlY = SVG_CENTER_Y + sign * amplitude * ((nextX - x) / (WAVE_PERIOD / 2));
-        parts.push(`Q ${midX.toFixed(1)} ${ctrlY.toFixed(1)} ${nextX.toFixed(1)} ${SVG_CENTER_Y}`);
+    const half = WAVE_PERIOD / 2;
+    const parts = [`M ${start} ${SVG_CENTER_Y} Q ${start + half / 2} ${(SVG_CENTER_Y - amplitude).toFixed(2)} ${start + half} ${SVG_CENTER_Y}`];
+    for (let x = start + half * 2; x <= end; x += half) {
+        parts.push(`T ${x} ${SVG_CENTER_Y}`);
     }
     return parts.join(' ');
 }
@@ -49,6 +44,7 @@ export function initCalculator() {
     const progressLabel = element('progressLabel');
     const progressPercent = element('progressPercent');
     const workdayProgress = element('workdayProgress');
+    const wavyClipRect = element('wavyClipRect');
     const wavyTrack = element('wavyTrack');
     const wavyWave = element('wavyWave');
     const wavyStop = element('wavyStop');
@@ -92,20 +88,22 @@ export function initCalculator() {
         const amplitude = clamped <= 6 || clamped >= 95 ? 0 : 4.2;
 
         if (clamped <= 0) {
+            wavyClipRect.setAttribute('width', '0');
             wavyWave.setAttribute('d', '');
             wavyTrack.setAttribute('x1', String(SVG_START_X));
             wavyTrack.setAttribute('x2', String(SVG_END_X));
             wavyStop.setAttribute('cx', String(SVG_END_X));
+            wavyStop.setAttribute('r', '2');
             return;
         }
 
-        wavyWave.setAttribute('d', buildWavyPath(fillX, amplitude));
+        wavyClipRect.setAttribute('width', fillX.toFixed(1));
+        wavyWave.setAttribute('d', buildWavyPath(amplitude));
         const trackStart = Math.min(SVG_END_X, fillX + SVG_GAP);
         wavyTrack.setAttribute('x1', trackStart.toFixed(1));
         wavyTrack.setAttribute('x2', String(SVG_END_X));
-        wavyStop.setAttribute('cx', String(clamped >= 99 ? fillX.toFixed(1) : SVG_END_X));
+        wavyStop.setAttribute('cx', String(SVG_END_X));
         wavyStop.setAttribute('r', clamped >= 100 ? '0' : '2');
-        void SVG_WIDTH;
     }
 
     function updateSummary(result) {

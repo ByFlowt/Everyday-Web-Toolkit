@@ -618,12 +618,20 @@
                                     <div id="workdayProgress" class="wavy-progress" role="progressbar"
                                         aria-labelledby="progressLabel" aria-valuemin="0" aria-valuemax="100"
                                         aria-valuenow="0" data-state="before">
-                                        <svg class="wavy-progress__svg" viewBox="0 0 240 16"
+                                        <svg class="wavy-progress__svg" viewBox="0 0 320 16"
                                             preserveAspectRatio="none" aria-hidden="true">
-                                            <line id="wavyTrack" class="wavy-progress__track" x1="2" y1="8" x2="238"
+                                            <defs>
+                                                <clipPath id="wavyClip">
+                                                    <rect id="wavyClipRect" x="0" y="0" width="0" height="16" rx="2">
+                                                    </rect>
+                                                </clipPath>
+                                            </defs>
+                                            <line id="wavyTrack" class="wavy-progress__track" x1="2" y1="8" x2="318"
                                                 y2="8"></line>
-                                            <path id="wavyWave" class="wavy-progress__wave" d=""></path>
-                                            <circle id="wavyStop" class="wavy-progress__stop" cx="238" cy="8" r="2">
+                                            <g clip-path="url(#wavyClip)">
+                                                <path id="wavyWave" class="wavy-progress__wave" d=""></path>
+                                            </g>
+                                            <circle id="wavyStop" class="wavy-progress__stop" cx="318" cy="8" r="2">
                                             </circle>
                                         </svg>
                                     </div>

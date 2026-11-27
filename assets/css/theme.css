@@ -1531,6 +1531,7 @@ legend {
     stroke: var(--md-surface-container-highest);
     stroke-width: 4;
     stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
 }
 
 .wavy-progress__wave {
@@ -1538,10 +1539,11 @@ legend {
     stroke: var(--md-primary);
     stroke-width: 4;
     stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
 }
 
 .wavy-progress[data-state="working"] .wavy-progress__wave {
-    animation: wavy-flow 1.8s linear infinite;
+    animation: wavy-flow 1.4s linear infinite;
 }
 
 .wavy-progress__stop {
@@ -1550,7 +1552,7 @@ legend {
 
 @keyframes wavy-flow {
     from { transform: translateX(0); }
-    to { transform: translateX(-24px); }
+    to { transform: translateX(32px); }
 }
 
 /* ---------- Shape morphing & reduced motion ---------- */
