@@ -1,0 +1,256 @@
+/* Work time calculator (TimeCalculator.html). */
+
+.calculator-grid {
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .calculator-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    }
+
+    .calc-result-column {
+        position: sticky;
+        top: 24px;
+    }
+}
+
+@media (max-width: 899px) {
+    .calc-result-column {
+        order: -1;
+    }
+}
+
+.calc-inputs-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.start-time-row {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.start-time-row .field {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.start-now-btn {
+    min-height: 3.5rem;
+    padding-inline: 18px;
+    border-radius: var(--shape-lg);
+}
+
+.field-row {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 12px;
+}
+
+.field-row .field {
+    flex: 1 1 11rem;
+}
+
+.switch-row .material-symbols-outlined {
+    color: var(--md-primary);
+}
+
+.overtime-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid color-mix(in srgb, var(--md-outline-variant) 45%, transparent);
+}
+
+.overtime-section .supporting {
+    margin: 0 4px;
+}
+
+.quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quick-chips .btn--xs {
+    min-height: 2.5rem;
+    padding-inline: 12px;
+}
+
+.calc-card__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid color-mix(in srgb, var(--md-outline-variant) 40%, transparent);
+}
+
+/* ---------- Hero result card & workday summary ---------- */
+.calc-result-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.result-card {
+    padding: 28px 20px;
+    border-radius: var(--shape-xl);
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    text-align: center;
+}
+
+.result-card__label {
+    font: var(--type-title-medium);
+    letter-spacing: var(--tracking-title-medium);
+}
+
+.result-time {
+    margin: 8px 0;
+    font: var(--type-display-medium);
+    font-weight: var(--weight-emphasized);
+    font-variation-settings: 'ROND' 100;
+    letter-spacing: var(--tracking-display-medium);
+}
+
+@media (min-width: 480px) {
+    .result-time {
+        font: var(--type-display-large);
+        font-weight: var(--weight-emphasized);
+        font-variation-settings: 'ROND' 100;
+        letter-spacing: var(--tracking-display-large);
+    }
+}
+
+.day-note {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 4px 12px;
+    border-radius: var(--shape-full);
+    background: color-mix(in srgb, var(--md-surface-container-lowest) 70%, transparent);
+    color: var(--md-on-surface);
+    font: var(--type-label-medium);
+    font-weight: var(--weight-emphasized);
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 8px 16px;
+    border-radius: var(--shape-full);
+    background: var(--md-surface-container-lowest);
+    color: var(--md-on-surface);
+    font: var(--type-label-large);
+    letter-spacing: var(--tracking-label-large);
+}
+
+.badge .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.badge[data-tone="positive"] {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+}
+
+.badge[data-tone="negative"],
+.badge[data-tone="error"] {
+    background: var(--md-error-container);
+    color: var(--md-on-error-container);
+}
+
+.summary-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.summary-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.metric-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    border-radius: var(--shape-md);
+    background: var(--md-surface-container-low);
+}
+
+.metric-tile__label {
+    color: var(--md-on-surface-variant);
+    font: var(--type-label-small);
+}
+
+.metric-tile__value {
+    font: var(--type-title-small);
+    font-weight: var(--weight-emphasized);
+}
+
+.progress-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.progress-block__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font: var(--type-label-medium);
+    color: var(--md-on-surface-variant);
+}
+
+.progress-block__percent {
+    color: var(--md-primary);
+    font-weight: var(--weight-emphasized);
+}
+
+/* ---------- Save toast (above ShortNavigationBar on mobile) ---------- */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    z-index: 30;
+    width: max-content;
+    max-width: calc(100% - 32px);
+    padding: 12px 18px;
+    border-radius: var(--shape-full);
+    background: var(--md-inverse-surface);
+    box-shadow: var(--elevation-3);
+    color: var(--md-inverse-on-surface);
+    font: var(--type-body-medium);
+    letter-spacing: var(--tracking-body-medium);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 16px);
+    transition:
+        transform var(--spring-default-spatial-duration) var(--spring-default-spatial),
+        opacity var(--spring-default-effects-duration) var(--spring-default-effects),
+        visibility var(--spring-default-effects-duration);
+}
+
+@media (max-width: 839px) {
+    .toast {
+        bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+}
+
+.toast.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+}

@@ -3,670 +3,241 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebApp Dashboard</title>
-    <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;500;700&family=Roboto:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-        rel="stylesheet" />
-    <style>
-        :root {
-            --md-primary: #00687a;
-            --md-on-primary: #ffffff;
-            --md-primary-container: #abedff;
-            --md-on-primary-container: #001f26;
-            --md-surface: #fbfcfe;
-            --md-surface-container: #f0f4f5;
-            --md-on-surface: #191c1d;
-
-            --radius-xl: 28px;
-            --radius-full: 9999px;
-            --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.3);
-            --elevation-3: 0 4px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
-            --transition: 300ms cubic-bezier(0.2, 0, 0, 1);
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--md-surface-container);
-            color: var(--md-on-surface);
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .hero-shape {
-            width: 150px;
-            height: 150px;
-            background: var(--md-primary-container);
-            color: var(--md-primary);
-            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            animation: morphFloat 8s ease-in-out infinite;
-        }
-
-        .hero-shape .material-symbols-outlined {
-            font-size: 4rem;
-        }
-
-        @keyframes morphFloat {
-            0% {
-                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-                transform: translateY(0);
-            }
-
-            50% {
-                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-                transform: translateY(-15px);
-            }
-
-            100% {
-                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-                transform: translateY(0);
-            }
-        }
-
-        h1 {
-            font-family: 'Roboto Serif', serif;
-            font-size: 2.5rem;
-            color: var(--md-on-surface);
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        p.subtitle {
-            font-size: 1.1rem;
-            color: #3f484a;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        .card-container {
-            display: flex;
-            gap: 2rem;
-            max-width: 800px;
-            width: 100%;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .nav-card {
-            background: var(--md-surface);
-            border-radius: var(--radius-xl);
-            padding: 2rem;
-            width: 320px;
-            text-decoration: none;
-            color: inherit;
-            box-shadow: var(--elevation-1);
-            transition: transform var(--transition), box-shadow var(--transition);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .nav-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--elevation-3);
-        }
-
-        .nav-card .icon-container {
-            background: var(--md-primary-container);
-            color: var(--md-on-primary-container);
-            padding: 1rem;
-            border-radius: var(--radius-full);
-            margin-bottom: 1.5rem;
-        }
-
-        .nav-card h2 {
-            font-family: 'Roboto Serif', serif;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--md-primary);
-        }
-
-        /* --- Login Styles --- */
-        .login-card {
-            background: var(--md-surface);
-            border-radius: var(--radius-xl);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: var(--elevation-1);
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 8px 8px 0 0;
-            padding: 8px 16px;
-            border-bottom: 2px solid #70797b;
-            text-align: left;
-            transition: all var(--transition);
-        }
-
-        .form-group:focus-within {
-            background: rgba(0, 0, 0, 0.08);
-            border-bottom-color: var(--md-primary);
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--md-primary);
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .form-group input {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-family: 'Roboto', sans-serif;
-            font-size: 1rem;
-            color: var(--md-on-surface);
-            outline: none;
-        }
-
-        /* Prevent auto-fill background from overriding transparency */
-        input:-webkit-autofill {
-            -webkit-box-shadow: 0 0 0 1000px var(--md-surface-container-high) inset !important;
-            -webkit-text-fill-color: var(--md-on-surface) !important;
-            border-radius: 4px;
-        }
-
-        .btn-primary {
-            background-color: var(--md-primary);
-            color: var(--md-on-primary);
-            border: none;
-            padding: 12px 24px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            width: 100%;
-            box-shadow: var(--elevation-1);
-            transition: all var(--transition);
-        }
-
-        .btn-primary:hover {
-            box-shadow: var(--elevation-3);
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--md-primary);
-            border: 1px solid var(--md-primary);
-            padding: 12px 24px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            width: 100%;
-            transition: all var(--transition);
-        }
-
-        .btn-secondary:hover {
-            background: var(--md-primary-container);
-            transform: translateY(-1px);
-        }
-
-        .recovery-panel {
-            margin-top: 1.25rem;
-            padding: 1rem 1.1rem 0.9rem;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 20px;
-            background: rgba(0, 0, 0, 0.02);
-            text-align: left;
-        }
-
-        .recovery-panel summary {
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--md-primary);
-        }
-
-        .recovery-panel summary::marker {
-            color: var(--md-primary);
-        }
-
-        .recovery-copy {
-            color: #3f484a;
-            font-size: 0.95rem;
-            line-height: 1.45;
-            margin: 0.85rem 0 1rem;
-        }
-
-        .recovery-actions {
-            display: grid;
-            gap: 0.75rem;
-        }
-
-        .status-msg {
-            display: none;
-            margin-top: 0.85rem;
-            font-size: 0.9rem;
-        }
-
-        .status-msg.success {
-            color: #0f7a3b;
-        }
-
-        .status-msg.error {
-            color: #ba1a1a;
-        }
-
-        .logout-btn {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            background: transparent;
-            border: 1px solid var(--md-outline);
-            color: var(--md-on-surface);
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all var(--transition);
-        }
-
-        .logout-btn:hover {
-            background: var(--md-surface-container-high);
-        }
-
-        #login-view,
-        #dashboard-view {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        #error-msg {
-            color: #ba1a1a;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        /* --- Mobile Responsiveness --- */
-        @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-
-            .nav-card {
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            .login-card {
-                box-sizing: border-box;
-                padding: 1.5rem;
-            }
-
-            .logout-btn {
-                position: static;
-                align-self: flex-end;
-                margin-bottom: 1.5rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eff4f6">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171d1e">
+    <title>Everyday Web Toolkit | Dashboard</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght,ROND@6..144,300..800,0..100&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-50..200&display=block">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <script src="assets/js/session.js"></script>
+    <script src="assets/js/session-guard.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script type="module" src="assets/js/login.js"></script>
 </head>
 
 <body>
+    <noscript>
+        <p>Diese Seite benötigt JavaScript. Bitte aktiviere es, um dich anzumelden.</p>
+    </noscript>
 
-    <!-- LOGIN VIEW -->
-    <div id="login-view">
-        <div class="hero-shape">
-            <span class="material-symbols-outlined">lock</span>
+    <main class="view view--login">
+        <div class="auth-shell">
+            <section class="auth-card">
+                <div class="auth-showcase">
+                    <div class="auth-showcase__top">
+                        <div class="auth-brand">
+                            <img class="auth-brand__mark" src="assets/favicon.svg" alt="" width="44" height="44">
+                            <span class="auth-brand__label">Everyday Web Toolkit</span>
+                        </div>
+                        <button type="button" class="icon-btn auth-theme-btn" data-theme-toggle
+                            aria-label="Design wechseln" title="Design wechseln">
+                            <span class="material-symbols-outlined" aria-hidden="true" translate="no">brightness_auto</span>
+                        </button>
+                    </div>
+                    <div class="auth-showcase__body">
+                        <h1 class="headline auth-showcase__title">Deine Alltags-Tools an einem Ort.</h1>
+                        <p class="auth-showcase__copy">Schlank, privat im Browser gespeichert und direkt einsatzbereit.</p>
+                        <div class="auth-features">
+                            <span class="chip" data-tone="primary">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                                Sprach-Konverter
+                            </span>
+                            <span class="chip" data-tone="primary">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                                Arbeitszeit-Rechner
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-form-pane">
+                    <div class="auth-form-pane__header">
+                        <h2 class="headline headline--medium">Anmelden</h2>
+                        <p class="auth-form-pane__subtitle">Melde dich an, um auf deine Werkzeuge zuzugreifen.</p>
+                    </div>
+
+                    <p id="loginNotice" class="message message--notice" role="status"></p>
+
+                    <form id="loginForm" method="post">
+                        <div class="field">
+                            <label for="nameInput">Name</label>
+                            <input type="text" id="nameInput" name="username" autocomplete="username"
+                                autocapitalize="none" spellcheck="false" placeholder="Dein Name" required>
+                        </div>
+                        <div class="field field--trailing">
+                            <div class="field--trailing__body">
+                                <label for="passwordInput">Passwort</label>
+                                <input type="password" id="passwordInput" name="password"
+                                    autocomplete="current-password" placeholder="Passwort eingeben" required>
+                            </div>
+                            <button type="button" id="toggleLoginPassword" class="icon-btn" aria-pressed="false"
+                                aria-controls="passwordInput" aria-label="Passwort anzeigen" title="Passwort anzeigen">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">visibility</span>
+                            </button>
+                        </div>
+                        <p id="loginError" class="message message--error" role="alert"></p>
+                        <button type="submit" id="loginButton" class="btn btn--filled btn--m btn--block"
+                            disabled>Anmelden</button>
+                    </form>
+                </div>
+            </section>
         </div>
-        <h1>Login</h1>
-        <p class="subtitle">Bitte melde dich an, um das Dashboard zu nutzen.</p>
+    </main>
 
-        <form class="login-card" onsubmit="event.preventDefault(); login();">
-            <div class="form-group">
-                <label for="nameInput">Name</label>
-                <input type="text" id="nameInput" name="username" autocomplete="username" placeholder="Dein Name"
-                    required>
+    <div class="view view--dashboard app-shell">
+        <aside class="wide-rail" aria-label="Hauptnavigation">
+            <div class="wide-rail__header">
+                <a class="rail-brand" href="index.html">
+                    <img class="rail-brand__mark" src="assets/favicon.svg" alt="" width="36" height="36">
+                    <span class="rail-brand__title">Web Toolkit</span>
+                </a>
+                <button type="button" class="icon-btn" data-rail-toggle aria-expanded="true"
+                    aria-label="Navigation einklappen" title="Navigation einklappen">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">menu_open</span>
+                </button>
             </div>
-            <div class="form-group">
-                <label for="passwordInput">Passwort</label>
-                <input type="password" id="passwordInput" name="password" autocomplete="current-password"
-                    placeholder="Passwort eingeben" required>
+
+            <nav class="wide-rail__nav" aria-label="Werkzeuge">
+                <a class="rail-item" href="index.html" aria-current="page">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">dashboard</span>
+                    <span class="rail-item__label">Übersicht</span>
+                </a>
+                <a class="rail-item" href="Converter.html">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                    <span class="rail-item__label">Sprach-Konverter</span>
+                </a>
+                <a class="rail-item" href="TimeCalculator.html">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                    <span class="rail-item__label">Arbeitszeit</span>
+                </a>
+            </nav>
+
+            <div class="wide-rail__footer">
+                <div class="rail-user">
+                    <span class="rail-user__avatar" data-user-avatar aria-hidden="true">U</span>
+                    <span class="rail-user__name" data-user-name>Angemeldet</span>
+                </div>
+                <button type="button" class="rail-action" data-theme-toggle aria-label="Design wechseln">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">brightness_auto</span>
+                    <span class="rail-action__label" data-theme-label>System</span>
+                </button>
+                <button type="button" class="rail-action rail-action--danger" data-logout>
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
+                    <span class="rail-action__label">Abmelden</span>
+                </button>
             </div>
-            <div id="error-msg">Falsches Passwort!</div>
-            <button type="submit" class="btn-primary">Anmelden</button>
+        </aside>
 
-            <details class="recovery-panel">
-                <summary>Passwort zurücksetzen</summary>
-                <p class="recovery-copy">
-                    Wenn dein eigenes Passwort vergessen wurde, kannst du mit dem Recovery-Code ein neues Passwort
-                    setzen.
-                    Die Änderung wird lokal gespeichert. Für die dauerhafte GitHub-Version kannst du den exportierten
-                    JSON-Stand
-                    danach wieder als Secret eintragen.
-                </p>
-                <div class="recovery-actions">
-                    <div class="form-group">
-                        <label for="recoveryCodeInput">Recovery-Code</label>
-                        <input type="password" id="recoveryCodeInput" placeholder="Recovery-Code eingeben"
-                            autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label for="resetNameInput">Benutzer</label>
-                        <input type="text" id="resetNameInput" placeholder="Name des Benutzers" autocomplete="username">
-                    </div>
-                    <div class="form-group">
-                        <label for="newPasswordInput">Neues Passwort</label>
-                        <input type="password" id="newPasswordInput" placeholder="Neues Passwort"
-                            autocomplete="new-password">
-                    </div>
-                    <button type="button" class="btn-secondary" onclick="resetPassword()">Passwort speichern</button>
-                </div>
-                <div id="reset-msg" class="status-msg"></div>
-            </details>
-        </form>
-    </div>
+        <div class="shell-main">
+            <header class="mobile-top-bar">
+                <img class="mobile-top-bar__brand" src="assets/favicon.svg" alt="" width="28" height="28">
+                <span class="mobile-top-bar__title">Übersicht</span>
+                <button type="button" class="icon-btn" data-theme-toggle aria-label="Design wechseln"
+                    title="Design wechseln">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">brightness_auto</span>
+                </button>
+                <button type="button" class="icon-btn" data-logout aria-label="Abmelden" title="Abmelden">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">logout</span>
+                </button>
+            </header>
 
-    <!-- DASHBOARD VIEW -->
-    <div id="dashboard-view">
-        <button class="logout-btn" onclick="logout()">
-            <span class="material-symbols-outlined">logout</span>
-            Logout
-        </button>
+            <main class="workspace">
+                <header class="workspace-header">
+                    <div class="workspace-header__text">
+                        <h1 id="welcomeMessage" class="headline" tabindex="-1">Willkommen zurück</h1>
+                        <p id="dashboardDate" class="workspace-header__subtitle">Wähle ein Werkzeug für heute</p>
+                    </div>
+                </header>
 
-        <div class="hero-shape">
-            <span class="material-symbols-outlined">widgets</span>
+                <section class="tool-grid" aria-label="Verfügbare Werkzeuge">
+                    <a class="tool-card" href="Converter.html">
+                        <div class="tool-card__top">
+                            <span class="tool-card__icon" aria-hidden="true">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                            </span>
+                            <span id="converterStatusChip" class="chip">API-Key einrichten</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h2 class="title">Sprach-Konverter</h2>
+                            <p class="tool-card__copy">Formuliert deinen Text mit Gemini blitzschnell um – vom höfischen
+                                Zeremoniell bis zum LinkedIn-Post.</p>
+                        </div>
+                        <div class="tool-card__meta">
+                            <span class="chip">Höfisch</span>
+                            <span class="chip">Gen-Z</span>
+                            <span class="chip">LinkedIn</span>
+                        </div>
+                        <div class="tool-card__footer">
+                            <span class="tool-card__cta">
+                                Öffnen
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">arrow_forward</span>
+                            </span>
+                        </div>
+                    </a>
+
+                    <a class="tool-card" href="TimeCalculator.html">
+                        <div class="tool-card__top">
+                            <span class="tool-card__icon tool-card__icon--alt" aria-hidden="true">
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                            </span>
+                            <span id="calculatorStatusChip" class="chip" data-tone="primary">Bereit</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h2 class="title">Arbeitszeit-Rechner</h2>
+                            <p class="tool-card__copy">Berechnet deinen Feierabend inklusive Pause, Überstundenkonto und
+                                Tagesfortschritt.</p>
+                        </div>
+                        <div class="tool-card__meta">
+                            <span id="calculatorLivePreview" class="chip tabular-nums">Noch keine Startzeit gespeichert</span>
+                        </div>
+                        <div class="tool-card__footer">
+                            <span class="tool-card__cta">
+                                Öffnen
+                                <span class="material-symbols-outlined" aria-hidden="true" translate="no">arrow_forward</span>
+                            </span>
+                        </div>
+                    </a>
+                </section>
+
+                <section class="session-strip" aria-label="Sitzung und Datenschutz">
+                    <span class="material-symbols-outlined session-strip__icon" aria-hidden="true"
+                        translate="no">verified_user</span>
+                    <p class="session-strip__text">Sitzung aktiv · Automatische Abmeldung nach 60 Minuten Inaktivität.
+                        Alle Werkzeug-Daten bleiben lokal in diesem Browser.</p>
+                </section>
+            </main>
         </div>
-        <h1 id="welcome-message">Willkommen zurück</h1>
-        <p class="subtitle">Wähle dein Tool aus dem Dashboard</p>
 
-        <div class="card-container">
-            <a href="Converter.html" class="nav-card">
-                <div class="icon-container">
-                    <span class="material-symbols-outlined" style="font-size: 2rem;">translate</span>
-                </div>
-                <h2>Sprach-Konverter</h2>
-                <p>KI-gestützte Übersetzung für Hofzeremoniell, Jugendsprache & LinkedIn.</p>
+        <nav class="short-nav-bar" aria-label="Mobile Navigation">
+            <a class="short-nav-item" href="index.html" aria-current="page">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">dashboard</span>
+                </span>
+                <span>Übersicht</span>
             </a>
-
-            <a href="TimeCalculator.html" class="nav-card">
-                <div class="icon-container">
-                    <span class="material-symbols-outlined" style="font-size: 2rem;">schedule</span>
-                </div>
-                <h2>Arbeitszeit-Rechner</h2>
-                <p>Dein Feierabend-Rechner mit smartem Überstunden-Management.</p>
+            <a class="short-nav-item" href="Converter.html">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">translate</span>
+                </span>
+                <span>Konverter</span>
             </a>
-        </div>
+            <a class="short-nav-item" href="TimeCalculator.html">
+                <span class="short-nav-item__pill">
+                    <span class="material-symbols-outlined" aria-hidden="true" translate="no">schedule</span>
+                </span>
+                <span>Arbeitszeit</span>
+            </a>
+        </nav>
     </div>
-
-    <script>
-        // Inactivity timeout (1 hour in milliseconds)
-        const INACTIVITY_LIMIT = 60 * 60 * 1000;
-        const USERS_OVERRIDE_KEY = 'usersOverride';
-        let RECOVERY_CODE = 'RECOVERY_PLACEHOLDER';
-
-        let BASE_USERS_LIST = {};
-        let USERS_LIST = {};
-
-        function setStatusMessage(elementId, message, type) {
-            const element = document.getElementById(elementId);
-            if (!element) {
-                return;
-            }
-
-            element.textContent = message;
-            element.className = 'status-msg ' + type;
-            element.style.display = 'block';
-        }
-
-        function clearStatusMessage(elementId) {
-            const element = document.getElementById(elementId);
-            if (!element) {
-                return;
-            }
-
-            element.textContent = '';
-            element.className = 'status-msg';
-            element.style.display = 'none';
-        }
-
-        function getStoredUsersOverride() {
-            try {
-                const rawOverride = localStorage.getItem(USERS_OVERRIDE_KEY);
-                if (!rawOverride) {
-                    return {};
-                }
-
-                const parsedOverride = JSON.parse(rawOverride);
-                return parsedOverride && typeof parsedOverride === 'object' ? parsedOverride : {};
-            } catch (error) {
-                console.warn('Gespeicherte Passwort-Überschreibung ist ungültig:', error);
-                return {};
-            }
-        }
-
-        function refreshUsersList() {
-            USERS_LIST = { ...BASE_USERS_LIST, ...getStoredUsersOverride() };
-        }
-
-        function isAuthenticated() {
-            return localStorage.getItem('isAuth') === 'true';
-        }
-
-        function getLastActivityTimestamp() {
-            const timestamp = Number(localStorage.getItem('lastActivity'));
-            return Number.isFinite(timestamp) ? timestamp : null;
-        }
-
-        function markActivity() {
-            if (isAuthenticated()) {
-                localStorage.setItem('lastActivity', String(Date.now()));
-            }
-        }
-
-        function resetActivityTimer() {
-            markActivity();
-        }
-
-        function checkInactivity() {
-            if (!isAuthenticated()) {
-                return;
-            }
-
-            const lastActivity = getLastActivityTimestamp();
-            if (lastActivity === null || (Date.now() - lastActivity) > INACTIVITY_LIMIT) {
-                alert('Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.');
-                logout();
-            }
-        }
-
-        function showResetMessage(message, type) {
-            setStatusMessage('reset-msg', message, type);
-        }
-
-        function saveUserOverrides(updatedUsers) {
-            localStorage.setItem(USERS_OVERRIDE_KEY, JSON.stringify(updatedUsers));
-            refreshUsersList();
-        }
-
-        function resetPassword() {
-            clearStatusMessage('reset-msg');
-
-            if (RECOVERY_CODE === 'RECOVERY_PLACEHOLDER') {
-                showResetMessage('Der Recovery-Code ist noch nicht in GitHub Actions hinterlegt.', 'error');
-                return;
-            }
-
-            const recoveryCode = document.getElementById('recoveryCodeInput').value.trim();
-            const targetName = document.getElementById('resetNameInput').value.trim();
-            const newPassword = document.getElementById('newPasswordInput').value.trim();
-
-            if (!recoveryCode || !targetName || !newPassword) {
-                showResetMessage('Bitte Recovery-Code, Benutzer und neues Passwort ausfüllen.', 'error');
-                return;
-            }
-
-            if (recoveryCode !== RECOVERY_CODE) {
-                showResetMessage('Recovery-Code ist falsch.', 'error');
-                return;
-            }
-
-            const userKey = Object.keys(USERS_LIST).find(key => key.toLowerCase() === targetName.toLowerCase()) || targetName;
-            const updatedUsers = { ...getStoredUsersOverride(), [userKey]: newPassword };
-
-            saveUserOverrides(updatedUsers);
-            document.getElementById('newPasswordInput').value = '';
-            showResetMessage(`Passwort für ${userKey} wurde gespeichert.`, 'success');
-
-            const currentUser = localStorage.getItem('userName');
-            if (currentUser && currentUser.toLowerCase() === userKey.toLowerCase()) {
-                markActivity();
-            }
-        }
-
-        function enforceSessionState() {
-            checkInactivity();
-            return isAuthenticated();
-        }
-
-        // Check Auth Status on Load
-        document.addEventListener('DOMContentLoaded', () => {
-            refreshUsersList();
-            checkInactivity(); // Check immediately on load
-            setInterval(checkInactivity, 30000); // Check every 30 seconds
-
-            // Attach listeners to reset timer on user interaction
-            ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {
-                window.addEventListener(event, resetActivityTimer);
-            });
-
-            window.addEventListener('focus', checkInactivity);
-
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') {
-                    checkInactivity();
-                }
-            });
-
-            if (isAuthenticated()) {
-                showDashboard();
-            } else {
-                showLogin();
-            }
-        });
-
-        let SYSTEM_ERROR = "";
-        try {
-            // Replaced securely via Node.js in the GitHub Action using backticks.
-            const rawUsers = 'USERS_PLACEHOLDER';
-            const rawRecoveryCode = 'RECOVERY_PLACEHOLDER';
-
-            // Checking if the placeholder is still there or empty
-            if (rawUsers !== 'USERS_PLACEHOLDER' && rawUsers !== '' && rawUsers !== '{}') {
-                BASE_USERS_LIST = JSON.parse(rawUsers);
-                refreshUsersList();
-            } else {
-                SYSTEM_ERROR = "GitHub Secret ist leer oder wurde nicht injiziert.";
-            }
-
-            if (rawRecoveryCode !== 'RECOVERY_PLACEHOLDER' && rawRecoveryCode !== '') {
-                RECOVERY_CODE = rawRecoveryCode;
-            }
-        } catch (e) {
-            console.warn("User list invalid JSON format:", e);
-            SYSTEM_ERROR = "JSON-Format Fehler: Bitte prüfe die Formatierung des Secrets! (" + e.message + ")";
-        }
-
-        function login() {
-            refreshUsersList();
-
-            const name = document.getElementById('nameInput').value.trim();
-            const pw = document.getElementById('passwordInput').value.trim();
-
-            if (SYSTEM_ERROR) {
-                document.getElementById('error-msg').textContent = 'Systemfehler: ' + SYSTEM_ERROR;
-                document.getElementById('error-msg').style.display = 'block';
-                return;
-            }
-
-            if (Object.keys(USERS_LIST).length === 0) {
-                document.getElementById('error-msg').textContent = 'Systemfehler: Keine Benutzer geladen.';
-                document.getElementById('error-msg').style.display = 'block';
-                return;
-            }
-
-            if (!name) {
-                document.getElementById('error-msg').textContent = 'Bitte einen Namen eingeben!';
-                document.getElementById('error-msg').style.display = 'block';
-                return;
-            }
-
-            // Case-insensitive name search
-            const foundUserKey = Object.keys(USERS_LIST).find(k => k.toLowerCase() === name.toLowerCase());
-
-            if (foundUserKey && USERS_LIST[foundUserKey] === pw) {
-                localStorage.setItem('isAuth', 'true');
-                localStorage.setItem('userName', foundUserKey);
-                localStorage.setItem('lastActivity', String(Date.now())); // Set initial activity time
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('error-msg').style.display = 'none';
-                clearStatusMessage('reset-msg');
-                showDashboard();
-            } else {
-                document.getElementById('error-msg').textContent = 'Name oder Passwort falsch! (Tipp: Achte auf Groß-/Kleinschreibung beim Passwort)';
-                document.getElementById('error-msg').style.display = 'block';
-                console.log("Gefundene Benutzernamen im System: ", Object.keys(USERS_LIST));
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('isAuth');
-            localStorage.removeItem('userName');
-            localStorage.removeItem('lastActivity');
-            showLogin();
-        }
-
-        function showLogin() {
-            document.getElementById('dashboard-view').style.display = 'none';
-            document.getElementById('login-view').style.display = 'flex';
-        }
-
-        function showDashboard() {
-            document.getElementById('login-view').style.display = 'none';
-            document.getElementById('dashboard-view').style.display = 'flex';
-
-            const name = localStorage.getItem('userName');
-            if (name) {
-                document.getElementById('welcome-message').textContent = `Willkommen zurück, ${name}!`;
-            } else {
-                document.getElementById('welcome-message').textContent = 'Willkommen zurück!';
-            }
-        }
-    </script>
 </body>
 
 </html>
