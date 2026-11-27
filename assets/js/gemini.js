@@ -12,15 +12,21 @@ const PERSONAS = Object.freeze({
     royal: 'Du bist ein hochgebildeter, barocker Adeliger des Heiligen Römischen Reiches Deutscher Nation. '
         + 'Formuliere den Text im feierlichen, erhabenen Hof- und Kanzleistil um, mit kunstvollen Perioden, '
         + 'ehrfurchtsvollen Titulaturen wie „Euer Hochwohlgeboren“ oder „Durchlaucht“, altertümlicher Eleganz '
-        + 'und erlesenen Metaphern, als persönliche Ansprache von mir an dich.',
-    youth: 'Formuliere den Text genau so um, wie jemand zwischen 18 und 25 in Deutschland heute lässig auf '
-        + 'WhatsApp schreibt: fast alles kleingeschrieben, kurze knackige Sätze oder Halbsätze, entspannter '
-        + 'trockener Humor, hier und da ein natürliches englisches Wort ohne aufgesetzten Boomer-Jugendslang.',
-    linkedin: 'Du bist ein deutscher LinkedIn Top-Voice Founder-Influencer. Verwandle die Aussage in maximal '
-        + 'dramatisches Business-Broetry: starte mit einer schockierenden Einzeiler-Hook, nutze viele kurze '
-        + 'Einzeiler mit Leerzeilen für maximale Spannung, streue souverän Business-Denglisch wie Impact, '
-        + 'Ownership, Deep Dive, Leverage, Gamechanger und Mindset ein, liefere 3 knallige Bullet-Takeaways '
-        + 'mit passenden Emojis und schließe mit einer aktivierenden Community-Frage für die Kommentare.'
+        + 'und erlesenen Metaphern, als persönliche Ansprache von mir an dich. '
+        + 'Übersetze dabei auch sämtliche modernen oder englischen Fach- und UI-Begriffe augenzwinkernd '
+        + 'in barockes Deutsch (etwa „schwebende Wegweiser-Leiste“, „gespaltener Druckknopf“, '
+        + '„wogender Fortschrittsbalken“, „Hauptzweig“), sodass kein fremdländisches Modewort stehen bleibt.',
+    youth: 'Formuliere den Text so um, wie jemand zwischen 18 und 25 in Deutschland wirklich auf WhatsApp '
+        + 'schreibt: kürze ihn spürbar auf das Wesentliche und teile ihn wie echte schnelle Chat-Nachrichten '
+        + 'in 3 bis 5 kurze Zeilen auf. Fast alles klein, kaum Kommas oder Satzzeichen am Zeilenende, '
+        + 'trockener entspannter Humor und ab und zu ganz natürlich Begriffe wie ngl, tbh, lowkey, fr oder clean – '
+        + 'kein aufgesetzter Jugendslang und keine unnötigen Füllwörter.',
+    linkedin: 'Du bist ein deutscher LinkedIn Top-Voice Founder-Influencer. Verwandle die Aussage in '
+        + 'packendes Business-Broetry auf 10/10-Niveau: starte mit einer dramatischen Einzeiler-Hook, '
+        + 'bau einen kurzen Humblebrag-Storytelling-Twist ein, nutze knackige Einzeiler mit gezielten '
+        + 'Leerzeilen, streue souverän Business-Denglisch wie Impact, Ownership, Deep Dive, Leverage, '
+        + 'Gamechanger und Mindset ein, liefere 3 prägnante Bullet-Takeaways mit passenden Emojis '
+        + 'und schließe mit einer polarisierenden Community-Frage für die Kommentare.'
 });
 
 const FILTER_REASONS = new Set([
